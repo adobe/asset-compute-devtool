@@ -1,0 +1,47 @@
+{
+  "name": "@adobe/asset-compute-devtool",
+  "version": "1.0.0",
+  "author": {
+    "name": "Adobe Inc."
+  },
+  "repository": "adobe/asset-compute-devtool",
+  "license": "Apache-2.0",
+  "keywords": [
+    "devtool",
+    "react",
+    "adobe",
+    "asset compute"
+  ],
+  "scripts": {
+    "build": "cd ../client && npm run build && cd ../server",
+    "start": "concurrently \"nodemon ./bin/www\" \"npm run client\"",
+    "server": "node ./bin/www",
+    "client": "node set-port.js && cd ../client && npm start",
+    "pretest": "eslint ./src ./set-port.js"
+  },
+  "dependencies": {
+    "@adobe/asset-compute-client": "^1.0.0",
+    "@adobe/cloud-blobstore-wrapper": "^1.0.0",
+    "ajv": "^6.12.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "debug": "~4.1.1",
+    "dotenv": "^8.2.0",
+    "express": "~4.17.1",
+    "express-formidable": "^1.2.0",
+    "formidable": "^1.2.2",
+    "fs-extra": "^8.1.0",
+    "get-port": "^5.1.1",
+    "http-errors": "~1.7.3",
+    "install": "^0.13.0",
+    "js-yaml": "^3.13.1",
+    "open": "^7.0.3",
+    "openwhisk": "^3.21.1",
+    "uuid": "^8.0.0"
+  },
+  "devDependencies": {
+    "@adobe/eslint-config-asset-compute": "^1.2.0",
+    "concurrently": "^5.2.0",
+    "nodemon": "^2.0.3"
+  }
+}
