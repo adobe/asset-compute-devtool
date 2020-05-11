@@ -7,7 +7,7 @@ Developer tool for exploring and testing the service.
 
 Please set the following credentials in a `.env` file in the root of the `/server` folder.
 
-For more information on setting up credentials, see [S3 Credentials](#1-s3-credentials) and [AIO Integrations](#2-setup-an-adobe-io-console-technical-integration) below.
+For more information on setting up credentials, see [Cloud Storage Container](#1-s3-bucket-or-azure-blob-storage-credentials) and [Adobe I/O Console Techinical Integrations](#2-adobe-io-console-technical-integration) below.
 
 ```bash
 # Defaults to Asset Compute Production endpoint

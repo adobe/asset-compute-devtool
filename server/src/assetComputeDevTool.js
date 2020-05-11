@@ -167,7 +167,7 @@ class AssetComputeDevTool {
 			if (event.type === "rendition_created") {
 				try {
 					return this.storage.commitPut(event.rendition.userData.path);
-				} catch() {
+				} catch {
 					return;// ignore if cloud storage is an S3 bucket, `commitPut` not needed
 				}
             } else {
