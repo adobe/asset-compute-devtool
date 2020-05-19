@@ -24,13 +24,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-if (process.env.NODE_ENV !== 'development') {
+if (process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') {
   app.use(express.static(path.join(__dirname, 'client-build')));
 }
 app.use(formidable());
 
 app.use('/', function (req, res, next) {
-  if ((process.env.NODE_ENV !== 'development') && (req.headers.authorization != app.settings.devToolToken)) {
+  if ((process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') && (req.headers.authorization != app.settings.devToolToken)) {
     return res.status(401).send({
      message: 'Unauthorized'
     });

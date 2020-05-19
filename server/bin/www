@@ -62,10 +62,12 @@ function run(port) {
       ? 'pipe ' + addr
       : 'port ' + addr.port;
     debug('Listening on ' + bind);
-    if (process.env.NODE_ENV !== 'development') {
+    if (process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') {
       const assetComputeDevToolUrl = `http://localhost:${addr.port}/?devToolToken=${randomString}`;
       console.log('Asset Compute Developer Tool Server started on url ', assetComputeDevToolUrl);
       await open(assetComputeDevToolUrl);
+    } else {
+      console.log('Running in development mode.');
     }
   })
   server.on('close', () => {

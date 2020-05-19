@@ -189,8 +189,8 @@ function getEndpoint() {
  * Set up instance of Asset Compute Client
  */
 async function setupAssetCompute() {
-    if (!process.env.AIO_INTEGRATION_FILE_PATH) { return; }
-	const integration = yaml.safeLoad(await fse.readFile(process.env.AIO_INTEGRATION_FILE_PATH, "utf-8"));
+    if (!process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH) { return; }
+	const integration = yaml.safeLoad(await fse.readFile(process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH, "utf-8"));
 
 	const options = {
 		url: getEndpoint(),
