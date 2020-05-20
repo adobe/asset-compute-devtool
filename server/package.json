@@ -14,8 +14,8 @@
   ],
   "scripts": {
     "build": "cd ../client && npm run build && cd ../server",
-    "start": "concurrently \"nodemon ./bin/www\" \"npm run client\"",
-    "server": "node ./bin/www",
+    "start": "ASSET_COMPUTE_DEV_TOOL_ENV=development concurrently \"nodemon ./bin/www\" \"npm run client\"",
+    "server": "ASSET_COMPUTE_DEV_TOOL_ENV=production node ./bin/www",
     "client": "node set-port.js && cd ../client && npm start",
     "pretest": "eslint ./src ./set-port.js"
   },
