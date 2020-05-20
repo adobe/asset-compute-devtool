@@ -15,11 +15,11 @@ _Note: This cloud storage can be shared across developers and custom workers pro
 #### Creating an Azure Blob Storage Container
 1. If you do not already have an account, follow the steps [here](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-create-account-block-blob?tabs=azure-portal) to create a storage account.
 2. If you do not already have a container, [create a new container](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-portal):
-    3. Navigate to your storage account in the Azure portal.
-    4. In the left menu for the storage account, scroll to the Blob service section, then select Containers.
-    5. Select the `+` Container button and choose a name for the container.
-    6. Select access level. (We reccomend private.)
-    7. Select OK to create the container.
+    1. Navigate to your storage account in the Azure portal.
+    2. In the left menu for the storage account, scroll to the Blob service section, then select Containers.
+    3. Select the `+` Container button and choose a name for the container.
+    4. Select access level. (We reccomend private.)
+    5. Select OK to create the container.
 3. Retrieve Azure storage account key by following the steps [here](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-keys-manage?tabs=azure-portal#view-account-access-keys).
 4. Set the Azure Storage environment variables in you `.env` file:
 ```
