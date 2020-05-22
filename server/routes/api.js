@@ -16,7 +16,7 @@ const express = require('express');
 const router = express.Router();
 const dotenv = require('dotenv');
 const { getWorkerLogs } = require('../src/openwhisk');
-const { setupAssetComputeDevTool, getEndpoint} = require('../src/assetComputeDevTool');
+const { setupAssetComputeDevTool, getEndpoint, getActionUrls} = require('../src/assetComputeDevTool');
 dotenv.config();
 
 let assetComputeDevTool;
@@ -27,6 +27,11 @@ router.get('/asset-compute-endpoint', async function(req, res) {
     res.json({
         endpoint: getEndpoint()
     });
+});
+
+router.get('/asset-compute-action-url', async function(req, res) {
+    const urls = await getActionUrls();
+    res.json(urls);
 });
 
 router.get('/cloudstorage-listObjects', async function(req, res) {

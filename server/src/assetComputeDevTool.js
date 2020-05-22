@@ -16,6 +16,9 @@ const yaml = require("js-yaml");
 const dotenv = require('dotenv');
 const fse = require('fs-extra');
 const { CloudStorage } = require('@adobe/cloud-blobstore-wrapper');
+const { promisify } = require('util');
+const exec = promisify(require('child_process').exec);
+
 dotenv.config();
 
 // const { ContainerAzure } = require("@nui/node-cloudstorage");
@@ -185,6 +188,17 @@ function getEndpoint() {
 	return process.env.ASSET_COMPUTE_URL || DEFAULT_ENDPOINT;
 }
 
+async function getActionUrls() {
+    try {
+        const { stdout, stderr } = await exec('aio app get-url -j');
+        // const stdout = '{"runtime":{"my-action":"https://undefined.adobeioruntime.net/api/v1/web/aio-test-app-0.0.1/my-action","generic":"https://undefined.adobeioruntime.net/api/v1/web/aio-test-app-0.0.1/generic"}}'
+        return JSON.parse(stdout).runtime;
+    } catch (e) {
+        // ignore error is not in the context of an aio app
+        return {};
+    }
+}
+
 /**
  * Set up instance of Asset Compute Client
  */
@@ -238,5 +252,6 @@ async function setupAssetComputeDevTool() {
 
 module.exports = {
 	setupAssetComputeDevTool,
-	getEndpoint
+    getEndpoint,
+    getActionUrls
 }
