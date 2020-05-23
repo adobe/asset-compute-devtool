@@ -43,7 +43,6 @@ export default class NormalDisplay extends React.Component {
             runTutorial:false,
             dev: localStorage.dev,
             env: localStorage.env,
-            // textArea:localStorage.getItem('json') || DEFAULT_RENDITIONS_TEXT,
             selectedOption: localStorage.selectedFile || null,
             devToolToken: this.getDevToolToken()
         };
