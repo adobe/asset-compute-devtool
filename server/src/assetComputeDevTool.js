@@ -165,18 +165,18 @@ class AssetComputeDevTool {
 	}
 
 	async getEvents(requestId) {
-		const events = await this.assetCompute.waitActivation(requestId, this.activationWaitMsec);
-        await Promise.all(events.map(event => {
-			if (event.type === "rendition_created") {
+        const events = await this.assetCompute.waitActivation(requestId, this.activationWaitMsec);
+        for (const event in events) {
+            if (event.type === "rendition_created") {
 				try {
-					return this.storage.commitPut(event.rendition.userData.path);
+					await this.storage.commitPut(event.rendition.userData.path);
 				} catch (e) {
-					return;// ignore if cloud storage is an S3 bucket, `commitPut` not needed
+					// ignore if cloud storage is an S3 bucket, `commitPut` not needed
 				}
             } else {
 				return null;
             }
-		}));
+        }
 		return events;
 	}
 }
@@ -190,7 +190,7 @@ function getEndpoint() {
 
 async function getActionUrls() {
     try {
-        const { stdout, stderr } = await exec('aio app get-url -j');
+        const { stdout } = await exec('aio app get-url -j');
         // const stdout = '{"runtime":{"my-action":"https://undefined.adobeioruntime.net/api/v1/web/aio-test-app-0.0.1/my-action","generic":"https://undefined.adobeioruntime.net/api/v1/web/aio-test-app-0.0.1/generic"}}'
         return JSON.parse(stdout).runtime;
     } catch (e) {
