@@ -37,41 +37,41 @@ class AssetComputeDevTool {
      */
     constructor(assetCompute, storage, expirationTime) {
         this.assetCompute = assetCompute;
-		this.storage = storage;
-		this.expirationTime = expirationTime || (Date.now() + 86400000); // 24 hours till asset compute access token expires
+        this.storage = storage;
+        this.expirationTime = expirationTime || (Date.now() + 86400000); // 24 hours till asset compute access token expires
         this.presignGetTTL = DEFAULT_PRESIGN_TTL_MSEC;
         this.presignPutTTL = DEFAULT_PRESIGN_TTL_MSEC;
         this.activationWaitMsec =  DEFAULT_ACTIVATION_WAIT_MSEC;
-		this.sourceStoragePath = 'source';
+        this.sourceStoragePath = 'source';
     }
 
-	/**
+    /**
      * Upload source files to source folder in Cloud Storage
      * @param {String}  file local file to be uploaded to the cloud
      */
-	async uploadSourceToCloud(file) {
-		await this.storage.upload(file.path, `${this.sourceStoragePath}/${file.name}`);
-		return file.name;
-	}
+    async uploadSourceToCloud(file) {
+        await this.storage.upload(file.path, `${this.sourceStoragePath}/${file.name}`);
+        return file.name;
+    }
 
-	/**
+    /**
      * List source files from source folder in Cloud Storage
      */
-	async listSourceObjects() {
-		let files = await this.storage.listObjects();
-		files = files.map((item) => {
-			if (item.name.includes(`${this.sourceStoragePath}/`)) {
-				return item.name.slice(7); // remove the `source/` prefix
-			}
-			return undefined;
-		}).filter((name) => (name !== undefined) && (name.length > 0) )
-		return files;
-	}
+    async listSourceObjects() {
+        let files = await this.storage.listObjects();
+        files = files.map((item) => {
+            if (item.name.includes(`${this.sourceStoragePath}/`)) {
+                return item.name.slice(7); // remove the `source/` prefix
+            }
+            return undefined;
+        }).filter((name) => (name !== undefined) && (name.length > 0) )
+        return files;
+    }
 
     /**
      * Pre-sign an asset reference
      * @param {String} source Source file name
-	 * @return {Object} Source object for Asset Compute Processing
+     * @return {Object} Source object for Asset Compute Processing
      */
     presignSource(source) {
         if (source) {
@@ -94,7 +94,7 @@ class AssetComputeDevTool {
      */
     getRenditionPath(source, rendition, idx) {
         if (rendition) {
-			return `rendition/${source}/${this.id}/${idx}/${rendition}`;
+            return `rendition/${source}/${this.id}/${idx}/${rendition}`;
         } else {
             return `rendition/${source}/${this.id}/${idx}/rendition`;
         }
@@ -140,7 +140,7 @@ class AssetComputeDevTool {
         return renditions.map((rendition, idx) => 
             this.presignRendition(source, rendition, idx)
         );
-	}
+    }
 
     /**
      * Process an asset, waits for all rendition events to return
@@ -150,42 +150,42 @@ class AssetComputeDevTool {
      * @param {Object} [userData=] Optional user to pass through
      */
     async process(source, renditions, userData) {
-		this.id = uuidv4();
-		const presignedSource = this.presignSource(source);
-		const presignedRenditions = this.presignRenditions(source, renditions);
-		console.log('Calling /process with source:', presignedSource);
-		console.log('Renditions:', presignedRenditions);
+        this.id = uuidv4();
+        const presignedSource = this.presignSource(source);
+        const presignedRenditions = this.presignRenditions(source, renditions);
+        console.log('Calling /process with source:', presignedSource);
+        console.log('Renditions:', presignedRenditions);
         const response = await this.assetCompute.process(
             presignedSource,
             presignedRenditions,
             userData
         );
-		console.log(`>>> Request ID ${response.requestId} (Activation ${response.activationId})`);
-		return response;
-	}
+        console.log(`>>> Request ID ${response.requestId} (Activation ${response.activationId})`);
+        return response;
+    }
 
-	async getEvents(requestId) {
+    async getEvents(requestId) {
         const events = await this.assetCompute.waitActivation(requestId, this.activationWaitMsec);
-        for (const event in events) {
+        await Promise.all(events.map(event => {
             if (event.type === "rendition_created") {
-				try {
-					await this.storage.commitPut(event.rendition.userData.path);
-				} catch (e) {
-					// ignore if cloud storage is an S3 bucket, `commitPut` not needed
-				}
+                try {
+                    return this.storage.commitPut(event.rendition.userData.path);
+                } catch {
+                    return; // ignore if cloud storage is an S3 bucket, `commitPut` not needed
+                }
             } else {
-				return null;
+                return null;
             }
-        }
-		return events;
-	}
+        }));
+        return events;
+    }
 }
 
 /**
  * Get the asset compute endpoint
  */
 function getEndpoint() {
-	return process.env.ASSET_COMPUTE_URL || DEFAULT_ENDPOINT;
+    return process.env.ASSET_COMPUTE_URL || DEFAULT_ENDPOINT;
 }
 
 async function getActionUrls() {
@@ -204,11 +204,11 @@ async function getActionUrls() {
  */
 async function setupAssetCompute() {
     if (!process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH) { return; }
-	const integration = yaml.safeLoad(await fse.readFile(process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH, "utf-8"));
+    const integration = yaml.safeLoad(await fse.readFile(process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH, "utf-8"));
 
-	const options = {
-		url: getEndpoint(),
-		apiKey: process.env.DEV_TOOL_API_KEY // will default to `integration.technicalAccount.clientId` if environment variable is not set
+    const options = {
+        url: getEndpoint(),
+        apiKey: process.env.DEV_TOOL_API_KEY // will default to `integration.technicalAccount.clientId` if environment variable is not set
     }
     const client = new AssetComputeClient(integration, options);
     await client.register();
@@ -220,7 +220,7 @@ async function setupAssetCompute() {
  * @return Cloud Storage container
  */
 async function setupCloudStorage() {
-	let storage;
+    let storage;
     if (process.env.AZURE_STORAGE_ACCOUNT && process.env.AZURE_STORAGE_KEY) {
         storage =  new CloudStorage({
             accountName: process.env.AZURE_STORAGE_ACCOUNT,
@@ -233,27 +233,27 @@ async function setupCloudStorage() {
             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY},
             process.env.S3_BUCKET,
             { bucketRegion: process.env.AWS_REGION });
-	}
+    }
     else {
         throw new Error("Cloud storage credentials not set.");
-	}
-	await storage.validate();
-	return storage;
+    }
+    await storage.validate();
+    return storage;
 }
 
 /**
  * Setup the dev tool framework.
  */
 async function setupAssetComputeDevTool() {
-	const assetCompute = await setupAssetCompute();
-	const expirationTime = Date.now() + 86400000;
-	const storage = await setupCloudStorage();
+    const assetCompute = await setupAssetCompute();
+    const expirationTime = Date.now() + 86400000;
+    const storage = await setupCloudStorage();
     return new AssetComputeDevTool(assetCompute, storage, expirationTime);
 }
 
 
 module.exports = {
-	setupAssetComputeDevTool,
+    setupAssetComputeDevTool,
     getEndpoint,
     getActionUrls
 }

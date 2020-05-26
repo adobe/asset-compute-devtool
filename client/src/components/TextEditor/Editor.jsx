@@ -18,7 +18,30 @@ import "ace-builds/src-noconflict/mode-json";
 import 'ace-builds/src-noconflict/theme-tomorrow_night_eighties'
 import ChangeAssetComputeProfileButton from './ChangeAssetComputeProfileButton';
 
-const DEFAULT_RENDITIONS_TEXT = JSON.stringify(JSON.parse('{"renditions": [{"fmt": "png", "wid": "200", "hei": "200", "name":"rendition.png"}]}'), undefined, 4);
+const DEFAULT_RENDITIONS_TEXT  = JSON.stringify({
+    "renditions": [
+        {
+            "name": "rendition.xml",
+            "fmt": "xmp"
+        },
+        {
+            "name": "rendition.txt",
+            "fmt": "txt"
+        },
+        {
+            "name": "rendition.48.48.png",
+            "fmt": "png",
+            "wid": 48,
+            "hei": 48
+        },
+        {
+            "name": "rendition.319.319.png",
+            "fmt": "png",
+            "wid": 319,
+            "hei": 319
+        }
+    ]
+}, undefined, 4);
 
 Object.filter = (obj, predicate) =>
 Object.keys(obj)
