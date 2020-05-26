@@ -22,7 +22,8 @@ node_js:
   - "14"
 
 install:
+  - cd server/
   - npm version
   - npm install
 script:
-  - cd server/ && npm test
+  - npm test
