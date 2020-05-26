@@ -89,6 +89,7 @@ export default class Editor extends Component {
         this.setState({
             textArea: textArea,
         })
+        localStorage.setItem('json', textArea);
         return this.props.onChange(textArea);
     }
     componentDidMount() {

@@ -191,7 +191,6 @@ function getEndpoint() {
 async function getActionUrls() {
     try {
         const { stdout } = await exec('aio app get-url -j');
-        // const stdout = '{"runtime":{"my-action":"https://undefined.adobeioruntime.net/api/v1/web/aio-test-app-0.0.1/my-action","generic":"https://undefined.adobeioruntime.net/api/v1/web/aio-test-app-0.0.1/generic"}}'
         return JSON.parse(stdout).runtime;
     } catch (e) {
         // ignore error is not in the context of an aio app
