@@ -21,8 +21,9 @@ node_js:
   - "12"
   - "14"
 
+before_install:
+  - cd server
 install:
-  - cd server/
   - npm version
   - npm install
 script:
