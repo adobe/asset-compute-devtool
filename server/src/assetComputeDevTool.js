@@ -1,17 +1,17 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ * Copyright 2020 Adobe. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
 
 "use strict";
-const { createAssetComputeClient } = require("@adobe/asset-compute-client");
+const { AssetComputeClient } = require("@adobe/asset-compute-client");
 const yaml = require("js-yaml");
 const dotenv = require('dotenv');
 const fse = require('fs-extra');
@@ -170,7 +170,7 @@ class AssetComputeDevTool {
 			if (event.type === "rendition_created") {
 				try {
 					return this.storage.commitPut(event.rendition.userData.path);
-				} catch {
+				} catch (e) {
 					return;// ignore if cloud storage is an S3 bucket, `commitPut` not needed
 				}
             } else {
@@ -210,7 +210,9 @@ async function setupAssetCompute() {
 		url: getEndpoint(),
 		apiKey: process.env.DEV_TOOL_API_KEY // will default to `integration.technicalAccount.clientId` if environment variable is not set
     }
-	return createAssetComputeClient(integration, options);
+    const client = new AssetComputeClient(integration, options);
+    await client.register();
+    return client;
 }
 
 /**

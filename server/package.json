@@ -17,10 +17,11 @@
     "start": "ASSET_COMPUTE_DEV_TOOL_ENV=development concurrently \"nodemon ./bin/www\" \"npm run client\"",
     "server": "ASSET_COMPUTE_DEV_TOOL_ENV=production node ./bin/www",
     "client": "node set-port.js && cd ../client && npm start",
-    "pretest": "eslint ./src ./set-port.js"
+    "posttest": "eslint ./src ./set-port.js",
+    "test": "nyc --reporter=html --reporter=text mocha test"
   },
   "dependencies": {
-    "@adobe/asset-compute-client": "^1.0.0",
+    "@adobe/asset-compute-client": "^4.2.0",
     "@adobe/cloud-blobstore-wrapper": "^1.0.0",
     "ajv": "^6.12.0",
     "body-parser": "^1.19.0",
@@ -42,6 +43,9 @@
   "devDependencies": {
     "@adobe/eslint-config-asset-compute": "^1.2.0",
     "concurrently": "^5.2.0",
-    "nodemon": "^2.0.3"
+    "mocha": "^7.2.0",
+    "mock-require": "^3.0.3",
+    "nodemon": "^2.0.3",
+    "nyc": "^15.0.1"
   }
 }
