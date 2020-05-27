@@ -23,7 +23,7 @@ describe( 'assetComputeDevTool.js tests', () => {
     it('should fail to get action urls if not in the context of an aio action', async function() {
         mockRequire('child_process', {
             exec: function(cmd, cb) {
-                throw new Error("TypeError: Cannot read property 'actions' of undefined\n");
+                return cb(new Error("TypeError: Cannot read property 'actions' of undefined\n"));
             }
         });
         const { getActionUrls } = mockRequire.reRequire('../src/assetComputeDevTool'); // refresh cache to use mocked child_process defined above
@@ -31,7 +31,7 @@ describe( 'assetComputeDevTool.js tests', () => {
         const actionUrls = await getActionUrls();
         assert.ok(typeof actionUrls, 'object')
         assert.strictEqual(Object.keys(actionUrls).length, 0);
-    });
+    }).timeout(3000);
     
     it('should get action urls successfully', async function() {
         mockRequire('child_process', {
