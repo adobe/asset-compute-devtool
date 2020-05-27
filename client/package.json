@@ -19,9 +19,10 @@
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "cross-os cross-os-build",
-		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"foo": "cross-os bar"
+		"pretest": "npm run build",
+		"test": "react-scripts test",
+		"report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
 	},
 	"cross-os": {
 		"cross-os-build": {
@@ -45,5 +46,8 @@
 			"last 1 firefox version",
 			"last 1 safari version"
 		]
+	},
+	"devDependencies": {
+		"codecov": "^3.7.0"
 	}
 }

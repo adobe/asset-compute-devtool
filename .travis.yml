@@ -11,16 +11,10 @@
 language: node_js
 
 os:
-  - windows
-  - linux
   - osx
 
 node_js:
   - "10"
-  - "10.15"
-  - "10.19"
-  - "12"
-  - "14"
 
 env:
   - TEST_DIR=client
