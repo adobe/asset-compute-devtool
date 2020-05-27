@@ -1,14 +1,14 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ * Copyright 2020 Adobe. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
 
 "use strict";
 const { createAssetComputeClient } = require("@adobe/asset-compute-client");
@@ -28,42 +28,42 @@ const DEFAULT_ENDPOINT = 'https://asset-compute.adobe.io';
 class AssetComputeDevTool {
     /**
      * Create Framework instance
-     * 
+     *
      * @param {AssetComputeClient} assetCompute Asset Compute Client
      * @param {ClouStorage} storage Cloud storage container (Azure or S3)
      */
     constructor(assetCompute, storage, expirationTime) {
         this.assetCompute = assetCompute;
-		this.storage = storage;
-		this.expirationTime = expirationTime || (Date.now() + 86400000); // 24 hours till asset compute access token expires
+        this.storage = storage;
+        this.expirationTime = expirationTime || (Date.now() + 86400000); // 24 hours till asset compute access token expires
         this.presignGetTTL = DEFAULT_PRESIGN_TTL_MSEC;
         this.presignPutTTL = DEFAULT_PRESIGN_TTL_MSEC;
         this.activationWaitMsec =  DEFAULT_ACTIVATION_WAIT_MSEC;
-		this.sourceStoragePath = 'source';
+        this.sourceStoragePath = 'source';
     }
 
-	/**
+    /**
      * Upload source files to source folder in Cloud Storage
      * @param {String}  file local file to be uploaded to the cloud
      */
-	async uploadSourceToCloud(file) {
-		await this.storage.upload(file.path, `${this.sourceStoragePath}/${file.name}`);
-		return file.name;
-	}
+    async uploadSourceToCloud(file) {
+        await this.storage.upload(file.path, `${this.sourceStoragePath}/${file.name}`);
+        return file.name;
+    }
 
-	/**
+    /**
      * List source files from source folder in Cloud Storage
      */
-	async listSourceObjects() {
-		let files = await this.storage.listObjects();
-		files = files.map((item) => {
-			if (item.name.includes(`${this.sourceStoragePath}/`)) {
-				return item.name.slice(7); // remove the `source/` prefix
-			}
-			return undefined;
-		}).filter((name) => (name !== undefined) && (name.length > 0) )
-		return files;
-	}
+    async listSourceObjects() {
+        let files = await this.storage.listObjects();
+        files = files.map((item) => {
+            if (item.name.includes(`${this.sourceStoragePath}/`)) {
+                return item.name.slice(7); // remove the `source/` prefix
+            }
+            return undefined;
+        }).filter((name) => (name !== undefined) && (name.length > 0) );
+        return files;
+    }
 
     /**
      * Pre-sign an asset reference
@@ -91,7 +91,7 @@ class AssetComputeDevTool {
      */
     getRenditionPath(source, rendition, idx) {
         if (rendition) {
-			return `rendition/${source}/${this.id}/${idx}/${rendition}`;
+            return `rendition/${source}/${this.id}/${idx}/${rendition}`;
         } else {
             return `rendition/${source}/${this.id}/${idx}/rendition`;
         }
@@ -99,7 +99,7 @@ class AssetComputeDevTool {
 
     /**
      * Retrieve the rendition path from a rendition_created or rendition_failed event
-     * 
+     *
      * @param {AssetComputeRenditionCreatedEvent|AssetComputeRenditionFailedEvent} event rendition event
      * @returns {String} rendition path in target repository
      */
@@ -109,7 +109,7 @@ class AssetComputeDevTool {
 
     /**
      * Presign a set of renditions
-     * 
+     *
      * @param {String} source Source asset name, may be null/undefined if there is no asset
      * @param {AssetComputeRendition} rendition Rendition to presign
      * @param {Number} idx Unique index
@@ -129,60 +129,59 @@ class AssetComputeDevTool {
 
     /**
      * Presign a set of renditions
-     * 
+     *
      * @param {String} source Source asset name
      * @param {AssetComputeRendition[]} renditions Renditions to create
      */
     presignRenditions(source, renditions) {
-        return renditions.map((rendition, idx) => 
+        return renditions.map((rendition, idx) =>
             this.presignRendition(source, rendition, idx)
         );
-	}
+    }
 
     /**
      * Process an asset, waits for all rendition events to return
-     * 
+     *
      * @param {String} [source=] Source file name
      * @param {Object} renditions Renditions
      * @param {Object} [userData=] Optional user to pass through
      */
     async process(source, renditions, userData) {
-		this.id = uuidv4();
-		const presignedSource = this.presignSource(source);
-		const presignedRenditions = this.presignRenditions(source, renditions);
-		console.log('Calling /process with source:', presignedSource);
-		console.log('Renditions:', presignedRenditions);
+        this.id = uuidv4();
+        const presignedSource = this.presignSource(source);
+        const presignedRenditions = this.presignRenditions(source, renditions);
+        console.log('Calling /process with source:', presignedSource);
+        console.log('Renditions:', presignedRenditions);
         const response = await this.assetCompute.process(
             presignedSource,
             presignedRenditions,
             userData
         );
-		console.log(`>>> Request ID ${response.requestId} (Activation ${response.activationId})`);
-		return response;
-	}
+        console.log(`>>> Request ID ${response.requestId} (Activation ${response.activationId})`);
+        return response;
+    }
 
-	async getEvents(requestId) {
-		const events = await this.assetCompute.waitActivation(requestId, this.activationWaitMsec);
+    async getEvents(requestId) {
+        const events = await this.assetCompute.waitActivation(requestId, this.activationWaitMsec);
         await Promise.all(events.map(event => {
-			if (event.type === "rendition_created") {
-				try {
-					return this.storage.commitPut(event.rendition.userData.path);
-				} catch {
-					return;// ignore if cloud storage is an S3 bucket, `commitPut` not needed
-				}
-            } else {
-				return null;
+            if (event.type === "rendition_created") {
+                try {
+                    return this.storage.commitPut(event.rendition.userData.path);
+                } catch (e) { // eslint-disable-line no-unused-vars
+                    // ignore if cloud storage is an S3 bucket, `commitPut` not needed
+                }
             }
-		}));
-		return events;
-	}
+            return null;
+        }));
+        return events;
+    }
 }
 
 /**
  * Get the asset compute endpoint
  */
 function getEndpoint() {
-	return process.env.ASSET_COMPUTE_URL || DEFAULT_ENDPOINT;
+    return process.env.ASSET_COMPUTE_URL || DEFAULT_ENDPOINT;
 }
 
 /**
@@ -190,13 +189,13 @@ function getEndpoint() {
  */
 async function setupAssetCompute() {
     if (!process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH) { return; }
-	const integration = yaml.safeLoad(await fse.readFile(process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH, "utf-8"));
+    const integration = yaml.safeLoad(await fse.readFile(process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH, "utf-8"));
 
-	const options = {
-		url: getEndpoint(),
-		apiKey: process.env.DEV_TOOL_API_KEY // will default to `integration.technicalAccount.clientId` if environment variable is not set
-    }
-	return createAssetComputeClient(integration, options);
+    const options = {
+        url: getEndpoint(),
+        apiKey: process.env.DEV_TOOL_API_KEY // will default to `integration.technicalAccount.clientId` if environment variable is not set
+    };
+    return createAssetComputeClient(integration, options);
 }
 
 /**
@@ -204,39 +203,39 @@ async function setupAssetCompute() {
  * @return Cloud Storage container
  */
 async function setupCloudStorage() {
-	let storage;
+    let storage;
     if (process.env.AZURE_STORAGE_ACCOUNT && process.env.AZURE_STORAGE_KEY) {
         storage =  new CloudStorage({
             accountName: process.env.AZURE_STORAGE_ACCOUNT,
             accountKey: process.env.AZURE_STORAGE_KEY
-        }, process.env.AZURE_STORAGE_CONTAINER_NAME)
+        }, process.env.AZURE_STORAGE_CONTAINER_NAME);
     }
     else if (process.env.S3_BUCKET && process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
         storage = new CloudStorage({
             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY},
-            process.env.S3_BUCKET,
-            { bucketRegion: process.env.AWS_REGION });
-	}
+        process.env.S3_BUCKET,
+        { bucketRegion: process.env.AWS_REGION });
+    }
     else {
         throw new Error("Cloud storage credentials not set.");
-	}
-	await storage.validate();
-	return storage;
+    }
+    await storage.validate();
+    return storage;
 }
 
 /**
  * Setup the dev tool framework.
  */
 async function setupAssetComputeDevTool() {
-	const assetCompute = await setupAssetCompute();
-	const expirationTime = Date.now() + 86400000;
-	const storage = await setupCloudStorage();
+    const assetCompute = await setupAssetCompute();
+    const expirationTime = Date.now() + 86400000;
+    const storage = await setupCloudStorage();
     return new AssetComputeDevTool(assetCompute, storage, expirationTime);
 }
 
 
 module.exports = {
-	setupAssetComputeDevTool,
-	getEndpoint
-}
+    setupAssetComputeDevTool,
+    getEndpoint
+};

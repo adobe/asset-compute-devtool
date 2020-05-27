@@ -1,14 +1,14 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ * Copyright 2020 Adobe. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
 
 'use strict';
 const dotenv = require('dotenv');
@@ -29,7 +29,7 @@ async function getWskCredentials() {
             if (cred.startsWith('AUTH')) {
                 apiKey = cred.split('=')[1];
             }
-        })
+        });
     } else if (process.env.AIO_RUNTIME_AUTH && process.env.AIO_RUNTIME_NAMESPACE) {
         apiKey = process.env.AIO_RUNTIME_AUTH;
         namespace = process.env.AIO_RUNTIME_NAMESPACE;
@@ -48,7 +48,7 @@ async function getActivationLogs(wsk, activationId)  {
         return {
             activationId: activationId,
             logs: logs.logs.join('\n')
-        }
+        };
     }
 }
 
@@ -139,7 +139,7 @@ async function getCustomWorkerLogs(wsk, activationIds)  {
 
 // get worker logs for each worker
 async function getWorkerLogs(activationId, events) {
-    /* look through events and determine if a custom worker was called 
+    /* look through events and determine if a custom worker was called
      * currently in events only custom worker activationIds are returned by Asset Compute
      */
     const uniqueActivationIds = new Set();
@@ -147,21 +147,21 @@ async function getWorkerLogs(activationId, events) {
         events.forEach(event => {
             if(event.activationIds) {
                 event.activationIds.forEach(activation => uniqueActivationIds.add(activation));
-            } 
-        })
+            }
+        });
     }
     const wsk = await getWskCredentials();
-    /* if custom worker, get activation logs for all the activation ids found in events 
+    /* if custom worker, get activation logs for all the activation ids found in events
      * (make sure its a set to avoid repeats)
      */
     let activationLogs = [];
     if(uniqueActivationIds.size > 0) {
-        //we got some custom workers. 
-        console.log("getCustomWorkerLogs activationIDs :", uniqueActivationIds)
+        //we got some custom workers.
+        console.log("getCustomWorkerLogs activationIDs :", uniqueActivationIds);
         activationLogs = await getCustomWorkerLogs(wsk,uniqueActivationIds);
     } else {
         // if not, then call getFirstPartyWorkerLogs
-        console.log("getFirstPartyWorkerLogs core activationID :", activationId)
+        console.log("getFirstPartyWorkerLogs core activationID :", activationId);
         activationLogs = await getFirstPartyWorkerLogs(wsk,activationId);
     }
     return activationLogs;
@@ -171,4 +171,4 @@ module.exports = {
     getFirstPartyWorkerLogs,
     getActivationLogs,
     getWorkerLogs
-}
+};

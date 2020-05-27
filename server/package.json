@@ -17,7 +17,9 @@
     "start": "ASSET_COMPUTE_DEV_TOOL_ENV=development concurrently \"nodemon ./bin/www\" \"npm run client\"",
     "server": "ASSET_COMPUTE_DEV_TOOL_ENV=production node ./bin/www",
     "client": "node set-port.js && cd ../client && npm start",
-    "pretest": "eslint ./src ./set-port.js"
+    "pretest": "eslint ./src ./set-port.js",
+    "test": "nyc mocha --recursive --exit",
+    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "dependencies": {
     "@adobe/asset-compute-client": "^1.0.0",
@@ -40,7 +42,8 @@
     "uuid": "^8.0.0"
   },
   "devDependencies": {
-    "@adobe/eslint-config-asset-compute": "^1.2.0",
+    "@adobe/eslint-config-asset-compute": "^1.3.0",
+    "codecov": "^3.7.0",
     "concurrently": "^5.2.0",
     "nodemon": "^2.0.3"
   }
