@@ -170,8 +170,8 @@ class AssetComputeDevTool {
             if (event.type === "rendition_created") {
                 try {
                     return this.storage.commitPut(event.rendition.userData.path);
-                } catch {
-                    return; // ignore if cloud storage is an S3 bucket, `commitPut` not needed
+                } catch (e) {
+                    return e; // ignore if cloud storage is an S3 bucket, `commitPut` not needed
                 }
             } else {
                 return null;
@@ -192,7 +192,7 @@ async function getActionUrls() {
     try {
         const { stdout } = await exec('aio app get-url -j');
         return JSON.parse(stdout).runtime;
-    } catch (e) {
+    } catch (e) { /* eslint-disable-line no-unused-vars */
         // ignore error is not in the context of an aio app
         return {};
     }
