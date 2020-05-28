@@ -20,7 +20,7 @@ const { setupAssetComputeDevTool, getEndpoint, getActionUrls} = require('../src/
 dotenv.config();
 
 let assetComputeDevTool;
-let assetComputeStartTime = Date.now();
+let assetComputeStartTime = Date.now(); // eslint-disable-line no-unused-vars
 const DEFAULT_PRESIGN_TTL_MSEC = 60000 * 60; // 60 minutes validity
 
 router.get('/asset-compute-endpoint', async function(req, res) {

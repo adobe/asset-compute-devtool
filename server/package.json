@@ -17,7 +17,7 @@
     "start": "ASSET_COMPUTE_DEV_TOOL_ENV=development concurrently \"nodemon bin/www\" \"npm run client\"",
     "server": "ASSET_COMPUTE_DEV_TOOL_ENV=production node bin/www",
     "client": "node set-port.js && cd ..&& cd client && npm start",
-    "pretest": "eslint src set-port.js",
+    "pretest": "eslint src set-port.js test routes",
     "test": "nyc mocha --recursive --exit",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },

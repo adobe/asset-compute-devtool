@@ -10,6 +10,9 @@
  * governing permissions and limitations under the License.
  */
 
+/* eslint-env mocha */
+/* eslint mocha/no-mocha-arrows: "off" */
+
 'use strict';
 
 const assert = require('assert');
