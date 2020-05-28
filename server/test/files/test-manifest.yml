@@ -1,0 +1,21 @@
+packages:
+    __APP_PACKAGE__:
+      license: Apache-2.0
+      actions:
+        worker-example:
+          function: actions/worker-example/index.js
+          web: 'yes'
+          runtime: 'nodejs:10'
+          inputs:
+            LOG_LEVEL: debug
+          annotations:
+            require-adobe-auth: true
+        generic:
+          function: actions/generic/index.js
+          web: 'yes'
+          runtime: 'nodejs:10'
+          inputs:
+            LOG_LEVEL: debug
+          annotations:
+            require-adobe-auth: true
+            final: true

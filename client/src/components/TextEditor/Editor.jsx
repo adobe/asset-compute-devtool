@@ -18,7 +18,30 @@ import "ace-builds/src-noconflict/mode-json";
 import 'ace-builds/src-noconflict/theme-tomorrow_night_eighties'
 import ChangeAssetComputeProfileButton from './ChangeAssetComputeProfileButton';
 
-const text = JSON.stringify(JSON.parse('{"renditions": [{"fmt": "png", "wid": "200", "hei": "200"}]}'), undefined, 4);
+const DEFAULT_RENDITIONS_TEXT  = JSON.stringify({
+    "renditions": [
+        {
+            "name": "rendition.xml",
+            "fmt": "xmp"
+        },
+        {
+            "name": "rendition.txt",
+            "fmt": "txt"
+        },
+        {
+            "name": "rendition.48.48.png",
+            "fmt": "png",
+            "wid": 48,
+            "hei": 48
+        },
+        {
+            "name": "rendition.319.319.png",
+            "fmt": "png",
+            "wid": 319,
+            "hei": 319
+        }
+    ]
+}, undefined, 4);
 
 Object.filter = (obj, predicate) =>
 Object.keys(obj)
@@ -26,15 +49,53 @@ Object.keys(obj)
     // eslint-disable-next-line
     .reduce( (res, key) => (res[key] = obj[key], res), {} );
 
-export default class Cred extends Component {
+export default class Editor extends Component {
     constructor(props){
         super(props);
         this.state = {
-            textArea: localStorage.getItem('json') ||text
+            textArea: localStorage.getItem('json') || DEFAULT_RENDITIONS_TEXT
         }
         this.handleChange = this.handleChange.bind(this);
 
     }
+
+    async getDefaultRenditionJSON() {
+        let resp;
+        try {
+            resp = await fetch("/api/asset-compute-action-url", {
+                method: 'GET',
+                headers: {
+                    Authorization: this.state.devToolToken
+                }
+            });
+            resp = await resp.json();
+        } catch (e) {
+            // ignore errors if not running in context of aio
+        }
+        let customWorkerRenditions;
+        if (resp && typeof resp === 'object' && Object.keys(resp).length > 0 ) {
+            let renditions = [];
+            Object.values(resp).forEach(action => {
+                renditions.push({
+                    worker: action,
+                    name: 'rendition.jpg'
+                })
+            });
+            customWorkerRenditions = JSON.stringify(Object.assign({
+                renditions
+            }), null, 4);
+        }
+        const textArea = customWorkerRenditions || localStorage.getItem('json') || DEFAULT_RENDITIONS_TEXT;
+        this.setState({
+            textArea: textArea,
+        })
+        localStorage.setItem('json', textArea);
+        return this.props.onChange(textArea);
+    }
+    componentDidMount() {
+        this.getDefaultRenditionJSON();
+    }
+
     handleChange(v) {
         this.setState({textArea:v})
         localStorage.setItem('json', v)

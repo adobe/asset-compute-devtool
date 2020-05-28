@@ -26,7 +26,30 @@ import ChooseFileBox from './components/FileChooser/ChooseFileBox';
 import Rendition from './components/RenditionDisplay/Rendition';
 import logo from './images/nui-flower.png';
 
-const text = JSON.stringify(JSON.parse('{"renditions": [{"fmt": "png", "wid": "200", "hei": "200", "name":"rendition.png"}]}'), undefined, 4);
+const DEFAULT_RENDITIONS_TEXT  = JSON.stringify({
+    "renditions": [
+        {
+            "name": "rendition.xml",
+            "fmt": "xmp"
+        },
+        {
+            "name": "rendition.txt",
+            "fmt": "txt"
+        },
+        {
+            "name": "rendition.48.48.png",
+            "fmt": "png",
+            "wid": 48,
+            "hei": 48
+        },
+        {
+            "name": "rendition.319.319.png",
+            "fmt": "png",
+            "wid": 319,
+            "hei": 319
+        }
+    ]
+}, undefined, 4);
 
 export default class NormalDisplay extends React.Component {
 
@@ -45,7 +68,7 @@ export default class NormalDisplay extends React.Component {
             runTutorial:false,
             dev: localStorage.dev,
             env: localStorage.env,
-            textArea:localStorage.getItem('json') || text,
+            textArea: localStorage.getItem('json') || DEFAULT_RENDITIONS_TEXT,
             selectedOption: localStorage.selectedFile || null,
             devToolToken: this.getDevToolToken()
         };
@@ -63,12 +86,9 @@ export default class NormalDisplay extends React.Component {
     }
 
     async callGetAssetComputeEndpoint() {
-
         if (this.isAborted) return;
-
-        var resp;
+        let resp;
         try {
-            console.log('calling Cloud Storage Presign get');
             resp = await fetch("/api/asset-compute-endpoint", {
                 method: 'GET',
                 headers: {
@@ -80,7 +100,7 @@ export default class NormalDisplay extends React.Component {
                 throw new Error(errorMessage);
             }
             resp = await resp.json();
-            console.log(`Successfully got endpoint, ${resp.endpoint}`);
+            console.log(`Using Asset Compute endpoint: ${resp.endpoint}`);
             this.setState({
                 endpoint: resp.endpoint
             });
