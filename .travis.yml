@@ -26,6 +26,10 @@ env:
   # - TEST_DIR=client
   - TEST_DIR=server
 
+install:
+  - npm version
+  - npm install
+
 script:
   - cd $TEST_DIR && npm install && npm test
 

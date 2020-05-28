@@ -11,14 +11,15 @@
  */
 
 "use strict";
-const { createAssetComputeClient } = require("@adobe/asset-compute-client");
+
+const { AssetComputeClient } = require("@adobe/asset-compute-client");
 const yaml = require("js-yaml");
 const dotenv = require('dotenv');
 const fse = require('fs-extra');
 const { CloudStorage } = require('@adobe/cloud-blobstore-wrapper');
+
 dotenv.config();
 
-// const { ContainerAzure } = require("@nui/node-cloudstorage");
 const { v4: uuidv4 } = require('uuid');
 
 const DEFAULT_PRESIGN_TTL_MSEC = 60000 * 10; // 10 minutes validity
@@ -68,7 +69,7 @@ class AssetComputeDevTool {
     /**
      * Pre-sign an asset reference
      * @param {String} source Source file name
-	 * @return {Object} Source object for Asset Compute Processing
+     * @return {Object} Source object for Asset Compute Processing
      */
     presignSource(source) {
         if (source) {
@@ -184,6 +185,25 @@ function getEndpoint() {
     return process.env.ASSET_COMPUTE_URL || DEFAULT_ENDPOINT;
 }
 
+async function getActionUrls() {
+    try {
+        const namespace = process.env.AIO_RUNTIME_NAMESPACE || process.env.AIO_runtime_namespace;
+        const manifest = yaml.safeLoad(await fse.readFile('manifest.yml', "utf-8"));
+        const packageJson = await fse.readJson('package.json');
+
+
+        return Object.entries(manifest.packages.__APP_PACKAGE__.actions).reduce((obj, [name]) => {
+            obj[name] = `https://${namespace}.adobeioruntime.net/api/v1/web/${packageJson.name}-${packageJson.version}/${name}`;
+            return obj;
+        }, {});
+
+
+    } catch (e) { /* eslint-disable-line no-unused-vars */
+        // ignore error is not in the context of an aio app
+        return {};
+    }
+}
+
 /**
  * Set up instance of Asset Compute Client
  */
@@ -195,7 +215,9 @@ async function setupAssetCompute() {
         url: getEndpoint(),
         apiKey: process.env.DEV_TOOL_API_KEY // will default to `integration.technicalAccount.clientId` if environment variable is not set
     };
-    return createAssetComputeClient(integration, options);
+    const client = new AssetComputeClient(integration, options);
+    await client.register();
+    return client;
 }
 
 /**
@@ -211,11 +233,14 @@ async function setupCloudStorage() {
         }, process.env.AZURE_STORAGE_CONTAINER_NAME);
     }
     else if (process.env.S3_BUCKET && process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
-        storage = new CloudStorage({
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY},
-        process.env.S3_BUCKET,
-        { bucketRegion: process.env.AWS_REGION });
+        storage = new CloudStorage(
+            {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+            },
+            process.env.S3_BUCKET,
+            { bucketRegion: process.env.AWS_REGION }
+        );
     }
     else {
         throw new Error("Cloud storage credentials not set.");
@@ -237,5 +262,6 @@ async function setupAssetComputeDevTool() {
 
 module.exports = {
     setupAssetComputeDevTool,
-    getEndpoint
+    getEndpoint,
+    getActionUrls
 };
