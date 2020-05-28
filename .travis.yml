@@ -17,8 +17,8 @@ node_js:
   - "10"
 
 install:
-  - cd client && npm run build
-  - cd server && npm run build
+  - cd client && npm install && npm run build
+  - cd server && npm install && npm run build
 
 env:
   - TEST_DIR=client
