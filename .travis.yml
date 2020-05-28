@@ -16,13 +16,9 @@ os:
 node_js:
   - "10"
 
-install:
-  - cd client && npm install && npm run build
-  - cd server && npm install && npm run build
-
 env:
   - TEST_DIR=client
   - TEST_DIR=server
 
 script:
-  - cd $TEST_DIR && npm test
+  - cd $TEST_DIR && npm install && npm test
