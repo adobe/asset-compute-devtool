@@ -16,8 +16,6 @@ const yaml = require("js-yaml");
 const dotenv = require('dotenv');
 const fse = require('fs-extra');
 const { CloudStorage } = require('@adobe/cloud-blobstore-wrapper');
-const { promisify } = require('util');
-const exec = promisify(require('child_process').exec);
 
 dotenv.config();
 
@@ -190,8 +188,17 @@ function getEndpoint() {
 
 async function getActionUrls() {
     try {
-        const { stdout } = await exec('aio app get-url -j');
-        return JSON.parse(stdout).runtime;
+        const namespace = process.env.AIO_RUNTIME_NAMESPACE || process.env.AIO_runtime_namespace;
+        const manifest = yaml.safeLoad(await fse.readFile('manifest.yml', "utf-8"));
+        const packageJson = await fse.readJson('package.json');
+
+
+        return Object.entries(manifest.packages.__APP_PACKAGE__.actions).reduce((obj, [name]) => {
+            obj[name] = `https://${namespace}.adobeioruntime.net/api/v1/web/${packageJson.name}-${packageJson.version}/${name}`;
+            return obj;
+        }, {})
+
+
     } catch (e) { /* eslint-disable-line no-unused-vars */
         // ignore error is not in the context of an aio app
         return {};
