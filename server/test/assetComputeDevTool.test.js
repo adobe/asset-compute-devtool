@@ -19,6 +19,7 @@ const assert = require('assert');
 const fse = require('fs-extra');
 
 describe( 'assetComputeDevTool.js tests', () => {
+
     afterEach(() => {
         delete process.env.AIO_RUNTIME_NAMESPACE;
     });
