@@ -13,43 +13,34 @@
 const assert = require('assert');
 // const { promisify } = require('util');
 // var exec = promisify(require('child_process').exec);
-const mockRequire = require('mock-require');
+const fse = require('fs-extra');
 
 describe( 'assetComputeDevTool.js tests', () => {
     afterEach(() => {
-        mockRequire.stopAll();
+        delete process.env.AIO_RUNTIME_NAMESPACE;
     })
     
-    it.skip('should fail to get action urls if not in the context of an aio action', async function() {
-        mockRequire('child_process', {
-            exec: function(cmd, cb) {
-                return cb(new Error("TypeError: Cannot read property 'actions' of undefined\n"));
-            }
-        });
-        const { getActionUrls } = mockRequire.reRequire('../src/assetComputeDevTool'); // refresh cache to use mocked child_process defined above
+    it('should fail to get action urls if not in the context of an aio action', async function() {
+        
+        const { getActionUrls } = require('../src/assetComputeDevTool'); // refresh cache to use mocked child_process defined above
 
         const actionUrls = await getActionUrls();
         assert.ok(typeof actionUrls, 'object')
         assert.strictEqual(Object.keys(actionUrls).length, 0);
     }).timeout(3000);
     
-    it.skip('should get action urls successfully', async function() {
-        mockRequire('child_process', {
-            exec: function(cmd, cb) {
-                console.log('cmd', cmd);
-                const response = {
-                    stdout: '{"runtime":{"my-action":"https://1111.my-action.com/my-action","generic":"https://2222.generic.com/generic"}}\n',
-                    stderr: ''
-                  }
-                return cb(undefined, response);
-            }
-        });
-        const { getActionUrls } = mockRequire.reRequire('../src/assetComputeDevTool'); // refresh cache to use mocked child_process defined above
+    it('should get action urls successfully', async function() {
+        process.env.AIO_RUNTIME_NAMESPACE = 'namespace';
+        await fse.copy('./test/files/test-manifest.yml', 'manifest.yml');
+        assert.ok(await fse.pathExists('manifest.yml'));
+        const { getActionUrls } = require('../src/assetComputeDevTool'); // refresh cache to use mocked child_process defined above
 
         const actionUrls = await getActionUrls();
         assert.strictEqual(Object.keys(actionUrls).length, 2);
-        assert.ok(actionUrls["my-action"], "https://1111.my-action.com/my-actio");
-        assert.ok(actionUrls.generic, "https://2222.generic.com/generic");
+        assert.ok(actionUrls["worker-example"], "https://105979_72515.adobeioruntime.net/api/v1/web/@adobe/asset-compute-devtool-1.0.0/worker-example");
+        assert.ok(actionUrls.generic, "https://105979_72515.adobeioruntime.net/api/v1/web/@adobe/asset-compute-devtool-1.0.0/generic");
+        await fse.remove('manifest.yml');
+        assert.ok(!await fse.pathExists('manifest.yml'));
     });
 });
 
