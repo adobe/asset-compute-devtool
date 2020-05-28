@@ -28,3 +28,6 @@ env:
 
 script:
   - cd $TEST_DIR && npm install && npm test
+
+after_success:
+  - npm run report-coverage
