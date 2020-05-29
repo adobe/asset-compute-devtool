@@ -11,6 +11,7 @@
  */
 
 "use strict";
+
 const { AssetComputeClient } = require("@adobe/asset-compute-client");
 const yaml = require("js-yaml");
 const dotenv = require('dotenv');
@@ -19,7 +20,6 @@ const { CloudStorage } = require('@adobe/cloud-blobstore-wrapper');
 
 dotenv.config();
 
-// const { ContainerAzure } = require("@nui/node-cloudstorage");
 const { v4: uuidv4 } = require('uuid');
 
 const DEFAULT_PRESIGN_TTL_MSEC = 60000 * 10; // 10 minutes validity
@@ -29,7 +29,7 @@ const DEFAULT_ENDPOINT = 'https://asset-compute.adobe.io';
 class AssetComputeDevTool {
     /**
      * Create Framework instance
-     * 
+     *
      * @param {AssetComputeClient} assetCompute Asset Compute Client
      * @param {ClouStorage} storage Cloud storage container (Azure or S3)
      */
@@ -62,7 +62,7 @@ class AssetComputeDevTool {
                 return item.name.slice(7); // remove the `source/` prefix
             }
             return undefined;
-        }).filter((name) => (name !== undefined) && (name.length > 0) )
+        }).filter((name) => (name !== undefined) && (name.length > 0) );
         return files;
     }
 
@@ -100,7 +100,7 @@ class AssetComputeDevTool {
 
     /**
      * Retrieve the rendition path from a rendition_created or rendition_failed event
-     * 
+     *
      * @param {AssetComputeRenditionCreatedEvent|AssetComputeRenditionFailedEvent} event rendition event
      * @returns {String} rendition path in target repository
      */
@@ -110,7 +110,7 @@ class AssetComputeDevTool {
 
     /**
      * Presign a set of renditions
-     * 
+     *
      * @param {String} source Source asset name, may be null/undefined if there is no asset
      * @param {AssetComputeRendition} rendition Rendition to presign
      * @param {Number} idx Unique index
@@ -130,19 +130,19 @@ class AssetComputeDevTool {
 
     /**
      * Presign a set of renditions
-     * 
+     *
      * @param {String} source Source asset name
      * @param {AssetComputeRendition[]} renditions Renditions to create
      */
     presignRenditions(source, renditions) {
-        return renditions.map((rendition, idx) => 
+        return renditions.map((rendition, idx) =>
             this.presignRendition(source, rendition, idx)
         );
     }
 
     /**
      * Process an asset, waits for all rendition events to return
-     * 
+     *
      * @param {String} [source=] Source file name
      * @param {Object} renditions Renditions
      * @param {Object} [userData=] Optional user to pass through
@@ -168,12 +168,11 @@ class AssetComputeDevTool {
             if (event.type === "rendition_created") {
                 try {
                     return this.storage.commitPut(event.rendition.userData.path);
-                } catch (e) {
-                    return e; // ignore if cloud storage is an S3 bucket, `commitPut` not needed
+                } catch (e) { // eslint-disable-line no-unused-vars
+                    // ignore if cloud storage is an S3 bucket, `commitPut` not needed
                 }
-            } else {
-                return null;
             }
+            return null;
         }));
         return events;
     }
@@ -196,7 +195,7 @@ async function getActionUrls() {
         return Object.entries(manifest.packages.__APP_PACKAGE__.actions).reduce((obj, [name]) => {
             obj[name] = `https://${namespace}.adobeioruntime.net/api/v1/web/${packageJson.name}-${packageJson.version}/${name}`;
             return obj;
-        }, {})
+        }, {});
 
 
     } catch (e) { /* eslint-disable-line no-unused-vars */
@@ -215,7 +214,7 @@ async function setupAssetCompute() {
     const options = {
         url: getEndpoint(),
         apiKey: process.env.DEV_TOOL_API_KEY // will default to `integration.technicalAccount.clientId` if environment variable is not set
-    }
+    };
     const client = new AssetComputeClient(integration, options);
     await client.register();
     return client;
@@ -231,14 +230,17 @@ async function setupCloudStorage() {
         storage =  new CloudStorage({
             accountName: process.env.AZURE_STORAGE_ACCOUNT,
             accountKey: process.env.AZURE_STORAGE_KEY
-        }, process.env.AZURE_STORAGE_CONTAINER_NAME)
+        }, process.env.AZURE_STORAGE_CONTAINER_NAME);
     }
     else if (process.env.S3_BUCKET && process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
-        storage = new CloudStorage({
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY},
+        storage = new CloudStorage(
+            {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+            },
             process.env.S3_BUCKET,
-            { bucketRegion: process.env.AWS_REGION });
+            { bucketRegion: process.env.AWS_REGION }
+        );
     }
     else {
         throw new Error("Cloud storage credentials not set.");
@@ -262,4 +264,4 @@ module.exports = {
     setupAssetComputeDevTool,
     getEndpoint,
     getActionUrls
-}
+};

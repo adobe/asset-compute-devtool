@@ -9,10 +9,11 @@
 # governing permissions and limitations under the License.
 
 language: node_js
+
 os:
-  - windows
   - linux
   - osx
+  - windows
 
 node_js:
   - "10"
@@ -21,10 +22,16 @@ node_js:
   - "12"
   - "14"
 
-before_install:
-  - cd server
+env:
+  # - TEST_DIR=client
+  - TEST_DIR=server
+
 install:
   - npm version
   - npm install
+
 script:
-  - npm test
+  - cd $TEST_DIR && npm install && npm test
+
+after_success:
+  - npm run report-coverage

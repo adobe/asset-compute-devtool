@@ -21,7 +21,6 @@ import Popover from '@react/react-spectrum/Popover';
 import AddCircle from '@react/react-spectrum/Icon/AddCircle';
 import Image from '@react/react-spectrum/Icon/Image';
 import ComboBox from '@react/react-spectrum/ComboBox';
-import { Toast } from '@react/react-spectrum/Toast';
 
 export default class ChooseFileBox extends Component {
     constructor(props){

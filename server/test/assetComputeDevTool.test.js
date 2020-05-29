@@ -9,26 +9,30 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+
+/* eslint-env mocha */
+/* eslint mocha/no-mocha-arrows: "off" */
+
 'use strict';
+
 const assert = require('assert');
-// const { promisify } = require('util');
-// var exec = promisify(require('child_process').exec);
 const fse = require('fs-extra');
 
 describe( 'assetComputeDevTool.js tests', () => {
+
     afterEach(() => {
         delete process.env.AIO_RUNTIME_NAMESPACE;
-    })
-    
+    });
+
     it('should fail to get action urls if not in the context of an aio action', async function() {
-        
+
         const { getActionUrls } = require('../src/assetComputeDevTool'); // refresh cache to use mocked child_process defined above
 
         const actionUrls = await getActionUrls();
-        assert.ok(typeof actionUrls, 'object')
+        assert.ok(typeof actionUrls, 'object');
         assert.strictEqual(Object.keys(actionUrls).length, 0);
     }).timeout(3000);
-    
+
     it('should get action urls successfully', async function() {
         process.env.AIO_RUNTIME_NAMESPACE = 'namespace';
         await fse.copy('./test/files/test-manifest.yml', 'manifest.yml');
@@ -43,4 +47,3 @@ describe( 'assetComputeDevTool.js tests', () => {
         assert.ok(!await fse.pathExists('manifest.yml'));
     });
 });
-
