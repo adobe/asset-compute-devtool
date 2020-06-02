@@ -125,4 +125,4 @@ async function onError(error) {
   }
 }
 
-run(port);
+module.exports.init = run(port);
