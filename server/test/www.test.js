@@ -16,13 +16,13 @@
 'use strict';
 
 // const assert = require('assert');
-const { init } = require('../bin/www.js');
+// const { init } = require('../bin/www.js');
 
 describe('bin/www.js tests', () => {
 
     it('Test running', async function () {
         console.log("STARTING RUN");
-        await init(88);
+        await require('../bin/www.js').init;
         console.log("We ran");
     });
 });
