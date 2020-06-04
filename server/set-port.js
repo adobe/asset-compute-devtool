@@ -14,6 +14,8 @@
 
 require('dotenv').config();
 
+const fse = require('fs-extra');
+
 if (process.env.ASSET_COMPUTE_DEV_PORT) {
     // read/process package.json
     const file = '../client/package.json';
