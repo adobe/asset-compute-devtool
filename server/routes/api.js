@@ -12,12 +12,12 @@
 
 'use strict';
 
+require('dotenv').config();
+
 const express = require('express');
 const router = express.Router();
-const dotenv = require('dotenv');
 const { getWorkerLogs } = require('../src/openwhisk');
 const { setupAssetComputeDevTool, getEndpoint, getActionUrls} = require('../src/assetComputeDevTool');
-dotenv.config();
 
 let assetComputeDevTool;
 let assetComputeStartTime = Date.now(); // eslint-disable-line no-unused-vars

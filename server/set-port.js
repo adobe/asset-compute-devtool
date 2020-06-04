@@ -10,11 +10,9 @@
  * governing permissions and limitations under the License.
  */
 
-
 'use strict';
-const fse = require('fs-extra');
-const dotenv = require('dotenv');
-dotenv.config();
+
+require('dotenv').config();
 
 if (process.env.ASSET_COMPUTE_DEV_PORT) {
     // read/process package.json

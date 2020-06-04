@@ -10,14 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
+"use strict";
+
+require('dotenv').config();
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var api = require('./routes/api');
 var cors = require("cors");
 const formidable = require('express-formidable');
-const dotenv = require('dotenv');
-dotenv.config();
 
 var app = express();
 

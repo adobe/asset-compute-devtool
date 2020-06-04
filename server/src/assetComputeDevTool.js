@@ -12,13 +12,12 @@
 
 "use strict";
 
+require('dotenv').config();
+
 const { AssetComputeClient } = require("@adobe/asset-compute-client");
 const yaml = require("js-yaml");
-const dotenv = require('dotenv');
 const fse = require('fs-extra');
 const { CloudStorage } = require('@adobe/cloud-blobstore-wrapper');
-
-dotenv.config();
 
 const { v4: uuidv4 } = require('uuid');
 
