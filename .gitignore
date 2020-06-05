@@ -16,6 +16,7 @@ client/coverage
 server/client-build/static
 server/client-build/asset-manifest.json
 server/client-build/precache-manifest.*
+server/client-build/index.html
 
 # Logs
 logs
