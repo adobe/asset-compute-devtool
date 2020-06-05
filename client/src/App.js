@@ -398,16 +398,15 @@ export default class NormalDisplay extends React.Component {
                             minWidth: '500px', marginBottom: '1em',
                             overflow: 'scroll',
                             padding: '1rem'}}>
-                <Well style={{padding:10,display:'inline-block'}}>
+
                         {/* choose file and add new file */}
                         <ChooseFileBox id="ChooseFileBox" onChange={this.handleSelectedFileChange.bind(this)} devToolToken={this.state.devToolToken} onError={this.handleApiErrors.bind(this)}/>
                         <Button id="run" variant="cta" isDisabled={!this.state.selectedOption || this.state.running} marginTop='15px' marginRight='10px' onPress={this.run}>
                             Run
                         </Button>
                         <Button id='Abort' variant="negative" marginTop='15px' marginLeft='10px'  isDisabled={!this.state.running} onPress={this.abort.bind(this)}>
-                            Abort'
+                            Abort
                         </Button>
-                </Well>
 
                         <Editor onChange={(v) => {this.handleTextChange(v)}} onRun={this.run}/>
 
