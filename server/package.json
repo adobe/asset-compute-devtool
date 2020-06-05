@@ -19,6 +19,7 @@
     "client": "node set-port.js && cd ..&& cd client && npm start",
     "pretest": "eslint src set-port.js test routes",
     "test": "nyc mocha --recursive --exit",
+    "posttest": "license-checker --summary",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "dependencies": {
@@ -48,6 +49,6 @@
     "mocha": "^7.2.0",
     "mock-require": "^3.0.3",
     "nodemon": "^2.0.3",
-    "nyc": "^15.1.0"
+    "nyc": "^15.0.1"
   }
 }
