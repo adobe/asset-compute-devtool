@@ -14,7 +14,7 @@ governing permissions and limitations under the License.
 import React from 'react';
 
 // Importing react-spectrum components
-import Well from '@react/react-spectrum/Well';
+import {Well} from '@react-spectrum/well';
 import Button from '@react/react-spectrum/Button';
 import {Toast} from '@react/react-spectrum/Toast';
 import Heading from '@react/react-spectrum/Heading';

@@ -14,7 +14,7 @@ import React, { Component } from 'react';
 
 // Importing react-spectrum global page styles
 
-import Well from '@react/react-spectrum/Well';
+import {Well} from '@react-spectrum/well';
 import Button from '@react/react-spectrum/Button';
 import OverlayTrigger from '@react/react-spectrum/OverlayTrigger';
 import Popover from '@react/react-spectrum/Popover';
