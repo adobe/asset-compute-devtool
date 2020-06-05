@@ -3,8 +3,8 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-        "@react/collection-view": "file:react-collection-view-4.1.5.tgz",
-        "@react/react-spectrum": "file:react-react-spectrum-2.25.0.tgz",
+        "@react/collection-view": "file:libraries/react-collection-view-4.1.5.tgz",
+        "@react/react-spectrum": "file:libraries/react-react-spectrum-2.25.0.tgz",
         "ace-builds": "^1.4.8",
         "ajv": "^6.12.0",
         "babel-polyfill": "^6.26.0",
