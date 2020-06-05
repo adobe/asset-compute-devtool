@@ -15,7 +15,9 @@ import React, { Component } from 'react';
 import '@react/react-spectrum/page';
 import DropdownButton from '@react/react-spectrum/DropdownButton';
 import { MenuItem } from '@react/react-spectrum/Menu';
-import ChevronDown from '@react/react-spectrum/Icon/ChevronDown';
+
+// OS
+import ChevronDown from '@spectrum-icons/workflow//ChevronDown';
 
 
 

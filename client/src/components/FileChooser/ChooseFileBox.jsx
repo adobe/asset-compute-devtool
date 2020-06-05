@@ -12,13 +12,16 @@ governing permissions and limitations under the License.
 
 import React, { Component } from 'react';
 
-// Importing react-spectrum global page styles
+// v3
 import {Well} from '@react-spectrum/well';
 import {ActionButton} from '@react-spectrum/button';
+import {Icon} from '@react-spectrum/icon';
+import AddCircle from '@spectrum-icons/workflow//AddCircle';
+import Image from '@spectrum-icons/workflow//Image';
+
+// v2
 import OverlayTrigger from '@react/react-spectrum/OverlayTrigger';
 import Popover from '@react/react-spectrum/Popover';
-import AddCircle from '@react/react-spectrum/Icon/AddCircle';
-import Image from '@react/react-spectrum/Icon/Image';
 import ComboBox from '@react/react-spectrum/ComboBox';
 
 export default class ChooseFileBox extends Component {
@@ -165,7 +168,9 @@ export default class ChooseFileBox extends Component {
             <div>
             <Well UNSAFE_style={{display:'inline-block'}}>
             <ActionButton id="file-chooser" isQuiet marginRight='size-75' onPress={(e) => {this._file.click()}}>
+                <Icon >
                 <AddCircle size='M'/>
+                </Icon>
             </ActionButton>
             <ComboBox
                 options={this.state.fileChoices}
@@ -178,7 +183,7 @@ export default class ChooseFileBox extends Component {
             <input id="myInput" type="file" onChange={this.onUpload.bind(this)} ref={(ref) => this._file = ref} style={{display:'none'}} />
             <OverlayTrigger  trigger="hover" disabled={!this.state.selectedOption} placement="right">
              <ActionButton  marginLeft='size-100'  disabled={!this.state.selectedOption} isQuiet >
-                <Image size='M'/>
+                <Icon><Image size='M'/></Icon>
             </ActionButton>
                 <Popover>
                  {this.state.image}
