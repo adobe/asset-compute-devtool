@@ -3,6 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"@react-spectrum/button": "^3.0.0-rc.2",
 		"@react-spectrum/provider": "^3.0.0-rc.2",
 		"@react-spectrum/theme-default": "^3.0.0-rc.2",
 		"@react-spectrum/well": "^3.0.0-rc.2",

@@ -14,8 +14,7 @@ import React, { Component } from 'react';
 
 // Importing react-spectrum global page styles
 
-import {Well} from '@react-spectrum/well';
-import Button from '@react/react-spectrum/Button';
+import {Button} from '@react-spectrum/button';
 import OverlayTrigger from '@react/react-spectrum/OverlayTrigger';
 import Popover from '@react/react-spectrum/Popover';
 import AddCircle from '@react/react-spectrum/Icon/AddCircle';
@@ -164,8 +163,9 @@ export default class ChooseFileBox extends Component {
     render () {
         return (
             <div>
-            <Well style={{padding:10,display:'inline-block'}}>
-            <Button variant ='tool' id="file-chooser" quiet icon={<AddCircle size='M'/>} style={{marginRight:5,float:'left'}} onClick={(e) => {this._file.click()}}/>
+            <Button variant ='primary' id="file-chooser" quiet marginRight='5px' float='left' onPress={(e) => {this._file.click()}}>
+                <AddCircle size='M'/>
+            </Button>
             <ComboBox
                 options={this.state.fileChoices}
                 placeholder="Select a file..."
@@ -176,12 +176,13 @@ export default class ChooseFileBox extends Component {
             <span style={{position:'fixed', top:'33px', left:'290px'}} id='ChooseFileButton' />
             <input id="myInput" type="file" onChange={this.onUpload.bind(this)} ref={(ref) => this._file = ref} style={{display:'none'}} />
             <OverlayTrigger  trigger="hover" disabled={!this.state.selectedOption} placement="right">
-             <Button  icon={<Image size='M'/>} style={{marginLeft:10}}  disabled={!this.state.selectedOption} quiet variant="action"/>
+             <Button  marginLeft='10px'  disabled={!this.state.selectedOption} quiet variant="primary">
+                <Image size='M'/>
+            </Button>
              <Popover>
                  {this.state.image}
              </Popover>
              </OverlayTrigger>
-            </Well>
             <p style={{marginRight:300, marginLeft:20, bottom:4, position:'fixed', zIndex:'10'}}>{this.state.error}</p>
             </div>
         )
