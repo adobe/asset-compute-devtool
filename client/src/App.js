@@ -374,6 +374,9 @@ export default class NormalDisplay extends React.Component {
                 });
             }
         } catch(err) {
+            this.setState({
+                running:false
+            });
             console.log(err);
             return this.handleApiErrors('Unexpected error. Check source file or request JSON.');
         }
@@ -404,7 +407,7 @@ export default class NormalDisplay extends React.Component {
                         <span id="tourStepThree" style={{position:"fixed", top:'35px', left:'420px'}}/>
                         <Button id='Abort' label="Abort" variant="warning" style={{marginTop:15, marginLeft:10}} disabled={!this.state.running} onClick={this.abort.bind(this)}/>
 
-                        <Editor onChange={(v) => {this.handleTextChange(v)}} onRun={this.run}/>
+                        <Editor onChange={(v) => {this.handleTextChange(v)}} devToolToken={this.state.devToolToken} onRun={this.run}/>
 
                     </div>
                 </GridColumn>

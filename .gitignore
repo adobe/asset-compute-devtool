@@ -16,6 +16,8 @@ client/coverage
 server/client-build/static
 server/client-build/asset-manifest.json
 server/client-build/precache-manifest.*
+server/client-build/index.html
+server/client-build/service-worker.js
 
 # Logs
 logs
@@ -63,7 +65,7 @@ typings/
 .node_repl_history
 
 # Output of 'npm pack'
-*.tgz
+# *.tgz
 
 # Yarn Integrity file
 .yarn-integrity
