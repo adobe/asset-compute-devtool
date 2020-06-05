@@ -16,6 +16,11 @@ import React from 'react';
 // Importing react-spectrum components
 import {Well} from '@react-spectrum/well';
 import {Button} from '@react-spectrum/button';
+// import {Image} from '@react-spectrum/image';
+// import {Flex} from '@react-spectrum/layout'
+// import {Header, View} from '@react-spectrum/view'
+
+
 import {Toast} from '@react/react-spectrum/Toast';
 import Heading from '@react/react-spectrum/Heading';
 import {Image} from '@react/react-spectrum/Image';

@@ -11,10 +11,14 @@ governing permissions and limitations under the License.
 */
 
 import React, { Component } from 'react';
+
+// v3
+import {Link} from '@react-spectrum/link';
+
+// v2
 import {Card, CardCoverPhoto, CardBody, CardPreview, CardFooter} from '@react/react-spectrum/Card';
 import {Asset} from '@react/react-spectrum/Asset';
 import Wait from '@react/react-spectrum/Wait';
-import Link from '@react/react-spectrum/Link';
 import errorPlaceHolder from '../../images/renditionFailedPlaceHolder.png';
 import path from 'path';
 
@@ -42,8 +46,10 @@ export default class Rendition extends Component {
                              </CardFooter>
                 }
                 else if (ext && (ext.length > 0) && IMAGE_EXT.includes(ext)) {
-                    image = <Link href={rendition.url} variant="quiet" target="_blank" >
+                    image = <Link href={rendition.url} isQuiet target="_blank" >
+                                <a href={rendition.url} target="_blank">
                                 <CardCoverPhoto src={rendition.url} />
+                                </a>
                             </Link>
                 }
                 else if (ext && (ext.length > 0) && EMBEDDED_EXT.includes(ext)) {
@@ -51,8 +57,10 @@ export default class Rendition extends Component {
                     if (rendition.name.includes('json')) { type = 'application/json'}
                     if (rendition.name.includes('xml')) { type = 'application/xml'}
                     image = <CardPreview>
-                                <Link href={rendition.url} target="_blank">
-                                <Asset type="file" style={{width:'238px', height:'136px'}} src={rendition.url} />
+                                <Link>
+                                    <a href={rendition.url} target="_blank">
+                                    <Asset type="file" style={{width:'238px', height:'136px'}} src={rendition.url} />
+                                    </a>
                                 </Link>
                             </CardPreview>
                     //  <CardPreview>
@@ -63,9 +71,11 @@ export default class Rendition extends Component {
                 }
                 else {
                     image = <CardPreview>
-                            <Link href={rendition.url} target="_blank">
-                            <Asset type="file" style={{width:'238px', height:'136px'}} />
-                            </Link>
+                                <Link href={rendition.url} target="_blank">
+                                    <a href={rendition.url} target="_blank">
+                                        <Asset type="file" style={{width:'238px', height:'136px'}} />
+                                    </a>
+                                </Link>
                             </CardPreview>
     
                 }
