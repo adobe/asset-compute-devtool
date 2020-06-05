@@ -14,8 +14,8 @@ governing permissions and limitations under the License.
 import React from 'react';
 
 // Importing react-spectrum components
-import Well from '@react/react-spectrum/Well';
-import Button from '@react/react-spectrum/Button';
+import {Well} from '@react-spectrum/well';
+import {Button} from '@react-spectrum/button';
 import {Toast} from '@react/react-spectrum/Toast';
 import Heading from '@react/react-spectrum/Heading';
 import {Image} from '@react/react-spectrum/Image';
@@ -398,11 +398,15 @@ export default class NormalDisplay extends React.Component {
                             minWidth: '500px', marginBottom: '1em',
                             overflow: 'scroll',
                             padding: '1rem'}}>
+
                         {/* choose file and add new file */}
                         <ChooseFileBox id="ChooseFileBox" onChange={this.handleSelectedFileChange.bind(this)} devToolToken={this.state.devToolToken} onError={this.handleApiErrors.bind(this)}/>
-                        <Button id="run" label="Run" variant="cta" style={{marginTop:15, marginLeft:10}} disabled={!this.state.selectedOption || this.state.running} onClick={this.run}/>
-                        <span id="tourStepThree" style={{position:"fixed", top:'35px', left:'420px'}}/>
-                        <Button id='Abort' label="Abort" variant="warning" style={{marginTop:15, marginLeft:10}} disabled={!this.state.running} onClick={this.abort.bind(this)}/>
+                        <Button id="run" variant="cta" isDisabled={!this.state.selectedOption || this.state.running} marginTop='15px' marginRight='10px' onPress={this.run}>
+                            Run
+                        </Button>
+                        <Button id='Abort' variant="negative" marginTop='15px' marginLeft='10px'  isDisabled={!this.state.running} onPress={this.abort.bind(this)}>
+                            Abort
+                        </Button>
 
                         <Editor onChange={(v) => {this.handleTextChange(v)}} onRun={this.run}/>
 

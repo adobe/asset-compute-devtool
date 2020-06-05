@@ -13,12 +13,12 @@ governing permissions and limitations under the License.
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-// import App from './App';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
-import Provider from '@react/react-spectrum/Provider';
+import { Provider } from '@react-spectrum/provider';
+import {theme} from '@react-spectrum/theme-default';
 
-ReactDOM.render(<Provider theme="dark"><App/></Provider>, document.getElementById('root'));
+ReactDOM.render(<Provider theme={theme} colorScheme="dark"><App/></Provider>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

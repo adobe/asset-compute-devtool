@@ -13,9 +13,8 @@ governing permissions and limitations under the License.
 import React, { Component } from 'react';
 
 // Importing react-spectrum global page styles
-
-import Well from '@react/react-spectrum/Well';
-import Button from '@react/react-spectrum/Button';
+import {Well} from '@react-spectrum/well';
+import {ActionButton} from '@react-spectrum/button';
 import OverlayTrigger from '@react/react-spectrum/OverlayTrigger';
 import Popover from '@react/react-spectrum/Popover';
 import AddCircle from '@react/react-spectrum/Icon/AddCircle';
@@ -164,8 +163,10 @@ export default class ChooseFileBox extends Component {
     render () {
         return (
             <div>
-            <Well style={{padding:10,display:'inline-block'}}>
-            <Button variant ='tool' id="file-chooser" quiet icon={<AddCircle size='M'/>} style={{marginRight:5,float:'left'}} onClick={(e) => {this._file.click()}}/>
+            <Well UNSAFE_style={{display:'inline-block'}}>
+            <ActionButton id="file-chooser" isQuiet marginRight='size-75' onPress={(e) => {this._file.click()}}>
+                <AddCircle size='M'/>
+            </ActionButton>
             <ComboBox
                 options={this.state.fileChoices}
                 placeholder="Select a file..."
@@ -176,12 +177,14 @@ export default class ChooseFileBox extends Component {
             <span style={{position:'fixed', top:'33px', left:'290px'}} id='ChooseFileButton' />
             <input id="myInput" type="file" onChange={this.onUpload.bind(this)} ref={(ref) => this._file = ref} style={{display:'none'}} />
             <OverlayTrigger  trigger="hover" disabled={!this.state.selectedOption} placement="right">
-             <Button  icon={<Image size='M'/>} style={{marginLeft:10}}  disabled={!this.state.selectedOption} quiet variant="action"/>
-             <Popover>
+             <ActionButton  marginLeft='size-100'  disabled={!this.state.selectedOption} isQuiet >
+                <Image size='M'/>
+            </ActionButton>
+                <Popover>
                  {this.state.image}
-             </Popover>
+                </Popover>
              </OverlayTrigger>
-            </Well>
+             </Well>
             <p style={{marginRight:300, marginLeft:20, bottom:4, position:'fixed', zIndex:'10'}}>{this.state.error}</p>
             </div>
         )
