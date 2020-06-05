@@ -26,16 +26,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 if (process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') {
-    app.use(express.static(path.join(__dirname, 'client-build')));
+    app.use(express.static(__dirname + '\\client-build'));
 }
 app.use(formidable());
 
 app.use('/', function (req, res, next) {
     if ((process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') && (req.headers.authorization != app.settings.devToolToken)) {
-        return res.status(401).send({
-            message: 'Unauthorized'
-        });
-    }
+            return res.status(401).send({
+                message: 'Unauthorized'
+            });
+        }
     next();
 });
 
@@ -43,17 +43,20 @@ app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+    console.log("In 404 error log")
     next(createError(404));
 });
 
 // error handler
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development
+    console.log("In error handler")
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 
     // render the error page
     res.status(err.status || 500);
+    console.log("Just before error")
     res.send('error');
 });
 
