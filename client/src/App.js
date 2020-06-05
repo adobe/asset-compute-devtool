@@ -374,6 +374,9 @@ export default class NormalDisplay extends React.Component {
                 });
             }
         } catch(err) {
+            this.setState({
+                running:false
+            });
             console.log(err);
             return this.handleApiErrors('Unexpected error. Check source file or request JSON.');
         }
