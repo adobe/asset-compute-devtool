@@ -163,7 +163,7 @@ export default class ChooseFileBox extends Component {
     render () {
         return (
             <div>
-            <Well >
+            <Well UNSAFE_style={{display:'inline-block'}}>
             <ActionButton id="file-chooser" isQuiet marginRight='size-75' onPress={(e) => {this._file.click()}}>
                 <AddCircle size='M'/>
             </ActionButton>
