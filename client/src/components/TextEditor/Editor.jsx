@@ -65,7 +65,7 @@ export default class Editor extends Component {
             resp = await fetch("/api/asset-compute-action-url", {
                 method: 'GET',
                 headers: {
-                    Authorization: this.state.devToolToken
+                    Authorization: this.props.devToolToken
                 }
             });
             resp = await resp.json();
