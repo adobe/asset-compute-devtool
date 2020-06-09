@@ -165,6 +165,16 @@ Note: The **backend port** will default to 9000. If you already have something r
 5. Run `npm publish --access public --dry-run` then `npm publish --access public` script to release to npm
 
 
+### Internal Dependencies
+This project depends on the @react/react-spectrum package which depends on the @react/collection-view package. Neither package is published to the public npm repository. In order to support their installation and use, they have been included in this project as tar files. Each file has been prepended with the following message regarding the license:
+```
+/**
+ * Use of this code is governed by the Adobe Terms of Use and
+ * Adobe Developer Additional Terms, and the license attached
+ * to this repo does not apply.
+ */
+```
+While changing package.json to point to the tar file for @react/react-spectrum is simple and natively supported by npm, this is not the case with @react/collection-view, since it is a dependency of @react/react-spectrum. To solve this problem, this project uses [npm-force-resolutions](https://www.npmjs.com/package/npm-force-resolutions) to add support for selective dependency resolutions.
 
 ![](files/meahana-screenshot-2.png)
 
