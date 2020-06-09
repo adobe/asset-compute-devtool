@@ -3,7 +3,7 @@
 <!-- [![Travis](https://travis-ci.com/adobe/asset-compute-devtool.svg?branch=master)](https://travis-ci.com/adobe/asset-compute-devtool) -->
 
 # Asset Compute Development Tool
-This is a library for the developer tool for exploring and testing the service. To use this, see [adobe/aio-cli-plugin-asset-compute](https://github.com/adobe/aio-cli-plugin-asset-compute).
+This is a library for the developer tool for exploring and testing the Adobe Asset Compute service. To use this, see [adobe/aio-cli-plugin-asset-compute](https://github.com/adobe/aio-cli-plugin-asset-compute).
 
 ## Prerequisites
 
