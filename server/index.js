@@ -17,6 +17,8 @@ governing permissions and limitations under the License.
  * Module dependencies.
  */
 
+require('dotenv').config();
+
 var app = require('./app.js');
 var debug = require('debug')('server');
 var http = require('http');
@@ -24,24 +26,23 @@ const open = require('open');
 const getPort = require('get-port');
 const crypto = require("crypto");
 
-var port = normalizePort(process.env.ASSET_COMPUTE_DEV_PORT || '9000');
-var randomString;
-try {
-    randomString = crypto.randomBytes(32).toString("hex");
-} catch (e) {
-    console.log(e);
-    throw new Error('Error: Not enough accumulated entropy to generate cryptographically strong data.');
-}
+let port;
 
-/**
- * Find open port
- */
-async function findOpenPort(preferredPort) {
-    return getPort({ port: [preferredPort, preferredPort + 1, preferredPort + 2] });
-    // Will use specified port if available, otherwise fall back to a random port
-}
+function run(portIncomming) {
 
-function run(port) {
+    if (isNaN(portIncomming) || portIncomming === undefined) {
+        port = normalizePort(process.env.ASSET_COMPUTE_DEV_PORT || '9000');
+    } else {
+        port = portIncomming;
+    }
+
+    var randomString;
+    try {
+        randomString = crypto.randomBytes(32).toString("hex");
+    } catch (e) {
+        console.log(e);
+        throw new Error('Error: Not enough accumulated entropy to generate cryptographically strong data.');
+    }
 
     // Get port from environment and store in Express.
     app.set('port', port);
@@ -74,6 +75,14 @@ function run(port) {
         console.log("Asset Compute Developer Tool Server Stopped");
         process.exit();
     });
+}
+
+/**
+ * Find open port
+ */
+async function findOpenPort(preferredPort) {
+    return getPort({ port: [preferredPort, preferredPort + 1, preferredPort + 2] });
+    // Will use specified port if available, otherwise fall back to a random port
 }
 
 /**
