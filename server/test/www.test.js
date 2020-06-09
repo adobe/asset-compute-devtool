@@ -18,6 +18,6 @@
 describe('bin/www.js tests', () => {
 
     it('Test running', async function () {
-        await require('../bin/www.js').init;
+        await require('../bin/www.js');
     });
 });
