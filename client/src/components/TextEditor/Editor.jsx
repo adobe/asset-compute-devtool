@@ -65,7 +65,7 @@ export default class Editor extends Component {
             resp = await fetch("/api/asset-compute-action-url", {
                 method: 'GET',
                 headers: {
-                    Authorization: this.state.devToolToken
+                    Authorization: this.props.devToolToken
                 }
             });
             resp = await resp.json();
@@ -73,7 +73,7 @@ export default class Editor extends Component {
             // ignore errors if not running in context of aio
         }
         let customWorkerRenditions;
-        if (resp && typeof resp === 'object' && Object.keys(resp).length > 0 ) {
+        if (resp && typeof resp === 'object' && Object.keys(resp).length > 0 && resp.message != 'Unauthorized' ) {
             let renditions = [];
             Object.values(resp).forEach(action => {
                 renditions.push({
