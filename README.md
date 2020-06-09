@@ -146,13 +146,13 @@ AZURE_STORAGE_CONTAINER_NAME=
 1. cd into `/server`
 2. Make sure to do a clean `npm install` in both `/server` and `/client`
 3. if this is your first time using the dev tool or there were changes to the UI since you used it last, run  `npm run build`
-4. run `npm start`
+4. run `npm run start-prod`
 
 ### Development
 1. Make sure to set environment variable:  `ASSET_COMPUTE_DEV_TOOL_ENV='development'`
 2. If it is your first time using the dev tool or you made changes to the UI, cd into `/client` and run `npm install` <br/>
 3. cd into the `/server` directory. (remember to do an `npm install`) <br/>
-4. run `npm run development` <br />
+4. run `npm run start-dev` <br />
 
 Note: The **backend port** will default to 9000. If you already have something running on that port or would like to change it, set the `ASSET_COMPUTE_DEV_PORT` environment variable. **WARNING: this updates the package.json in /client**
 
