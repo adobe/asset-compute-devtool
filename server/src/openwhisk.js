@@ -11,7 +11,6 @@
  */
 
 'use strict';
-require('dotenv').config();
 
 const fse = require('fs-extra');
 const openwhisk = require('openwhisk');

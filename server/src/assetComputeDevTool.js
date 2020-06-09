@@ -12,8 +12,6 @@
 
 "use strict";
 
-require('dotenv').config();
-
 const { AssetComputeClient } = require("@adobe/asset-compute-client");
 const yaml = require("js-yaml");
 const fse = require('fs-extra');
