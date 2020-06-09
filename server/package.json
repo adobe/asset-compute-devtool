@@ -14,8 +14,8 @@
   ],
   "scripts": {
     "build": "cd .. && cd client && npm run build && cd .. && cd server",
-    "start": "ASSET_COMPUTE_DEV_TOOL_ENV=development concurrently \"nodemon index\" \"npm run client\"",
-    "server": "node index",
+    "development": "ASSET_COMPUTE_DEV_TOOL_ENV=development concurrently \"nodemon index\" \"npm run client\"",
+    "start": "ASSET_COMPUTE_DEV_TOOL_ENV=production node index",
     "client": "node set-port.js && cd .. && cd client && npm start",
     "pretest": "eslint src set-port.js test routes",
     "test": "nyc mocha --recursive --exit",
