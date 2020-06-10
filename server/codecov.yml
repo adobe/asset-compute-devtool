@@ -1,6 +1,6 @@
 coverage:
   status:
-    project: off
-    default:
-      informational: true
-      target: 0%
+    project:
+      default:
+        informational: true
+        target: 0%
