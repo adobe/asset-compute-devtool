@@ -1,6 +1,2 @@
 coverage:
-  status:
-    project:
-      default:
-        informational: true
-        target: 0%
+  range: "0...100"
