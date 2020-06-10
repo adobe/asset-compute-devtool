@@ -134,4 +134,4 @@ async function onError(error) {
     }
 }
 
-module.exports.start = run(port);
+module.exports.start = run;
