@@ -1,53 +1,56 @@
 {
-	"name": "client",
-	"version": "0.1.0",
-	"private": true,
-	"dependencies": {
-		"@react/react-spectrum": "^2.28.0",
-		"ace-builds": "^1.4.8",
-		"ajv": "^6.12.0",
-		"babel-polyfill": "^6.26.0",
-		"cross-os": "^1.3.0",
-		"form-data": "^3.0.0",
-		"js-yaml": "^3.13.1",
-		"react": "^16.13.0",
-		"react-ace": "^8.0.0",
-		"react-dom": "^16.13.0",
-		"react-scripts": "3.4.0",
-		"url": "^0.11.0"
-	},
-	"scripts": {
-		"start": "react-scripts start",
-		"build": "cross-os cross-os-build",
-		"eject": "react-scripts eject",
-		"pretest": "npm run build",
-		"test": "react-scripts test",
-		"report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
-	},
-	"cross-os": {
-		"cross-os-build": {
-			"darwin": "npm i && react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
-			"linux": "npm i && react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
-			"win32": "npm i && react-scripts build && rmdir /S /Q ..\\server\\client-build && move build ..\\server\\client-build"
-		}
-	},
-	"eslintConfig": {
-		"extends": "react-app"
-	},
-	"proxy": "http://localhost:9000",
-	"browserslist": {
-		"production": [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
-		"development": [
-			"last 1 chrome version",
-			"last 1 firefox version",
-			"last 1 safari version"
-		]
-	},
-	"devDependencies": {
-		"codecov": "^3.7.0"
-	}
+    "name": "client",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "@react/collection-view": "file:libraries/react-collection-view-4.1.5.tgz",
+        "@react/react-spectrum": "file:libraries/react-react-spectrum-2.25.0.tgz",
+        "ace-builds": "^1.4.8",
+        "ajv": "^6.12.0",
+        "babel-polyfill": "^6.26.0",
+        "cross-os": "^1.3.0",
+        "form-data": "^3.0.0",
+        "js-yaml": "^3.13.1",
+        "react": "^16.13.0",
+        "react-ace": "^8.0.0",
+        "react-dom": "^16.13.0",
+        "react-scripts": "3.4.0",
+        "url": "^0.11.0"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "cross-os cross-os-build",
+        "eject": "react-scripts eject",
+        "pretest": "npm run build",
+        "test": "react-scripts test",
+        "posttest": "license-checker --summary",
+        "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
+    },
+    "cross-os": {
+        "cross-os-build": {
+            "darwin": "npm i && react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
+            "linux": "npm i && react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
+            "win32": "npm i && react-scripts build && rmdir /S /Q ..\\server\\client-build && move build ..\\server\\client-build"
+        }
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "proxy": "http://localhost:9000",
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "codecov": "^3.7.0",
+        "license-checker": "^25.0.1"
+    }
 }
