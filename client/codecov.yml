@@ -1,4 +1,6 @@
 coverage:
   status:
     project: off
-    patch: off
+    patch:
+      default:
+        informational: true
