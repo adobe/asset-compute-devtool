@@ -17,7 +17,11 @@
 
 describe('index.js tests', () => {
 
-    it('Test running', async function () {
+    it('Just calling index', async function () {
         await require('../index.js');
+    });
+
+    it('Passing a port number to index', async function () {
+        await require('../index.js').start(8080);
     });
 });
