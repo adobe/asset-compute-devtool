@@ -24,7 +24,7 @@
         "pretest": "npm run build",
         "test": "react-scripts test",
         "posttest": "license-checker --summary",
-        "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
+        "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov"
     },
     "cross-os": {
         "cross-os-build": {

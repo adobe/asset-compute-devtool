@@ -20,7 +20,7 @@
     "pretest": "eslint src set-port.js test routes",
     "test": "nyc mocha --recursive --exit",
     "posttest": "license-checker --summary",
-    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
+    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov"
   },
   "dependencies": {
     "@adobe/asset-compute-client": "^4.2.0",
