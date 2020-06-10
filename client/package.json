@@ -22,7 +22,7 @@
         "build": "cross-os cross-os-build",
         "eject": "react-scripts eject",
         "pretest": "npm run build",
-        "preinstall": "npx npm-force-resolutions",
+        "preinstall": "npm-force-resolutions",
         "test": "react-scripts test",
         "posttest": "license-checker --summary",
         "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
