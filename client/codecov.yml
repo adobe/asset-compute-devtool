@@ -1,2 +1,6 @@
 coverage:
-  range: "0...100"
+  range: 0..100 # coverage lower than 50 is red, higher than 90 green, between color code
+
+  status:
+    project: false
+    patch: false
