@@ -22,6 +22,7 @@
         "build": "cross-os cross-os-build",
         "eject": "react-scripts eject",
         "pretest": "npm run build",
+        "preinstall": "npm i npm-force-resolutions --save-dev && npm-force-resolutions",
         "test": "react-scripts test",
         "posttest": "license-checker --summary",
         "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov"
@@ -51,6 +52,10 @@
     },
     "devDependencies": {
         "codecov": "^3.7.0",
-        "license-checker": "^25.0.1"
+        "license-checker": "^25.0.1",
+        "npm-force-resolutions": "0.0.3"
+    },
+    "resolutions": {
+        "@react/collection-view": "file:libraries/react-collection-view-4.1.5.tgz"
     }
 }
