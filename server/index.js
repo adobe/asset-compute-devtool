@@ -25,7 +25,7 @@ const crypto = require("crypto");
 
 let port = process.env.ASSET_COMPUTE_DEV_PORT || '9000';
 
-function run(portIncomming) {
+function start(portIncomming) {
 
     if (!isNaN(portIncomming)) {
         port = portIncomming;
@@ -102,11 +102,11 @@ async function onError(error) {
     case 'EADDRINUSE':
         console.error(bind + ' is already in use');
         port = await findOpenPort(port);
-        run(port);
+        start(port);
         break;
     default:
         throw error;
     }
 }
 
-module.exports.start = run;
+module.exports = { start };
