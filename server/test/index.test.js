@@ -10,19 +10,23 @@
  * governing permissions and limitations under the License.
  */
 
+/* eslint-env mocha */
+/* eslint mocha/no-mocha-arrows: "off" */
+
 'use strict';
 
-require('dotenv').config();
+describe('index.js tests', () => {
 
-const fse = require('fs-extra');
+    it('Just calling index', async function () {
+        await require('../index.js');
+    });
 
-if (process.env.ASSET_COMPUTE_DEV_PORT) {
-    // read/process package.json
-    const file = '../client/package.json';
-    const pkg = fse.readJSONSync(file, { throws: false });
-    // at this point you should have access to your ENV vars
-    pkg.proxy = `http://localhost:${process.env.ASSET_COMPUTE_DEV_PORT}`;
+    it('Passing a port number to index', async function () {
+        await require('../index.js').start(8080);
+    });
 
-    // the 2 enables pretty-printing and defines the number of spaces to use
-    fse.writeJSONSync(file, pkg, { spaces: '\t'});
-}
+    it('Port in use', async function () {
+        await require('../index.js').start(8080);
+        await require('../index.js').start(8080);
+    });
+});

@@ -25,7 +25,7 @@
         "preinstall": "npm i npm-force-resolutions --save-dev && npm-force-resolutions",
         "test": "react-scripts test",
         "posttest": "license-checker --summary",
-        "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
+        "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov"
     },
     "cross-os": {
         "cross-os-build": {

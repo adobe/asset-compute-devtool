@@ -14,13 +14,13 @@
   ],
   "scripts": {
     "build": "cd .. && cd client && npm run build && cd .. && cd server",
-    "start": "ASSET_COMPUTE_DEV_TOOL_ENV=development concurrently \"nodemon bin/www\" \"npm run client\"",
-    "server": "ASSET_COMPUTE_DEV_TOOL_ENV=production node bin/www",
-    "client": "node set-port.js && cd ..&& cd client && npm start",
-    "pretest": "eslint src set-port.js test routes",
+    "start-dev": "ASSET_COMPUTE_DEV_TOOL_ENV=development concurrently \"nodemon index\" \"npm run client\"",
+    "start-prod": "ASSET_COMPUTE_DEV_TOOL_ENV=production node index",
+    "client": "node set-port.js && cd .. && cd client && npm start",
+    "pretest": "eslint src set-port.js test routes index.js app.js",
     "test": "nyc mocha --recursive --exit",
     "posttest": "license-checker --summary",
-    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
+    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov"
   },
   "dependencies": {
     "@adobe/asset-compute-client": "^4.2.0",

@@ -11,10 +11,9 @@
  */
 
 'use strict';
-const dotenv = require('dotenv');
+
 const fse = require('fs-extra');
 const openwhisk = require('openwhisk');
-dotenv.config();
 
 const API_HOST = 'https://adobeioruntime.net';
 

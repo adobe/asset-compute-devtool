@@ -10,16 +10,16 @@
  * governing permissions and limitations under the License.
  */
 
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var api = require('./routes/api');
-var cors = require("cors");
-const formidable = require('express-formidable');
-const dotenv = require('dotenv');
-dotenv.config();
+"use strict";
 
-var app = express();
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const api = require('./routes/api');
+const cors = require("cors");
+const formidable = require('express-formidable');
+
+const app = express();
 
 app.use(cors());
 app.use(express.json());
@@ -31,7 +31,7 @@ if (process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') {
 app.use(formidable());
 
 app.use('/', function (req, res, next) {
-    if ((process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') && (req.headers.authorization != app.settings.devToolToken)) {
+    if ((process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') && (req.headers.authorization !== app.settings.devToolToken)) {
         return res.status(401).send({
             message: 'Unauthorized'
         });
@@ -47,7 +47,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) { // eslint-disable-line no-unused-vars
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
