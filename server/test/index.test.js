@@ -24,4 +24,9 @@ describe('index.js tests', () => {
     it('Passing a port number to index', async function () {
         await require('../index.js').start(8080);
     });
+
+    it('Port in use', async function () {
+        await require('../index.js').start(8080);
+        await require('../index.js').start(8080);
+    });
 });
