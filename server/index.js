@@ -20,16 +20,19 @@ const app = require('./app.js');
 const debug = require('debug')('server');
 const http = require('http');
 const open = require('open');
-const getPort = require('get-port');
+const portfinder = require('portfinder');
 const crypto = require("crypto");
 
-let port = process.env.ASSET_COMPUTE_DEV_PORT || '9000';
 
-function start(portIncomming) {
+async function start(portIncomming) {
+    console.log("PORT:", portIncomming);
 
+    let port = process.env.ASSET_COMPUTE_DEV_PORT || '9000';
     if (!isNaN(portIncomming)) {
         port = portIncomming;
     }
+
+    port = await findOpenPort(port);
 
     let randomString;
     try {
@@ -77,7 +80,22 @@ function start(portIncomming) {
  */
 async function findOpenPort(preferredPort) {
     // Will use specified port if available, otherwise fall back to a random port
-    return getPort({ port: [preferredPort, preferredPort + 1, preferredPort + 2] });
+
+    const portRange = {
+        port: preferredPort || 9000, // minimum port
+        stopPort: 9999 // maximum port
+    };
+
+    // Fine client port and write it to package.json
+    portfinder.getPort(portRange, function (err, port) {
+
+        // Fall back and let react notify if port is in use
+        if (err) {
+            port = portRange.port;
+        }
+
+        return port;
+    });
 }
 
 /**
@@ -89,9 +107,9 @@ async function onError(error) {
         throw error;
     }
 
-    const bind = typeof port === 'string'
-        ? 'Pipe ' + port
-        : 'Port ' + port;
+    const bind = typeof this.port === 'string'
+        ? 'Pipe ' + this.port
+        : 'Port ' + this.port;
 
     // handle specific listen errors with friendly messages
     switch (error.code) {
@@ -99,14 +117,9 @@ async function onError(error) {
         console.error(bind + ' requires elevated privileges');
         process.exit(1);
         break;
-    case 'EADDRINUSE':
-        console.error(bind + ' is already in use');
-        port = await findOpenPort(port);
-        start(port);
-        break;
     default:
         throw error;
     }
 }
 
-module.exports = { start };
+module.exports.start = start(port);

@@ -15,14 +15,28 @@
 require('dotenv').config();
 
 const fse = require('fs-extra');
+const portfinder = require('portfinder');
 
-if (process.env.ASSET_COMPUTE_DEV_PORT) {
+const portRange = {
+    port: process.env.ASSET_COMPUTE_DEV_PORT || 3000, // minimum port
+    stopPort: 3333 // maximum port
+};
+
+// Fine client port and write it to package.json
+portfinder.getPort(portRange, function (err, port) {
+
+    // Fall back and let react notify if port is in use
+    if (err) {
+        port = portRange.port;
+    }
+
     // read/process package.json
     const file = '../client/package.json';
     const pkg = fse.readJSONSync(file, { throws: false });
-    // at this point you should have access to your ENV vars
-    pkg.proxy = `http://localhost:${process.env.ASSET_COMPUTE_DEV_PORT}`;
 
-    // the 2 enables pretty-printing and defines the number of spaces to use
-    fse.writeJSONSync(file, pkg, { spaces: '\t'});
-}
+    pkg.proxy = `http://localhost:${port}`;
+    pkg.scripts.start = `PORT=${port} react-scripts start`;
+
+    // Write to package.json
+    fse.writeJSONSync(file, pkg, { spaces: '\t' });
+});

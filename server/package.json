@@ -34,12 +34,12 @@
     "express-formidable": "^1.2.0",
     "formidable": "^1.2.2",
     "fs-extra": "^8.1.0",
-    "get-port": "^5.1.1",
     "http-errors": "~1.7.3",
     "install": "^0.13.0",
     "js-yaml": "^3.13.1",
     "open": "^7.0.3",
     "openwhisk": "^3.21.1",
+    "portfinder": "^1.0.26",
     "uuid": "^8.0.0"
   },
   "devDependencies": {
