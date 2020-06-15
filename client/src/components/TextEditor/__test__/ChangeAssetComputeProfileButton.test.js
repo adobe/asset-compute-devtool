@@ -20,19 +20,30 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import ChangeAssetComputeProfileButton  from '../ChangeAssetComputeProfileButton.jsx'
 import DropdownButton from '@react/react-spectrum/DropdownButton';
-
+import { MenuItem } from '@react/react-spectrum/Menu';
 
 describe('ChangeAssetComputeProfileButton', () => {
 
-    it('ChangeAssetComputeProfileButton renders correctly', () => {
+    it('ChangeAssetComputeProfileButton has requested components', () => {
+        const wrapper = shallow(<ChangeAssetComputeProfileButton/>);
+        //console.log('wrapper', wrapper);
+
+        // this component has DropdownButton and MenuItem
+        const dropDownButton = wrapper.find(DropdownButton);
+        
+        expect(wrapper.find(DropdownButton)).toHaveLength(1);
+        expect(wrapper.find(MenuItem)).toHaveLength(4);
+    });
+
+    it('ChangeAssetComputeProfileButton -> DropdownButton has 4 children', () => {
         const wrapper = shallow(<ChangeAssetComputeProfileButton/>);
         console.log('wrapper', wrapper);
-        // expect(wrapper.find(ModalTrigger)).toHaveLength(1);
 
-        // const button = wrapper.find(Button);
-
-        // expect(button).toHaveLength(1);
-        // expect(button.prop('aria-label')).toBe('Delete');
+        // this component has DropdownButton and MenuItem
+        const dropDownButton = wrapper.find(DropdownButton);
+        const children = dropDownButton.children();
+        expect(children).toHaveLength(4);
+        expect(wrapper.find(MenuItem)).toHaveLength(4);
     });
 
 });
