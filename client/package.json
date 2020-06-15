@@ -21,7 +21,6 @@
         "start": "react-scripts start",
         "build": "cross-os cross-os-build",
         "eject": "react-scripts eject",
-        "pretest": "npm run build",
         "preinstall": "npm i npm-force-resolutions --save-dev && npm-force-resolutions",
         "test": "react-scripts test",
         "posttest": "license-checker --summary",
@@ -52,6 +51,8 @@
     },
     "devDependencies": {
         "codecov": "^3.7.0",
+        "enzyme": "^3.11.0",
+        "enzyme-adapter-react-16": "^1.15.2",
         "license-checker": "^25.0.1",
         "npm-force-resolutions": "0.0.3"
     },
