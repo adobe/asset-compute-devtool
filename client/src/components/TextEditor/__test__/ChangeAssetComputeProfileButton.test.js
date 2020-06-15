@@ -18,7 +18,9 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { ChangeAssetComputeProfileButton } from './ChangeAssetComputeProfileButton.test'
+import ChangeAssetComputeProfileButton  from '../ChangeAssetComputeProfileButton.jsx'
+import DropdownButton from '@react/react-spectrum/DropdownButton';
+
 
 describe('ChangeAssetComputeProfileButton', () => {
 
