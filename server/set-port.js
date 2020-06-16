@@ -32,7 +32,7 @@ portfinder.getPortPromise(portRange)
         pkg.scripts.start = `PORT=${port} react-scripts start`;
 
         // Write to package.json
-        fse.writeJSONSync(file, pkg, { spaces: '\t' });
+        fse.writeJSONSync(file, pkg, { spaces: 4 });
     })
     .catch((err) => {
         throw new Error(err);

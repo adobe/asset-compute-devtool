@@ -77,7 +77,7 @@ async function start(portPreferred) {
             pkg.proxy = `http://localhost:${port}`;
 
             // Write to package.json
-            fse.writeJSONSync(file, pkg, { spaces: '\t' });
+            fse.writeJSONSync(file, pkg, { spaces: 4 });
 
             console.log('Running in development mode.');
         }
