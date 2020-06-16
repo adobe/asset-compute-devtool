@@ -24,16 +24,16 @@ const portRange = {
 
 // Find available server port
 portfinder.getPortPromise(portRange)
-.then((port) => {
+    .then((port) => {
 
-    // read/process package.json
-    const file = '../client/package.json';
-    const pkg = fse.readJSONSync(file, { throws: false });
-    pkg.scripts.start = `PORT=${port} react-scripts start`;
+        // read/process package.json
+        const file = '../client/package.json';
+        const pkg = fse.readJSONSync(file, { throws: false });
+        pkg.scripts.start = `PORT=${port} react-scripts start`;
 
-    // Write to package.json
-    fse.writeJSONSync(file, pkg, { spaces: '\t' });
-})
-.catch((err) => {
-    throw new Error(err);
-});
+        // Write to package.json
+        fse.writeJSONSync(file, pkg, { spaces: '\t' });
+    })
+    .catch((err) => {
+        throw new Error(err);
+    });
