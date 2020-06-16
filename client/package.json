@@ -31,7 +31,7 @@
         "cross-os-build": {
             "darwin": "npm i && react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
             "linux": "npm i && react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
-            "win32": "npm i && react-scripts build && rm -rf ..\\server\\client-build && mv build ..\\server\\client-build"
+            "win32": "npm i && react-scripts build && rmdir /S /Q ..\\server\\client-build && move build ..\\server\\client-build"
         }
     },
     "eslintConfig": {

@@ -15,12 +15,19 @@
   "scripts": {
     "build": "cd .. && cd client && npm run build && cd .. && cd server",
     "start-dev": "ASSET_COMPUTE_DEV_TOOL_ENV=development concurrently \"nodemon index\" \"npm run client\"",
-    "start-prod": "ASSET_COMPUTE_DEV_TOOL_ENV=production node index",
-    "client": "node set-port.js && cd .. && cd client && npm start",
+    "start-prod": "cross-os cross-os-server",
     "pretest": "eslint src set-port.js test routes index.js app.js",
+    "client": "node set-port.js && cd ..&& cd client && npm start",
     "test": "nyc mocha --recursive --exit",
     "posttest": "license-checker --summary",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov"
+  },
+  "cross-os": {
+    "cross-os-server": {
+      "darwin": "ASSET_COMPUTE_DEV_TOOL_ENV=production node index",
+      "linux": "ASSET_COMPUTE_DEV_TOOL_ENV=production node index",
+      "win32": "set ASSET_COMPUTE_DEV_TOOL_ENV=production && node index"
+    }
   },
   "dependencies": {
     "@adobe/asset-compute-client": "^4.2.0",
@@ -28,6 +35,7 @@
     "ajv": "^6.12.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "cross-os": "^1.3.0",
     "debug": "~4.1.1",
     "dotenv": "^8.2.0",
     "express": "~4.17.1",

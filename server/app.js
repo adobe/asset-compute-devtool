@@ -26,7 +26,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 if (process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') {
-    app.use(express.static(path.join(__dirname, 'client-build')));
+    if (process.platform == "darwin" || process.platform == "linux") {
+        app.use(express.static(path.join(__dirname, 'client-build')));
+    }
+    else if (process.platform == "win32") {
+        app.use(express.static(__dirname + '\\client-build'));
+    }
 }
 app.use(formidable());
 
