@@ -17,7 +17,7 @@
 // const assert = require('assert');
 const {stdout} = require("stdout-stderr");
 const path = require('path');
-const { assert } = require("console");
+const { assert } = require("assert");
 
 describe('index.js tests', () => {
     it('verify path.join works across operating systems', async function() {
