@@ -22,21 +22,18 @@ const portRange = {
     stopPort: 3333 // maximum port
 };
 
-// Fine client port and write it to package.json
-portfinder.getPort(portRange, function (err, port) {
-
-    // Fall back and let react notify if port is in use
-    if (err) {
-        port = portRange.port;
-    }
+// Find available server port
+portfinder.getPortPromise(portRange)
+.then((port) => {
 
     // read/process package.json
     const file = '../client/package.json';
     const pkg = fse.readJSONSync(file, { throws: false });
-
-    pkg.proxy = `http://localhost:${port}`;
     pkg.scripts.start = `PORT=${port} react-scripts start`;
 
     // Write to package.json
     fse.writeJSONSync(file, pkg, { spaces: '\t' });
+})
+.catch((err) => {
+    throw new Error(err);
 });

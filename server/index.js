@@ -22,17 +22,20 @@ const http = require('http');
 const open = require('open');
 const portfinder = require('portfinder');
 const crypto = require("crypto");
+const fse = require('fs-extra');
 
 
-async function start(portIncomming) {
-    console.log("PORT:", portIncomming);
-
+async function start(portPreferred) {
     let port = process.env.ASSET_COMPUTE_DEV_PORT || '9000';
-    if (!isNaN(portIncomming)) {
-        port = portIncomming;
+    if (!isNaN(portPreferred)) {
+        port = portPreferred;
     }
 
-    port = await findOpenPort(port);
+    const portRangeServer = {
+        port: port, // minimum port
+        stopPort: 9999 // maximum port
+    };
+    port = await findOpenPort(portRangeServer);
 
     let randomString;
     try {
@@ -66,6 +69,16 @@ async function start(portIncomming) {
             console.log('Asset Compute Developer Tool Server started on url ', assetComputeDevToolUrl);
             await open(assetComputeDevToolUrl);
         } else {
+
+            // read/process package.json
+            const file = '../client/package.json';
+            const pkg = fse.readJSONSync(file, { throws: false });
+
+            pkg.proxy = `http://localhost:${port}`;
+
+            // Write to package.json
+            fse.writeJSONSync(file, pkg, { spaces: '\t' });
+
             console.log('Running in development mode.');
         }
     });
@@ -78,24 +91,11 @@ async function start(portIncomming) {
 /**
  * Find open port
  */
-async function findOpenPort(preferredPort) {
-    // Will use specified port if available, otherwise fall back to a random port
+async function findOpenPort(portRange) {
 
-    const portRange = {
-        port: preferredPort || 9000, // minimum port
-        stopPort: 9999 // maximum port
-    };
-
-    // Fine client port and write it to package.json
-    portfinder.getPort(portRange, function (err, port) {
-
-        // Fall back and let react notify if port is in use
-        if (err) {
-            port = portRange.port;
-        }
-
-        return port;
-    });
+    // Find available server port
+    const port = await portfinder.getPortPromise(portRange);
+    return port;
 }
 
 /**
@@ -122,4 +122,4 @@ async function onError(error) {
     }
 }
 
-module.exports.start = start(port);
+module.exports ={ start };

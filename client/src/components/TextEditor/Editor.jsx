@@ -73,7 +73,7 @@ export default class Editor extends Component {
             // ignore errors if not running in context of aio
         }
         let customWorkerRenditions;
-        if (resp && typeof resp === 'object' && Object.keys(resp).length > 0 && resp.message != 'Unauthorized' ) {
+        if (resp && typeof resp === 'object' && Object.keys(resp).length > 0 && resp.message !== 'Unauthorized' ) {
             let renditions = [];
             Object.values(resp).forEach(action => {
                 renditions.push({
@@ -125,7 +125,7 @@ export default class Editor extends Component {
             // <div>
             <div id="text-wrap" style={{marginTop:20}}>
             <ChangeAssetComputeProfileButton id='ChangeAssetComputeProfileButton' onChangeProfile={this.changeProfile.bind(this)} style={{float:'right'}}/>
-                <AceEditor 
+                <AceEditor
                     style={{position:'relative', zIndex:'0', borderRadius:'5px', overflow:'scroll'}}
                     ref='aceEditor'
                     id='editor'
