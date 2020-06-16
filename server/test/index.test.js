@@ -20,9 +20,6 @@ const path = require('path');
 const assert = require("assert");
 
 describe('index.js tests', () => {
-    it('verify path.join works across operating systems', async function() {
-        assert.ok(path.join(__dirname, 'test').includes('server/test'));
-    });
 
     it('Just calling index', async function () {
         stdout.start();
@@ -31,7 +28,7 @@ describe('index.js tests', () => {
 
         // check start up logs
         console.log(stdout.output);
-        assert.ok(stdout.output.includes('server/client-build'));
+        assert.ok(stdout.output.includes('client-build'));
     });
 
     it('Passing a port number to index', async function () {
