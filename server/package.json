@@ -59,6 +59,7 @@
     "mocha": "^7.2.0",
     "mock-require": "^3.0.3",
     "nodemon": "^2.0.3",
-    "nyc": "^15.0.1"
+    "nyc": "^15.0.1",
+    "stdout-stderr": "^0.1.13"
   }
 }

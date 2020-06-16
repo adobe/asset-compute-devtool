@@ -14,11 +14,24 @@
 /* eslint mocha/no-mocha-arrows: "off" */
 
 'use strict';
+// const assert = require('assert');
+const {stdout} = require("stdout-stderr");
+const path = require('path');
+const { assert } = require("console");
 
 describe('index.js tests', () => {
+    it('verify path.join works across operating systems', async function() {
+        assert.ok(path.join(__dirname, 'test').includes('server/test'));
+    });
 
     it('Just calling index', async function () {
+        stdout.start();
         await require('../index.js');
+        stdout.stop();
+
+        // check start up logs
+        console.log(stdout.output);
+        assert.ok(stdout.output.includes('server/client-build'));
     });
 
     it('Passing a port number to index', async function () {
