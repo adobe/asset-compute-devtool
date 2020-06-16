@@ -31,7 +31,7 @@ install:
   - npm install
 
 script:
-  - cd $TEST_DIR && npm install && npm test
+  - cd $TEST_DIR && yarn install && npm test
 
 after_success:
   - npm run report-coverage
