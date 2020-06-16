@@ -14,9 +14,8 @@
 /* eslint mocha/no-mocha-arrows: "off" */
 
 'use strict';
-// const assert = require('assert');
+
 const {stdout} = require("stdout-stderr");
-const path = require('path');
 const assert = require("assert");
 
 describe('index.js tests', () => {
