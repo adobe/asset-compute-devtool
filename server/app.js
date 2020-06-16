@@ -26,6 +26,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 if (process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') {
+    const build = path.join(__dirname, 'client-build');
+    console.log('static build path', build);
+    // app.use(express.static(build));
     if (process.platform === "darwin" || process.platform === "linux") {
         app.use(express.static(path.join(__dirname, 'client-build')));
     }
