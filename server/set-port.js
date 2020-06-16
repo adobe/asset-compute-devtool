@@ -18,7 +18,7 @@ const fse = require('fs-extra');
 const portfinder = require('portfinder');
 
 const portRange = {
-    port: process.env.ASSET_COMPUTE_DEV_PORT || 3000, // minimum port
+    port: 3000, // minimum port
     stopPort: 3333 // maximum port
 };
 
