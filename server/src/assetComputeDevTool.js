@@ -240,7 +240,7 @@ async function setupCloudStorage() {
         );
     }
     else {
-        throw new Error("Neither AWS nor Azure cloud storage credentials were provided, please see readme for information");
+        throw new Error("Neither AWS nor Azure cloud storage credentials were provided, please set credentials up for either AWS or Azure");
     }
     await storage.validate();
     return storage;
