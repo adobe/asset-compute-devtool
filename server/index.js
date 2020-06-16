@@ -122,4 +122,4 @@ async function onError(error) {
     }
 }
 
-module.exports ={ start };
+module.exports = { start };
