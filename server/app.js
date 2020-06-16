@@ -26,7 +26,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 if (process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') {
-    app.use(express.static(path.join(__dirname, 'client-build')));
+    const build = path.join(__dirname, 'client-build');
+    console.log('static build path', build);
+    app.use(express.static(build));
 }
 app.use(formidable());
 
