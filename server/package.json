@@ -19,9 +19,17 @@
     "server": "node -e 'require(\"./index.js\").start()'",
     "client": "node set-port.js && cd .. && cd client && npm start",
     "pretest": "eslint src set-port.js test routes index.js app.js",
+    "client": "node set-port.js && cd ..&& cd client && npm start",
     "test": "nyc mocha --recursive --exit",
     "posttest": "license-checker --summary",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov"
+  },
+  "cross-os": {
+    "cross-os-server": {
+      "darwin": "ASSET_COMPUTE_DEV_TOOL_ENV=production node index start",
+      "linux": "ASSET_COMPUTE_DEV_TOOL_ENV=production node index start",
+      "win32": "set ASSET_COMPUTE_DEV_TOOL_ENV=production && node index start"
+    }
   },
   "dependencies": {
     "@adobe/asset-compute-client": "^4.2.0",
@@ -29,6 +37,7 @@
     "ajv": "^6.12.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "cross-os": "^1.3.0",
     "debug": "~4.1.1",
     "dotenv": "^8.2.0",
     "express": "~4.17.1",
@@ -38,6 +47,7 @@
     "http-errors": "~1.7.3",
     "install": "^0.13.0",
     "js-yaml": "^3.13.1",
+    "make-runnable": "^1.3.6",
     "open": "^7.0.3",
     "openwhisk": "^3.21.1",
     "portfinder": "^1.0.26",
@@ -51,6 +61,7 @@
     "mocha": "^7.2.0",
     "mock-require": "^3.0.3",
     "nodemon": "^2.0.3",
-    "nyc": "^15.0.1"
+    "nyc": "^15.0.1",
+    "stdout-stderr": "^0.1.13"
   }
 }
