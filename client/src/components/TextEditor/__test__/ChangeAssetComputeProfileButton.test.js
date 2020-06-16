@@ -29,8 +29,6 @@ describe('ChangeAssetComputeProfileButton', () => {
         //console.log('wrapper', wrapper);
 
         // this component has DropdownButton and MenuItem
-        const dropDownButton = wrapper.find(DropdownButton);
-        
         expect(wrapper.find(DropdownButton)).toHaveLength(1);
         expect(wrapper.find(MenuItem)).toHaveLength(4);
     });
@@ -45,5 +43,4 @@ describe('ChangeAssetComputeProfileButton', () => {
         expect(children).toHaveLength(4);
         expect(wrapper.find(MenuItem)).toHaveLength(4);
     });
-
 });
