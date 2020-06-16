@@ -34,6 +34,7 @@ if (process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') {
     }
     else if (process.platform === "win32") {
         app.use(express.static(path.join(__dirname, '\\client-build')));
+        console.log('windows build:', path.join(__dirname, '\\client-build'));
     }
 }
 app.use(formidable());
