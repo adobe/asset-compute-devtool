@@ -123,4 +123,3 @@ async function onError(error) {
 }
 
 module.exports = { start };
-require('make-runnable');
