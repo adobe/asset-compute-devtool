@@ -16,7 +16,7 @@
     "build": "cd .. && cd client && npm run build && cd .. && cd server",
     "start-dev": "cross-os cross-os-start-dev",
     "start-prod": "cross-os cross-os-start-prod",
-    "start-server": "node -e 'require(\"./index.js\").start()'",
+    "start-server": "run-func index.js start",
     "start-client": "node set-port.js && cd .. && cd client && npm start",
     "pretest": "eslint src set-port.js test routes index.js app.js",
     "test": "nyc mocha --recursive --exit",
@@ -54,6 +54,7 @@
     "open": "^7.0.3",
     "openwhisk": "^3.21.1",
     "portfinder": "^1.0.26",
+    "run-func": "^1.0.5",
     "uuid": "^8.0.0"
   },
   "devDependencies": {
