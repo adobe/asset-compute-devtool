@@ -32,13 +32,14 @@ env:
 #   - sudo apt-get install -y -qq yarn=1.22.4-1
 # cache:
 #   yarn: true
-
+before_install:
+    - cd $TEST_DIR
 # install:
 #   - npm version
 #   - yarn install
 
-script:
-  - cd $TEST_DIR && yarn install && npm test
+# script:
+#   - cd $TEST_DIR && yarn install && npm test
 
 after_success:
   - npm run report-coverage
