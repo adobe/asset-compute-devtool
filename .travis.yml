@@ -17,13 +17,11 @@ os:
 
 node_js:
   - "10"
-  - "10.15"
-  - "10.19"
   - "12"
   - "14"
 
 env:
-  # - TEST_DIR=client
+  - TEST_DIR=client
   - TEST_DIR=server
 
 before_install: # if "install" is overridden
