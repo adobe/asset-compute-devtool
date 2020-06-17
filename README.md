@@ -145,12 +145,17 @@ AZURE_STORAGE_CONTAINER_NAME=
 ### Production (build and use static UI):
 1. cd into `/server`
 2. Make sure to do a clean `npm install` in both `/server` and `/client`
-3. if this is your first time using the dev tool or there were changes to the UI since you used it last, run  `npm run build`
-4. run `npm run start-prod`
+
+    _note: If you run into issues installing the `client` dependencies, try this [npm force resolutions](#what-to-do-if-npm-force-resolutions-fails) workaround_
+4. if this is your first time using the dev tool or there were changes to the UI since you used it last, run  `npm run build`
+5. run `npm run start-prod`
 
 ### Development
 1. Make sure to set environment variable:  `ASSET_COMPUTE_DEV_TOOL_ENV='development'`
 2. If it is your first time using the dev tool or you made changes to the UI, cd into `/client` and run `npm install` <br/>
+
+    _note: If you run into issues installing the `client` dependencies, try this [npm force resolutions](#what-to-do-if-npm-force-resolutions-fails) workaround_
+
 3. cd into the `/server` directory. (remember to do an `npm install`) <br/>
 4. run `npm run start-dev` <br />
 
@@ -174,7 +179,20 @@ This project depends on the @react/react-spectrum package which depends on the @
  * to this repo does not apply.
  */
 ```
-While changing package.json to point to the tar file for @react/react-spectrum is simple and natively supported by npm, this is not the case with @react/collection-view, since it is a dependency of @react/react-spectrum. To solve this problem, this project uses [npm-force-resolutions](https://www.npmjs.com/package/npm-force-resolutions) to add support for selective dependency resolutions.
+While changing package.json to point to the tar file for @react/react-spectrum is simple and natively supported by npm, this is not the case with @react/collection-view, since it is a dependency of @react/react-spectrum. To solve this problem, this project uses [npm-force-resolutions](https://www.npmjs.com/package/npm-force-resolutions) to add support for selective dependency resolutions. See below if there are still issues installing.
+
+### What to do if npm force resolutions fails
+
+If you are running on windows or `npm install` fails in `client` due to `@react/collection-view not found`. Please try this solution:
+1. cd into `/client`
+2. run 
+    ```
+    npm install @react/collection-view
+    ```
+4. try installing again:
+    ```
+    npm install
+    ```
 
 ![](files/meahana-screenshot-2.png)
 
