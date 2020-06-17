@@ -73,7 +73,7 @@ export default class Editor extends Component {
             // ignore errors if not running in context of aio
         }
         let customWorkerRenditions;
-        if (resp && typeof resp === 'object' && Object.keys(resp).length > 0 && resp.message != 'Unauthorized' ) {
+        if (resp && typeof resp === 'object' && Object.keys(resp).length > 0 && resp.message !== 'Unauthorized' ) {
             let renditions = [];
             Object.values(resp).forEach(action => {
                 renditions.push({
