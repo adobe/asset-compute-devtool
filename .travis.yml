@@ -21,7 +21,7 @@ node_js:
   - "14"
 
 env:
-  - TEST_DIR=client
+#   - TEST_DIR=client
   - TEST_DIR=server
 
 # before_install: # if "install" is overridden
