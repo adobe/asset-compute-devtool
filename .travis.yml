@@ -22,8 +22,7 @@ node_js:
 
 env:
 #   - TEST_DIR=client
-  - TEST_DIR=server
-  - YARN_GPG=no
+  - TEST_DIR=server YARN_GPG=no
 before_install:
   - cd $TEST_DIR
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.4
