@@ -24,12 +24,14 @@ env:
 
 matrix:
   include:
-      - os: windows
-        node_js:
-          - "10"
-          - "12"
-          - "14"
-        env: TEST_DIR=server YARN_GPG=no
+    - os: windows
+      env: TEST_DIR=server YARN_GPG=no
+    - os: windows
+      node_js: "12"
+      env: TEST_DIR=server YARN_GPG=no
+    - os: windows
+      node_js: "14"
+      env: TEST_DIR=server YARN_GPG=no
 before_install:
   - cd $TEST_DIR
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.4
