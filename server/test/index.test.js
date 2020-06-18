@@ -15,27 +15,27 @@
 
 'use strict';
 
-const {stdout} = require("stdout-stderr");
-const assert = require("assert");
+// const {stdout} = require("stdout-stderr");
+// const assert = require("assert");
 
 describe('index.js tests', () => {
 
-    it.skip('Just calling index', async function () {
-        stdout.start();
-        await require('../index.js');
-        stdout.stop();
+    // it('Just calling index', async function () {
+    //     stdout.start();
+    //     await require('../index.js');
+    //     stdout.stop();
 
-        // check start up logs
-        console.log(stdout.output);
-        assert.ok(stdout.output.includes('client-build'));
-    });
+    //     // check start up logs
+    //     console.log(stdout.output);
+    //     assert.ok(stdout.output.includes('client-build'));
+    // });
 
-    it.skip('Passing a port number to index', async function () {
-        await require('../index.js').start(8080);
-    });
+    // it('Passing a port number to index', async function () {
+    //     await require('../index.js').start(8080);
+    // });
 
-    it.skip('Port in use', async function () {
-        await require('../index.js').start(8080);
-        await require('../index.js').start(8080);
-    });
+    // it('Port in use', async function () {
+    //     await require('../index.js').start(8080);
+    //     await require('../index.js').start(8080);
+    // });
 });
