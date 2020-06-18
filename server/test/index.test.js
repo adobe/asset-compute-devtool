@@ -20,7 +20,7 @@ const assert = require("assert");
 
 describe('index.js tests', () => {
 
-    it('Just calling index', async function () {
+    it.skip('Just calling index', async function () {
         stdout.start();
         await require('../index.js');
         stdout.stop();
@@ -30,11 +30,11 @@ describe('index.js tests', () => {
         assert.ok(stdout.output.includes('client-build'));
     });
 
-    it('Passing a port number to index', async function () {
+    it.skip('Passing a port number to index', async function () {
         await require('../index.js').start(8080);
     });
 
-    it('Port in use', async function () {
+    it.skip('Port in use', async function () {
         await require('../index.js').start(8080);
         await require('../index.js').start(8080);
     });
