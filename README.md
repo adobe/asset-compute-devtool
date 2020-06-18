@@ -145,6 +145,7 @@ AZURE_STORAGE_CONTAINER_NAME=
 
 ### Production (build and use static UI):
 1. cd into `/server`
+<<<<<<< HEAD
 2. Make sure to do a clean `yarn install` in the `/server`
 3. if this is your first time using the dev tool or there were changes to the UI since you used it last, run  `npm run build`
 4. run `npm run start-prod`
@@ -153,6 +154,21 @@ AZURE_STORAGE_CONTAINER_NAME=
 1. Make sure to set environment variable:  `ASSET_COMPUTE_DEV_TOOL_ENV='development'`
 2. If it is your first time using the dev tool or you made changes to the UI, cd into `/client` and run `yarn install` <br/>
 3. cd into the `/server` directory. (remember to do an `yarn install`) <br/>
+=======
+2. Make sure to do a clean `npm install` in both `/server` and `/client`
+
+    _note: If you run into issues installing the `client` dependencies, try this [npm force resolutions](#what-to-do-if-npm-force-resolutions-fails) workaround_
+4. if this is your first time using the dev tool or there were changes to the UI since you used it last, run  `npm run build`
+5. run `npm run start-prod`
+
+### Development
+1. Make sure to set environment variable:  `ASSET_COMPUTE_DEV_TOOL_ENV='development'`
+2. If it is your first time using the dev tool or you made changes to the UI, cd into `/client` and run `npm install` <br/>
+
+    _note: If you run into issues installing the `client` dependencies, try this [npm force resolutions](#what-to-do-if-npm-force-resolutions-fails) workaround_
+
+3. cd into the `/server` directory. (remember to do an `npm install`) <br/>
+>>>>>>> master
 4. run `npm run start-dev` <br />
 
 Note: The **backend port** will default to 9000. If you already have something running on that port or would like to change it, set the `ASSET_COMPUTE_DEV_PORT` environment variable. **WARNING: this updates the package.json in /client**
@@ -175,7 +191,24 @@ As stated by [Adobe Reactor Extensions Core](https://github.com/adobe/reactor-ex
  * to this repo does not apply.
  */
 ```
+<<<<<<< HEAD
 While changing package.json to point to the tar file for @react/react-spectrum is simple and natively supported by npm, this is not the case with @react/collection-view, since it is a dependency of @react/react-spectrum. To solve this problem, this project uses Yarn for installing dependencies since it natively supports [selective dependency resolutions](https://classic.yarnpkg.com/en/docs/selective-version-resolutions/).
+=======
+While changing package.json to point to the tar file for @react/react-spectrum is simple and natively supported by npm, this is not the case with @react/collection-view, since it is a dependency of @react/react-spectrum. To solve this problem, this project uses [npm-force-resolutions](https://www.npmjs.com/package/npm-force-resolutions) to add support for selective dependency resolutions. See below if there are still issues installing.
+
+### What to do if npm force resolutions fails
+
+If you are running on windows or `npm install` fails in `client` due to `@react/collection-view not found`. Please try this solution:
+1. cd into `/client`
+2. run 
+    ```
+    npm install @react/collection-view
+    ```
+4. try installing again:
+    ```
+    npm install
+    ```
+>>>>>>> master
 
 ![](files/meahana-screenshot-2.png)
 

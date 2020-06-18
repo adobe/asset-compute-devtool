@@ -125,7 +125,7 @@ export default class Editor extends Component {
             // <div>
             <div id="text-wrap" style={{marginTop:20}}>
             <ChangeAssetComputeProfileButton id='ChangeAssetComputeProfileButton' onChangeProfile={this.changeProfile.bind(this)} style={{float:'right'}}/>
-                <AceEditor 
+                <AceEditor
                     style={{position:'relative', zIndex:'0', borderRadius:'5px', overflow:'scroll'}}
                     ref='aceEditor'
                     id='editor'

@@ -29,13 +29,12 @@
         "cross-os-build": {
             "darwin": "yarn install && react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
             "linux": "yarn install && react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
-            "win32": "yarn install && react-scripts build && IF EXIST \"..\\server\\client-build\" (rmdir /S /Q ..\\server\\client-build & mkdir ..\\server\\client-build & move build\\* ..\\server\\client-build) ELSE (mkdir ..\\server\\client-build & move build\\* ..\\server\\client-build)"
+            "win32": "yarn install && react-scripts build && build.cmd"
         }
     },
     "eslintConfig": {
         "extends": "react-app"
     },
-    "proxy": "http://localhost:9000",
     "browserslist": {
         "production": [
             ">0.2%",
