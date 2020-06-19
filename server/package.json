@@ -19,7 +19,6 @@
     "start-server": "run-func index.js start",
     "start-client": "node set-port.js && cd .. && cd client && npm start",
     "pretest": "eslint src set-port.js test routes index.js app.js",
-    "client": "node set-port.js && cd ..&& cd client && npm start",
     "test": "nyc mocha --recursive --exit",
     "posttest": "license-checker --summary",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov"
