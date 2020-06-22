@@ -22,6 +22,44 @@ import ChangeAssetComputeProfileButton  from '../ChangeAssetComputeProfileButton
 import DropdownButton from '@react/react-spectrum/DropdownButton';
 import { MenuItem } from '@react/react-spectrum/Menu';
 
+const STANDARD_AEM_PROFILE = {
+    "renditions": [
+        {
+            "name": "cqdam.metadata.xml",
+            "fmt": "xmp",
+            "cqDamAttributes": true
+        },
+        {
+            "name": "cqdam.text.txt",
+            "fmt": "txt"
+        },
+        {
+            "name": "cq5dam.thumbnail.48.48.png",
+            "fmt": "png",
+            "wid": 48,
+            "hei": 48
+        },
+        {
+            "name": "cq5dam.thumbnail.140.100.png",
+            "fmt": "png",
+            "wid": 140,
+            "hei": 100
+        },
+        {
+            "name": "cq5dam.thumbnail.319.319.png",
+            "fmt": "png",
+            "wid": 319,
+            "hei": 319
+        },
+        {
+            "name": "cq5dam.web.1280.1280.png",
+            "fmt": "jpg",
+            "wid": 1280,
+            "hei": 1280
+        }
+    ]
+}
+
 describe('ChangeAssetComputeProfileButton', () => {
 
     it('ChangeAssetComputeProfileButton has requested components', () => {
@@ -35,7 +73,6 @@ describe('ChangeAssetComputeProfileButton', () => {
 
     it('ChangeAssetComputeProfileButton -> DropdownButton has 4 children', () => {
         const wrapper = shallow(<ChangeAssetComputeProfileButton/>);
-        console.log('wrapper', wrapper);
 
         // this component has DropdownButton and MenuItem
         const dropDownButton = wrapper.find(DropdownButton);
@@ -44,12 +81,14 @@ describe('ChangeAssetComputeProfileButton', () => {
         expect(wrapper.find(MenuItem)).toHaveLength(4);
     });
 
-    it('ChangeAssetComputeProfileButton -> Choose Standard AEM Profile button', () => {
-        const wrapper = shallow(<ChangeAssetComputeProfileButton onChangeProfile={(v) => {console.log('hello', v);}}/>);
-        console.log('wrapper', wrapper);
+    it('ChangeAssetComputeProfileButton -> Choose Standard AEM Profile', () => {
+        const wrapper = shallow(<ChangeAssetComputeProfileButton onChangeProfile={(v) => { 
+            expect(v).toEqual(STANDARD_AEM_PROFILE);
+        }}/>);
 
-        // this component has DropdownButton and MenuItem
+        // Similate selecting the Standard AEM Profile
         const dropDownButton = wrapper.find(DropdownButton);
-        dropDownButton.simulate('select', 'Standard AEM Profile' );
+        const standardAemProfile = wrapper.find(MenuItem).first().props().value;
+        dropDownButton.simulate('select', JSON.parse(standardAemProfile));
     });
 });
