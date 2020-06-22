@@ -110,7 +110,8 @@ AWS_REGION=
     | `technicalAccount.clientSecret`| Client Secret | `project.workspace.details.credentials[0].jwt.client_secret` |
     | `publicKey` and `privateKey`| Created and downloaded to a safe location on your machine when you added the APIs | none |
 
-
+### 3. Install Yarn
+[Yarn](https://yarnpkg.com/en/docs/install) is required for installing dependencies for this project. See [internal dependencies](#internal-dependencies) to learn more about this.
 
 ## Environment Variables
 
@@ -144,21 +145,21 @@ AZURE_STORAGE_CONTAINER_NAME=
 
 ### Production (build and use static UI):
 1. cd into `/server`
-2. Make sure to do a clean `npm install` in both `/server` and `/client`
+2. Make sure to do a clean `yarn install` in the `/server`
 3. if this is your first time using the dev tool or there were changes to the UI since you used it last, run  `npm run build`
 4. run `npm run start-prod`
 
 ### Development
 1. Make sure to set environment variable:  `ASSET_COMPUTE_DEV_TOOL_ENV='development'`
-2. If it is your first time using the dev tool or you made changes to the UI, cd into `/client` and run `npm install` <br/>
-3. cd into the `/server` directory. (remember to do an `npm install`) <br/>
+2. If it is your first time using the dev tool or you made changes to the UI, cd into `/client` and run `yarn install` <br/>
+3. cd into the `/server` directory. (remember to do an `yarn install`) <br/>
 4. run `npm run start-dev` <br />
 
 Note: The **backend port** will default to 9000. If you already have something running on that port or would like to change it, set the `ASSET_COMPUTE_DEV_PORT` environment variable. **WARNING: this updates the package.json in /client**
 
 
 ### Releasing
-1. Make sure to do a clean `npm install` in both `/server` and `/client`
+1. Make sure to do a clean `yarn install` in both `/server` and `/client`
 2. cd into `/server`
 3. Run  `npm run build`
 4. Create the git tag for the release
@@ -166,7 +167,7 @@ Note: The **backend port** will default to 9000. If you already have something r
 
 
 ### Internal Dependencies
-This project depends on the @react/react-spectrum package which depends on the @react/collection-view package. Neither package is published to the public npm repository. In order to support their installation and use, they have been included in this project as tar files. Each file has been prepended with the following message regarding the license:
+As stated by [Adobe Reactor Extensions Core](https://github.com/adobe/reactor-extension-core#internal-dependencies), the `client` in this project depends on the @react/react-spectrum package which depends on the @react/collection-view package. Neither package is published to the public npm repository. In order to support their installation and use, they have been included in this project as tar files. Each file has been prepended with the following message regarding the license:
 ```
 /**
  * Use of this code is governed by the Adobe Terms of Use and
@@ -174,7 +175,7 @@ This project depends on the @react/react-spectrum package which depends on the @
  * to this repo does not apply.
  */
 ```
-While changing package.json to point to the tar file for @react/react-spectrum is simple and natively supported by npm, this is not the case with @react/collection-view, since it is a dependency of @react/react-spectrum. To solve this problem, this project uses [npm-force-resolutions](https://www.npmjs.com/package/npm-force-resolutions) to add support for selective dependency resolutions.
+While changing package.json to point to the tar file for @react/react-spectrum is simple and natively supported by npm, this is not the case with @react/collection-view, since it is a dependency of @react/react-spectrum. To solve this problem, this project uses Yarn for installing dependencies since it natively supports [selective dependency resolutions](https://classic.yarnpkg.com/en/docs/selective-version-resolutions/).
 
 ![](files/meahana-screenshot-2.png)
 
