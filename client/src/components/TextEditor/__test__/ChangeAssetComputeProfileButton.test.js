@@ -89,6 +89,7 @@ describe('ChangeAssetComputeProfileButton', () => {
         // Similate selecting the Standard AEM Profile
         const dropDownButton = wrapper.find(DropdownButton);
         const standardAemProfile = wrapper.find(MenuItem).first().props().value;
+        // onSelect will return the value of the standard AEM Profile
         dropDownButton.simulate('select', JSON.parse(standardAemProfile));
     });
 });
