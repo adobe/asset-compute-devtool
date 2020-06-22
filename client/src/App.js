@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 // Importing react-spectrum
 import React from 'react';
+import "regenerator-runtime/runtime.js";
 
 // Importing react-spectrum components
 import Well from '@react/react-spectrum/Well';
