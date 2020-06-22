@@ -43,4 +43,13 @@ describe('ChangeAssetComputeProfileButton', () => {
         expect(children).toHaveLength(4);
         expect(wrapper.find(MenuItem)).toHaveLength(4);
     });
+
+    it('ChangeAssetComputeProfileButton -> Choose Standard AEM Profile button', () => {
+        const wrapper = shallow(<ChangeAssetComputeProfileButton onChangeProfile={(v) => {console.log('hello', v);}}/>);
+        console.log('wrapper', wrapper);
+
+        // this component has DropdownButton and MenuItem
+        const dropDownButton = wrapper.find(DropdownButton);
+        dropDownButton.simulate('select', 'Standard AEM Profile' );
+    });
 });
