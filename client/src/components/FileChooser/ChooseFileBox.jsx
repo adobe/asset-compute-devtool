@@ -21,6 +21,9 @@ import Popover from '@react/react-spectrum/Popover';
 import AddCircle from '@react/react-spectrum/Icon/AddCircle';
 import Image from '@react/react-spectrum/Icon/Image';
 import ComboBox from '@react/react-spectrum/ComboBox';
+import debug from 'debug';
+
+const Log = debug('asset-compute-devtool.ChooseFileBox');
 
 export default class ChooseFileBox extends Component {
     constructor(props){
@@ -46,12 +49,12 @@ export default class ChooseFileBox extends Component {
                 throw new Error(errorMessage);
             }
             resp = await resp.json();
-            console.log(`called cloud storage successfully`);
+            Log(`called cloud storage successfully`);
             this.setState({
                 fileChoices:resp
             });
         } catch(e) {
-            console.log(e);
+            Log(e);
             this.handleApiErrors(e.message);
         }
     }
@@ -75,12 +78,12 @@ export default class ChooseFileBox extends Component {
                 throw new Error(errorMessage);
             }
             resp = await resp.json();
-            console.log(`Successfully uploaded ${file.name} to cloud.`);
+            Log(`Successfully uploaded ${file.name} to cloud.`);
             this.setState({
                 fileChoices:resp
             });
         } catch(e) {
-            console.log(e);
+            Log(e);
             this.handleApiErrors(e.message);
         }
     }
@@ -103,10 +106,10 @@ export default class ChooseFileBox extends Component {
                 throw new Error(errorMessage);
             }
             resp = await resp.json();
-            console.log(`Successfully got presigned get url for ${key}, ${resp.url}`);
+            Log(`Successfully got presigned get url for ${key}, ${resp.url}`);
             return resp.url;
         } catch(e) {
-            console.log(e);
+            Log(e);
             this.handleApiErrors(e.message);
         }
     }

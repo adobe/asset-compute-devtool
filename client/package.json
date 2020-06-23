@@ -9,6 +9,7 @@
         "ajv": "^6.12.0",
         "babel-polyfill": "^6.26.0",
         "cross-os": "^1.3.0",
+        "debug": "^4.1.1",
         "form-data": "^3.0.0",
         "js-yaml": "^3.13.1",
         "react": "^16.13.0",
@@ -19,7 +20,7 @@
         "url": "^0.11.0"
     },
     "scripts": {
-        "start": "react-scripts start",
+        "start": "PORT=3000 react-scripts start",
         "build": "cross-os cross-os-build",
         "eject": "react-scripts eject",
         "test": "react-scripts test",
@@ -65,5 +66,6 @@
             "src/components/**/*.{js,jsx}",
             "src/App.js"
         ]
-    }
+    },
+    "proxy": "http://localhost:9000"
 }

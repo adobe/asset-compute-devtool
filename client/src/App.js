@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 // Importing react-spectrum
 import React from 'react';
 import "regenerator-runtime/runtime.js";
+import debug from 'debug';
 
 // Importing react-spectrum components
 import Well from '@react/react-spectrum/Well';
@@ -27,6 +28,7 @@ import ChooseFileBox from './components/FileChooser/ChooseFileBox';
 import Rendition from './components/RenditionDisplay/Rendition';
 import logo from './images/nui-flower.png';
 
+const Log = debug('asset-compute-devtool.App');
 const DEFAULT_RENDITIONS_TEXT  = JSON.stringify({
     "renditions": [
         {
@@ -101,13 +103,13 @@ export default class NormalDisplay extends React.Component {
                 throw new Error(errorMessage);
             }
             resp = await resp.json();
-            console.log(`Using Asset Compute endpoint: ${resp.endpoint}`);
+            Log(`Using Asset Compute endpoint: ${resp.endpoint}`);
             this.setState({
                 endpoint: resp.endpoint
             });
             return resp.endpoint;
         } catch (e) {
-            console.log(e);
+            Log(e);
             this.handleApiErrors(e.message);
         }
     }
@@ -143,7 +145,7 @@ export default class NormalDisplay extends React.Component {
         try {
             var data = new FormData();
             data.append('key', key);
-            console.log('calling Cloud Storage presign get');
+            Log('calling Cloud Storage presign get');
             resp = await fetch("/api/cloudstorage-presign-get", {
                 method: 'POST',
                 headers: {
@@ -156,10 +158,10 @@ export default class NormalDisplay extends React.Component {
                 throw new Error(errorMessage);
             }
             resp = await resp.json();
-            console.log(`Successfully got presigned get url for ${key}, ${resp.url}`);
+            Log(`Successfully got presigned get url for ${key}, ${resp.url}`);
             return resp.url;
         } catch (e) {
-            console.log(e);
+            Log(e);
             return this.handleApiErrors(e.message);
         }
     }
@@ -173,7 +175,7 @@ export default class NormalDisplay extends React.Component {
             var data = new FormData();
             data.append('source',source);
             data.append('renditions', JSON.stringify(renditions));
-            console.log('calling asset compute /process');
+            Log('calling asset compute /process');
             resp = await fetch("/api/asset-compute-process", {
                 method: 'POST',
                 headers: {
@@ -188,7 +190,7 @@ export default class NormalDisplay extends React.Component {
             resp = await resp.json();
             return resp;
         } catch(e) {
-            console.log(e);
+            Log(e);
             return this.handleApiErrors(e.message);
         }
     }
@@ -201,7 +203,7 @@ export default class NormalDisplay extends React.Component {
         try {
             var data = new FormData();
             data.append('requestId', requestId);
-            console.log('getting events');
+            Log('getting events');
             resp = await fetch("/api/asset-compute-getEvents", {
                 method: 'POST',
                 headers: {
@@ -214,10 +216,10 @@ export default class NormalDisplay extends React.Component {
                 throw new Error(errorMessage);
             }
             resp = await resp.json();
-            console.log(`Successfully got events`);
+            Log(`Successfully got events`);
             return resp;
         } catch (e) {
-            console.log(e);
+            Log(e);
             return this.handleApiErrors(e.message);
         }
     }
@@ -243,10 +245,10 @@ export default class NormalDisplay extends React.Component {
                 throw new Error(errorMessage);
             }
             resp = await resp.json();
-            console.log(`Successfully got activation logs`);
+            Log(`Successfully got activation logs`);
             return resp;
         } catch(e) {
-            console.log(e);
+            Log(e);
             return this.handleApiErrors('Error getting OpenWhisk activation logs');
         }
     }
@@ -276,7 +278,7 @@ export default class NormalDisplay extends React.Component {
         if (!this.isAborted && logs) {
             const currentWidth = document.getElementById('activationLogs').offsetWidth;
             const headings = logs.map(log => {
-                console.log('log: ', log);
+                Log('log: ', log);
                 return <span>
                     <br />
                     <Heading variant="subtitle2">>>>>>>>>>>> Start of Activation Id: {log.activationId}</Heading>
@@ -285,7 +287,7 @@ export default class NormalDisplay extends React.Component {
                     <br />
                 </span>
             });
-            console.log('headings: ', headings);
+            Log('headings: ', headings);
             return <pre style={{ maxHeight: '400px', overflow: 'scroll', maxWidth: `${currentWidth - 20}px`, fontSize: '12px' }}>{headings}</pre>
         }
         return;
@@ -317,7 +319,7 @@ export default class NormalDisplay extends React.Component {
             const response = await this.callAssetComputeApi(source, requestJSON.renditions);
             const renditions = [];
 
-            console.log("Response from /process:", JSON.stringify(response, null, 2));
+            Log("Response from /process:", JSON.stringify(response, null, 2));
             if (!response) {
                 return; // process failed so just return
             }
@@ -378,7 +380,7 @@ export default class NormalDisplay extends React.Component {
             this.setState({
                 running:false
             });
-            console.log(err);
+            Log(err);
             return this.handleApiErrors('Unexpected error. Check source file or request JSON.');
         }
     }
@@ -390,7 +392,7 @@ export default class NormalDisplay extends React.Component {
     handleSelectedFileChange(f) {
         this.setState({selectedOption:f});
         localStorage.setItem('selectedFile', f);
-        console.log('selected file changed', this.state.selectedOption, f)
+        Log('selected file changed', this.state.selectedOption, f)
     }
 
     render() {
