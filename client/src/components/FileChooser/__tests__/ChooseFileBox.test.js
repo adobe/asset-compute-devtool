@@ -96,4 +96,16 @@ describe('ChooseFileBox', () => {
         });
     })
 
+    it('selects a different file', () => {
+        // TODO: add test that similates ComboBox event 'onSelect'
+    })
+
+    it('uploads a new file to the cloud', () => {
+        // TODO: add test that similates uploading event
+    })
+
+    it('hovers over file preview', () => {
+        // TODO: add test that similates OverlayTrigger 'onHover' event
+    })
+
 });
