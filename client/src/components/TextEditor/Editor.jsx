@@ -122,9 +122,8 @@ export default class Editor extends Component {
 
     render() {
         return (
-            // <div>
             <div id="text-wrap" style={{marginTop:20}}>
-            <ChangeAssetComputeProfileButton id='ChangeAssetComputeProfileButton' onChangeProfile={this.changeProfile.bind(this)} style={{float:'right'}}/>
+                <ChangeAssetComputeProfileButton id='ChangeAssetComputeProfileButton' onChangeProfile={this.changeProfile.bind(this)} style={{float:'right'}}/>
                 <AceEditor
                     style={{position:'relative', zIndex:'0', borderRadius:'5px', overflow:'scroll'}}
                     ref='aceEditor'
@@ -142,7 +141,7 @@ export default class Editor extends Component {
                         enableBasicAutocompletion: true,
                         enableLiveAutocompletion: true,
                         fontSize: '15px'
-                      }}
+                        }}
                     commands={[{
                         name:'run',
                         bindKey: {win:'Command-Enter', mac:'Command-Enter'},
@@ -150,7 +149,7 @@ export default class Editor extends Component {
                         },
                     ]}
                 />
-                 </div>
+            </div>
         )
 
 

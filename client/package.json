@@ -53,6 +53,7 @@
         "codecov": "^3.7.0",
         "enzyme": "^3.11.0",
         "enzyme-adapter-react-16": "^1.15.2",
+        "jest-fetch-mock": "^3.0.3",
         "license-checker": "^25.0.1",
         "nyc": "^15.1.0"
     },
