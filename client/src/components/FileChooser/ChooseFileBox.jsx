@@ -167,25 +167,24 @@ export default class ChooseFileBox extends Component {
     render () {
         return (
             <div>
-            <Well style={{padding:10,display:'inline-block'}}>
-            <Button variant ='tool' id="file-chooser" quiet icon={<AddCircle size='M'/>} style={{marginRight:5,float:'left'}} onClick={(e) => {this._file.click()}}/>
-            <ComboBox
-                options={this.state.fileChoices}
-                placeholder="Select a file..."
-                value ={this.state.selectedOption}
-                onSelect={this.handleOptionChange.bind(this)}
-                onChange={this.handleTextChange.bind(this)}
-            />
-            <span style={{position:'fixed', top:'33px', left:'290px'}} id='ChooseFileButton' />
-            <input id="myInput" type="file" onChange={this.onUpload.bind(this)} ref={(ref) => this._file = ref} style={{display:'none'}} />
-            <OverlayTrigger  trigger="hover" disabled={!this.state.selectedOption} placement="right">
-             <Button  icon={<Image size='M'/>} style={{marginLeft:10}}  disabled={!this.state.selectedOption} quiet variant="action"/>
-             <Popover>
-                 {this.state.image}
-             </Popover>
-             </OverlayTrigger>
-            </Well>
-            <p style={{marginRight:300, marginLeft:20, bottom:4, position:'fixed', zIndex:'10'}}>{this.state.error}</p>
+                <Well style={{padding:10,display:'inline-block'}}>
+                    <Button variant ='tool' id="file-chooser" quiet icon={<AddCircle size='M'/>} style={{marginRight:5,float:'left'}} onClick={(e) => {this._file.click()}}/>
+                    <ComboBox
+                        options={this.state.fileChoices}
+                        placeholder="Select a file..."
+                        value ={this.state.selectedOption}
+                        onSelect={this.handleOptionChange.bind(this)}
+                        onChange={this.handleTextChange.bind(this)}
+                    />
+                    <span style={{position:'fixed', top:'33px', left:'290px'}} id='ChooseFileButton' />
+                    <input id="myInput" type="file" onChange={this.onUpload.bind(this)} ref={(ref) => this._file = ref} style={{display:'none'}} />
+                    <OverlayTrigger  trigger="hover" disabled={!this.state.selectedOption} placement="right">
+                        <Button  icon={<Image size='M'/>} style={{marginLeft:10}}  disabled={!this.state.selectedOption} quiet variant="action"/>
+                        <Popover>
+                            {this.state.image}
+                        </Popover>
+                    </OverlayTrigger>
+                </Well>
             </div>
         )
     }
