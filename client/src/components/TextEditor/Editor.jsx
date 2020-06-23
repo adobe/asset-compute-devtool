@@ -101,14 +101,11 @@ export default class Editor extends Component {
         localStorage.setItem('json', v)
         return this.props.onChange(v)
     }
-    changeProfile(v) {
-        this.handleChange(v);
-    }
 
     render() {
         return (
             <div id="text-wrap" style={{marginTop:20}}>
-                <ChangeAssetComputeProfileButton id='ChangeAssetComputeProfileButton' onChangeProfile={this.changeProfile.bind(this)} style={{float:'right'}}/>
+                <ChangeAssetComputeProfileButton id='ChangeAssetComputeProfileButton' onChangeProfile={this.handleChange.bind(this)} style={{float:'right'}}/>
                 <AceEditor
                     style={{position:'relative', zIndex:'0', borderRadius:'5px', overflow:'scroll'}}
                     ref='aceEditor'

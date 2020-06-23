@@ -114,4 +114,19 @@ describe('Editor', () => {
 
     })
 
+    it('Simulate a different Asset Compute profile selected event', () => {
+        const renditions = {
+            renditions: [
+                {
+                    name: 'test-rendition.jpg',
+                    fmt:'jpg'
+                }
+            ]
+        }
+        const wrapper = shallow(<Editor onChange={(v) => {return v;}} devToolToken={DEVTOOL_TOKEN} />);
+        wrapper.find(ChangeAssetComputeProfileButton).simulate('changeProfile', JSON.stringify(renditions));
+        expect(JSON.parse(wrapper.state('textArea'))).toEqual(renditions);
+
+    })
+
 });
