@@ -101,21 +101,6 @@ export default class Editor extends Component {
         localStorage.setItem('json', v)
         return this.props.onChange(v)
     }
-
-    // adding new rendtion to ace editor via form
-    addRendition(rendition) {
-        // get new rendition from rendition form
-        console.log(rendition)
-        rendition = Object.filter(rendition, i => i.length > 0)
-
-        if (JSON.stringify(rendition) === '{}') {return;}
-
-        // add rendition to ace editor text area
-        var old = JSON.parse(this.state.textArea);
-        old.renditions[old.renditions.length] = rendition
-        const newTextArea = JSON.stringify(old, undefined, 2);
-        return this.handleChange(newTextArea);
-    }
     changeProfile(v) {
         this.handleChange(v);
     }
