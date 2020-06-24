@@ -27,6 +27,23 @@ router.get('/asset-compute-endpoint', async function(req, res) {
     });
 });
 
+
+router.get('/setUpDevToolGetJournalUrl', async function(req, res) {
+    try {
+        if (!assetComputeDevTool) {
+            assetComputeDevTool = await setupAssetComputeDevTool();
+        }
+    }  catch(e) {
+        console.log(e);
+        return res.status(500).send({
+            message: 'Error setting up devtool - journal url'
+        });
+    }
+
+    const jrnlUrl = assetComputeDevTool && assetComputeDevTool.assetCompute && assetComputeDevTool.assetCompute.journal;
+    res.json({ journalUrl: jrnlUrl });
+});
+
 router.get('/asset-compute-action-url', async function(req, res) {
     const urls = await getActionUrls();
     res.json(urls);
@@ -96,7 +113,6 @@ router.post('/asset-compute-process', async function(req, res) {
         }
         const source = req.fields.source;
         const renditions = JSON.parse(req.fields.renditions);
-
 
         assetComputeStartTime = Date.now();
         const response = await assetComputeDevTool.process(source, renditions);

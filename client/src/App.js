@@ -111,8 +111,36 @@ export default class NormalDisplay extends React.Component {
         }
     }
 
+    async setUpDevToolGetJournalUrl() {
+        if (this.isAborted) return;
+        let resp;
+        try {
+            resp = await fetch("/api/setUpDevToolGetJournalUrl", {
+                method: 'GET',
+                headers: {
+                    Authorization: this.state.devToolToken
+                }
+            });
+            if (!resp.ok) {
+                const errorMessage = await this.formatErrorMessage(resp, 'Error setting up event provider');
+                throw new Error(errorMessage);
+            }
+            resp = await resp.json();
+            console.log(`Asset Compute journal url: ${resp.journalUrl}`);
+            this.setState({
+                journalUrl: resp.journalUrl
+            });
+            document.getElementById('run').disabled = false;
+            return resp.journalUrl;
+        } catch (e) {
+            console.log(e);
+            this.handleApiErrors(e.message);
+        }
+    }
+
     componentDidMount() {
         this.callGetAssetComputeEndpoint();
+        this.setUpDevToolGetJournalUrl();
     }
 
     hideToast() {
@@ -403,7 +431,7 @@ export default class NormalDisplay extends React.Component {
                             padding: '1rem'}}>
                         {/* choose file and add new file */}
                         <ChooseFileBox id="ChooseFileBox" onChange={this.handleSelectedFileChange.bind(this)} devToolToken={this.state.devToolToken} onError={this.handleApiErrors.bind(this)}/>
-                        <Button id="run" label="Run" variant="cta" style={{marginTop:15, marginLeft:10}} disabled={!this.state.selectedOption || this.state.running} onClick={this.run}/>
+                        <Button id="run" label="Run" variant="cta" style={{marginTop:15, marginLeft:10}} disabled={!this.state.selectedOption || this.state.running || !this.state.journalUrl} onClick={this.run}/>
                         <span id="tourStepThree" style={{position:"fixed", top:'35px', left:'420px'}}/>
                         <Button id='Abort' label="Abort" variant="warning" style={{marginTop:15, marginLeft:10}} disabled={!this.state.running} onClick={this.abort.bind(this)}/>
 
