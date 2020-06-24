@@ -25,8 +25,7 @@
         "eject": "react-scripts eject",
         "test": "react-scripts test",
         "posttest": "license-checker --summary",
-        "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov",
-        "unit-test": "npm test -- --coverage"
+        "unit-test": "npm test -- --coverage --watchAll=false"
     },
     "cross-os": {
         "cross-os-build": {
@@ -65,6 +64,7 @@
         "collectCoverageFrom": [
             "src/components/**/*.{js,jsx}",
             "src/App.js"
-        ]
+        ],
+        "coverageReporters": ["lcov"]
     }
 }
