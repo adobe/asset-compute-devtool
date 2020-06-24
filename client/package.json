@@ -20,7 +20,7 @@
         "url": "^0.11.0"
     },
     "scripts": {
-        "start": "PORT=3000 react-scripts start",
+        "start": "react-scripts start",
         "build": "cross-os cross-os-build",
         "eject": "react-scripts eject",
         "test": "react-scripts test",
@@ -66,6 +66,5 @@
             "src/components/**/*.{js,jsx}",
             "src/App.js"
         ]
-    },
-    "proxy": "http://localhost:9000"
+    }
 }
