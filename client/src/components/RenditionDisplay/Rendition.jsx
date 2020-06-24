@@ -55,11 +55,6 @@ export default class Rendition extends Component {
                                 <Asset type="file" style={{width:'238px', height:'136px'}} src={rendition.url} />
                                 </Link>
                             </CardPreview>
-                    //  <CardPreview>
-                    //     <a href={rendition.url}  target="_blank" rel="noopener noreferrer" style={{display:'inline-block'}}>
-                    //      <embed width='100px' height='100px' name="plugin" style={{width:'238px', height:'136px', backgroundColor:'grey', pointerEvents:'none'}} src={rendition.url} type={type}/>
-                    //     </a>
-                    //     </CardPreview>
                 }
                 else {
                     image = <CardPreview>

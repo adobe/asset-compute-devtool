@@ -102,29 +102,10 @@ export default class Editor extends Component {
         return this.props.onChange(v)
     }
 
-    // adding new rendtion to ace editor via form
-    addRendition(rendition) {
-        // get new rendition from rendition form
-        console.log(rendition)
-        rendition = Object.filter(rendition, i => i.length > 0)
-
-        if (JSON.stringify(rendition) === '{}') {return;}
-
-        // add rendition to ace editor text area
-        var old = JSON.parse(this.state.textArea);
-        old.renditions[old.renditions.length] = rendition
-        const newTextArea = JSON.stringify(old, undefined, 2);
-        return this.handleChange(newTextArea);
-    }
-    changeProfile(v) {
-        this.handleChange(v);
-    }
-
     render() {
         return (
-            // <div>
             <div id="text-wrap" style={{marginTop:20}}>
-            <ChangeAssetComputeProfileButton id='ChangeAssetComputeProfileButton' onChangeProfile={this.changeProfile.bind(this)} style={{float:'right'}}/>
+                <ChangeAssetComputeProfileButton id='ChangeAssetComputeProfileButton' onChangeProfile={this.handleChange.bind(this)} style={{float:'right'}}/>
                 <AceEditor
                     style={{position:'relative', zIndex:'0', borderRadius:'5px', overflow:'scroll'}}
                     ref='aceEditor'
@@ -142,7 +123,7 @@ export default class Editor extends Component {
                         enableBasicAutocompletion: true,
                         enableLiveAutocompletion: true,
                         fontSize: '15px'
-                      }}
+                        }}
                     commands={[{
                         name:'run',
                         bindKey: {win:'Command-Enter', mac:'Command-Enter'},
@@ -150,7 +131,7 @@ export default class Editor extends Component {
                         },
                     ]}
                 />
-                 </div>
+            </div>
         )
 
 

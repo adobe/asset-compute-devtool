@@ -7,10 +7,14 @@
 */.pnp
 .pnp.js
 .vscode
-*/.env
+
+# credentials
+*.env
+*.aio
 
 # testing
 client/coverage
+*coverage.lcov
 
 # misc
 .DS_Store
