@@ -295,7 +295,7 @@ export default class NormalDisplay extends React.Component {
 
     formatRequestDisplay(source, requestJSON, response) {
         return <pre style={{overflow:'scroll', fontFamily:'Source Code Pro', fontSize:'12px'}}>
-                    <Heading size={6}>Request:</Heading>{`POST ${this.state.endpoint}process\n`}
+                    <Heading size={6}>Request:</Heading>{`POST ${this.state.endpoint}\n`}
                     <br/>{JSON.stringify(Object.assign({}, {source: source}, requestJSON), undefined, 1)}<br/>
                     <br/>
                     <Heading size={6}>Response:</Heading>
