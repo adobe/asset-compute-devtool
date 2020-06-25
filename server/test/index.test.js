@@ -17,9 +17,13 @@
 
 const {stdout} = require("stdout-stderr");
 const assert = require("assert");
+const mock = require('mock-require');
+mock('open', () => {});
 
 describe('index.js tests', () => {
-
+    after(() => {
+        mock.stopAll();
+    });
     it('Just calling index', async function () {
         stdout.start();
         await require('../index.js');

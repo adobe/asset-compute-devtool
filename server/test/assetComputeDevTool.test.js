@@ -22,6 +22,9 @@ describe( 'assetComputeDevTool.js tests', () => {
 
     afterEach(() => {
         delete process.env.AIO_RUNTIME_NAMESPACE;
+        delete process.env.AIO_runtime_namespace;
+        delete process.env.AIO_RUNTIME_AUTH;
+        delete process.env.AIO_runtime_auth;
     });
 
     it('should fail to get action urls if not in the context of an aio action', async function() {

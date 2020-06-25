@@ -19,7 +19,9 @@ const API_HOST = 'https://adobeioruntime.net';
 
 async function getWskCredentials() {
     let apiKey, namespace;
-    if (process.env.WSK_CONFIG_FILE) {
+    apiKey = process.env.AIO_RUNTIME_AUTH || process.env.AIO_runtime_auth;
+    namespace = process.env.AIO_RUNTIME_NAMESPACE || process.env.AIO_runtime_namespace;
+    if ((!apiKey || !namespace) && process.env.WSK_CONFIG_FILE) {
         const credentials = (await fse.readFile(process.env.WSK_CONFIG_FILE, {encoding:'utf8'})).split('\n');
         credentials.forEach(cred => {
             if (cred.startsWith('NAMESPACE')) {
@@ -29,9 +31,6 @@ async function getWskCredentials() {
                 apiKey = cred.split('=')[1];
             }
         });
-    } else if (process.env.AIO_RUNTIME_AUTH && process.env.AIO_RUNTIME_NAMESPACE) {
-        apiKey = process.env.AIO_RUNTIME_AUTH;
-        namespace = process.env.AIO_RUNTIME_NAMESPACE;
     }
 
     return openwhisk({
@@ -167,7 +166,5 @@ async function getWorkerLogs(activationId, events) {
 }
 
 module.exports = {
-    getFirstPartyWorkerLogs,
-    getActivationLogs,
     getWorkerLogs
 };
