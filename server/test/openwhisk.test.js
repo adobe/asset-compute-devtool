@@ -50,7 +50,7 @@ describe( 'openwhisk.js tests', () => {
         try {
             await getWorkerLogs();
         } catch (e) {
-            assert.ok(!e.message.includes('Test failed. Credentials are not as expected'));
+            assert.ok(!e.message.includes('Test failed'));
             // ignore errors after checking options
         }
     });
@@ -61,7 +61,7 @@ describe( 'openwhisk.js tests', () => {
         try {
             await getWorkerLogs();
         } catch (e) {
-            assert.ok(!e.message.includes('Test failed. Credentials are not as expected'));
+            assert.ok(!e.message.includes('Test failed'));
             // ignore errors after checking options
         }
     });
