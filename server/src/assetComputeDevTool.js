@@ -13,6 +13,7 @@
 "use strict";
 
 const { AssetComputeClient } = require("@adobe/asset-compute-client");
+const { AdobeIOEvents } = require("@adobe/asset-compute-events-client");
 const yaml = require("js-yaml");
 const fse = require('fs-extra');
 const { CloudStorage } = require('@adobe/cloud-blobstore-wrapper');
@@ -137,6 +138,17 @@ class AssetComputeDevTool {
         );
     }
 
+    async checkEventJornal(journalUrl) {
+        console.log("~~~ calling this.assetCompute.checkEventJornal - this is outside");
+        
+        const response = await this.assetCompute.checkEventJornal(
+            journalUrl
+        );
+        console.log("~~~ assetComputeDevTool.checkEventJornal",response);
+        return response;
+        
+    }
+
     /**
      * Process an asset, waits for all rendition events to return
      *
@@ -158,7 +170,7 @@ class AssetComputeDevTool {
         console.log(`>>> Request ID ${response.requestId} (Activation ${response.activationId})`);
         return response;
     }
-
+     
     async getEvents(requestId) {
         const events = await this.assetCompute.waitActivation(requestId, this.activationWaitMsec);
         await Promise.all(events.map(event => {
@@ -249,11 +261,22 @@ async function setupCloudStorage() {
 /**
  * Setup the dev tool framework.
  */
-async function setupAssetComputeDevTool() {
+async function doSetupAssetComputeDevTool() {
     const assetCompute = await setupAssetCompute();
     const expirationTime = Date.now() + 86400000;
     const storage = await setupCloudStorage();
     return new AssetComputeDevTool(assetCompute, storage, expirationTime);
+}
+let devToolPromise;
+
+async function setupAssetComputeDevTool() {
+    if (devToolPromise) {
+        return devToolPromise;
+    }
+    devToolPromise = new Promise(async (resolve, reject) => {
+        resolve(await doSetupAssetComputeDevTool());
+    });
+    return devToolPromise;
 }
 
 

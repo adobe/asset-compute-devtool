@@ -44,6 +44,25 @@ router.get('/setUpDevToolGetJournalUrl', async function(req, res) {
     res.json({ journalUrl: jrnlUrl });
 });
 
+router.post('/check-jrnl-ready', async function(req, res) {
+    const journalUrl = req.fields.journalUrl;
+    try {
+        if (!assetComputeDevTool) {
+            throw new Error("goofing up...")
+        }
+    }  catch(e) {
+        console.log(e);
+        return res.status(500).send({
+            message: 'Error checking journal ready'
+        });
+    }
+    console.log("~~~ calling assetComputeDevTool.checkEventJornal(journalUrl)");
+    
+    const journalReady = await assetComputeDevTool.checkEventJornal(journalUrl);
+    console.log("~~~ journalReady",journalReady);
+    res.json({ journalReady });
+});
+
 router.get('/asset-compute-action-url', async function(req, res) {
     const urls = await getActionUrls();
     res.json(urls);

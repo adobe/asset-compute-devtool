@@ -328,9 +328,65 @@ export default class NormalDisplay extends React.Component {
                 </pre>
     }
 
+    async checkJournalReady(journalUrl) {
+
+        if (this.isAborted) return;
+
+        var resp;
+        try {
+            var data = new FormData();
+            data.append('journalUrl',journalUrl);
+            
+            console.log('calling check-jrnl-ready');
+            resp = await fetch("/api/check-jrnl-ready", {
+                method: 'POST',
+                headers: {
+                    Authorization: this.state.devToolToken
+                },
+                body: data
+                });
+            if (!resp.ok) {
+                const errorMessage = await this.formatErrorMessage(resp, '/process')
+                throw new Error(errorMessage);
+            }
+            resp = await resp.json();
+            return resp;
+        } catch(e) {
+            console.log(e);
+            return this.handleApiErrors(e.message);
+        }
+    }
+
+    async validateJournalReady(journalUrl) {
+        console.log("~~~ calling checkJournalReady");
+        
+        const response = await this.checkJournalReady(journalUrl);
+        console.log("~~~ response checkJournalReady",response);
+        console.log("~~~ response checkJournalReady value",response.journalReady);
+        return response.journalReady;
+        
+    }
+
     async run() {
         this.isAborted = false;
-        this.setState({
+        console.log("~~~ journalUrl",this.state.journalUrl);
+        console.log("~~~ journalReady", this.state.journalReady);
+        
+        if(this.state.journalUrl && !this.state.journalReady){
+            const journalReady = await this.validateJournalReady(this.state.journalUrl);
+            console.log("~~~ journalReady result", journalReady);
+            
+            this.setState({
+                journalReady: journalReady
+            });
+            console.log("~~~ journalReady after", this.state.journalReady);
+            if(!journalReady) {
+                const errMsg = "Journal registration not complete, try again in 60 seconds";
+                console.log(errMsg);
+                return this.handleApiErrors(errMsg);
+            }
+        }
+            this.setState({
             renditions: [],
             error: null,
             runTutorial: false,
