@@ -30,14 +30,14 @@ const DEFAULT_RENDITIONS_TEXT  = {
         {
             "name": "rendition.48.48.png",
             "fmt": "png",
-            "wid": 48,
-            "hei": 48
+            "width": 48,
+            "height": 48
         },
         {
             "name": "rendition.319.319.png",
             "fmt": "png",
-            "wid": 319,
-            "hei": 319
+            "width": 319,
+            "height": 319
         }
     ]
 };
@@ -74,7 +74,7 @@ describe('Editor', () => {
     it('Displays action urls as renditions after mounting', () => {
         const workerURLs = {
             'worker-example': 'https://namespace.adobeioruntime.net/api/v1/web/@adobe/asset-compute-devtool-1.0.1/worker-example',
-            generic: 'https://namespace.adobeioruntime.net/api/v1/web/@adobe/asset-compute-devtool-1.0.1/generic' 
+            generic: 'https://namespace.adobeioruntime.net/api/v1/web/@adobe/asset-compute-devtool-1.0.1/generic'
         };
         fetch.mockResponseOnce(JSON.stringify(workerURLs))
         mount(<Editor onChange={(v) => {expect(JSON.parse(v)).toEqual(CUSTOM_WORKER_RENDITIONS)}} devToolToken={DEVTOOL_TOKEN} />)

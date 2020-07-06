@@ -33,26 +33,26 @@ const STANDARD_AEM_PROFILE = JSON.stringify({
         {
             "name": "cq5dam.thumbnail.48.48.png",
             "fmt": "png",
-            "wid": 48,
-            "hei": 48
+            "width": 48,
+            "height": 48
         },
         {
             "name": "cq5dam.thumbnail.140.100.png",
             "fmt": "png",
-            "wid": 140,
-            "hei": 100
+            "width": 140,
+            "height": 100
         },
         {
             "name": "cq5dam.thumbnail.319.319.png",
             "fmt": "png",
-            "wid": 319,
-            "hei": 319
+            "width": 319,
+            "height": 319
         },
         {
             "name": "cq5dam.web.1280.1280.png",
             "fmt": "jpg",
-            "wid": 1280,
-            "hei": 1280
+            "width": 1280,
+            "height": 1280
         }
     ]
 }, undefined, 4);
@@ -70,14 +70,14 @@ const SIMPLE_REQUEST = JSON.stringify({
         {
             "name": "rendition.48.48.png",
             "fmt": "png",
-            "wid": 48,
-            "hei": 48
+            "width": 48,
+            "height": 48
         },
         {
             "name": "rendition.319.319.png",
             "fmt": "png",
-            "wid": 319,
-            "hei": 319
+            "width": 319,
+            "height": 319
         }
     ]
 }, undefined, 4);
