@@ -48,7 +48,7 @@ router.post('/check-jrnl-ready', async function(req, res) {
     const journalUrl = req.fields.journalUrl;
     try {
         if (!assetComputeDevTool) {
-            throw new Error("goofing up...")
+            throw new Error("assetComputeDevTool should have initialized in setupDevTool");
         }
     }  catch(e) {
         console.log(e);

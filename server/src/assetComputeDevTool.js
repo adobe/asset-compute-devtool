@@ -13,7 +13,6 @@
 "use strict";
 
 const { AssetComputeClient } = require("@adobe/asset-compute-client");
-const { AdobeIOEvents } = require("@adobe/asset-compute-events-client");
 const yaml = require("js-yaml");
 const fse = require('fs-extra');
 const { CloudStorage } = require('@adobe/cloud-blobstore-wrapper');
@@ -261,22 +260,24 @@ async function setupCloudStorage() {
 /**
  * Setup the dev tool framework.
  */
-async function doSetupAssetComputeDevTool() {
-    const assetCompute = await setupAssetCompute();
-    const expirationTime = Date.now() + 86400000;
-    const storage = await setupCloudStorage();
-    return new AssetComputeDevTool(assetCompute, storage, expirationTime);
-}
+
 let devToolPromise;
 
 async function setupAssetComputeDevTool() {
     if (devToolPromise) {
         return devToolPromise;
     }
-    devToolPromise = new Promise(async (resolve, reject) => {
-        resolve(await doSetupAssetComputeDevTool());
+    devToolPromise = new Promise((resolve) => {
+        resolve(doSetupAssetComputeDevTool());
     });
     return devToolPromise;
+}
+
+async function doSetupAssetComputeDevTool() {
+    const assetCompute = await setupAssetCompute();
+    const expirationTime = Date.now() + 86400000;
+    const storage = await setupCloudStorage();
+    return new AssetComputeDevTool(assetCompute, storage, expirationTime);
 }
 
 
