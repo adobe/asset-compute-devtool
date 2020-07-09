@@ -28,7 +28,7 @@ router.get('/asset-compute-endpoint', async function(req, res) {
 });
 
 
-router.get('/setUpDevToolGetJournalUrl', async function(req, res) {
+router.get('/get-journal-url', async function(req, res) {
     try {
         if (!assetComputeDevTool) {
             assetComputeDevTool = await setupAssetComputeDevTool();
@@ -39,28 +39,25 @@ router.get('/setUpDevToolGetJournalUrl', async function(req, res) {
             message: 'Error setting up devtool - journal url'
         });
     }
-
-    const jrnlUrl = assetComputeDevTool && assetComputeDevTool.assetCompute && assetComputeDevTool.assetCompute.journal;
-    res.json({ journalUrl: jrnlUrl });
+    const journalUrl = assetComputeDevTool && assetComputeDevTool.assetCompute 
+                            && assetComputeDevTool.assetCompute.journal;
+    res.json({ journalUrl });
 });
 
 router.post('/check-jrnl-ready', async function(req, res) {
     const journalUrl = req.fields.journalUrl;
     try {
-        if (!assetComputeDevTool) {
-            throw new Error("assetComputeDevTool should have initialized in setupDevTool");
+        if (!journalUrl) {
+            throw new Error("assetComputeDevTool did not initialize");
         }
+        const journalReady = await assetComputeDevTool.checkEventJornal(journalUrl);
+        res.json({ journalReady });
     }  catch(e) {
         console.log(e);
         return res.status(500).send({
             message: 'Error checking journal ready'
         });
     }
-    console.log("~~~ calling assetComputeDevTool.checkEventJornal(journalUrl)");
-    
-    const journalReady = await assetComputeDevTool.checkEventJornal(journalUrl);
-    console.log("~~~ journalReady",journalReady);
-    res.json({ journalReady });
 });
 
 router.get('/asset-compute-action-url', async function(req, res) {

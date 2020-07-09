@@ -114,11 +114,11 @@ export default class NormalDisplay extends React.Component {
         }
     }
 
-    async setUpDevToolGetJournalUrl() {
+    async getJournalUrl() {
         if (this.isAborted) return;
         let resp;
         try {
-            resp = await fetch("/api/setUpDevToolGetJournalUrl", {
+            resp = await fetch("/api/get-journal-url", {
                 method: 'GET',
                 headers: {
                     Authorization: this.state.devToolToken
@@ -143,7 +143,7 @@ export default class NormalDisplay extends React.Component {
 
     componentDidMount() {
         this.callGetAssetComputeEndpoint();
-        this.setUpDevToolGetJournalUrl();
+        this.getJournalUrl();
     }
 
     hideToast() {
@@ -332,15 +332,11 @@ export default class NormalDisplay extends React.Component {
     }
 
     async checkJournalReady(journalUrl) {
-
         if (this.isAborted) return;
-
-        var resp;
+        let resp;
         try {
             var data = new FormData();
             data.append('journalUrl',journalUrl);
-            
-            console.log('calling check-jrnl-ready');
             resp = await fetch("/api/check-jrnl-ready", {
                 method: 'POST',
                 headers: {
@@ -349,7 +345,7 @@ export default class NormalDisplay extends React.Component {
                 body: data
                 });
             if (!resp.ok) {
-                const errorMessage = await this.formatErrorMessage(resp, '/process')
+                const errorMessage = await this.formatErrorMessage(resp, '/check-jrnl-ready')
                 throw new Error(errorMessage);
             }
             resp = await resp.json();
@@ -360,36 +356,26 @@ export default class NormalDisplay extends React.Component {
         }
     }
 
-    async validateJournalReady(journalUrl) {
-        console.log("~~~ calling checkJournalReady");
-        
+    async validate(journalUrl) {
         const response = await this.checkJournalReady(journalUrl);
-        console.log("~~~ response checkJournalReady",response);
-        console.log("~~~ response checkJournalReady value",response.journalReady);
         return response.journalReady;
-        
     }
 
     async run() {
         this.isAborted = false;
-        console.log("~~~ journalUrl",this.state.journalUrl);
-        console.log("~~~ journalReady", this.state.journalReady);
-        
+        //validate only if setup returned journalUrl and was not checked before
         if(this.state.journalUrl && !this.state.journalReady){
-            const journalReady = await this.validateJournalReady(this.state.journalUrl);
-            console.log("~~~ journalReady result", journalReady);
-            
+            const journalReady = await this.validate(this.state.journalUrl);
             this.setState({
                 journalReady: journalReady
             });
-            console.log("~~~ journalReady after", this.state.journalReady);
             if(!journalReady) {
                 const errMsg = "Journal registration not complete, try again in 60 seconds";
                 console.log(errMsg);
                 return this.handleApiErrors(errMsg);
             }
         }
-            this.setState({
+        this.setState({
             renditions: [],
             error: null,
             runTutorial: false,

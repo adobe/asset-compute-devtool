@@ -138,14 +138,9 @@ class AssetComputeDevTool {
     }
 
     async checkEventJornal(journalUrl) {
-        console.log("~~~ calling this.assetCompute.checkEventJornal - this is outside");
-        
-        const response = await this.assetCompute.checkEventJornal(
-            journalUrl
-        );
-        console.log("~~~ assetComputeDevTool.checkEventJornal",response);
+        console.log("calling asset-compute-client#checkEventJornal");
+        const response = await this.assetCompute.checkEventJornal(journalUrl);
         return response;
-        
     }
 
     /**
@@ -260,7 +255,7 @@ async function setupCloudStorage() {
 /**
  * Setup the dev tool framework.
  */
-
+// singleton Promise
 let devToolPromise;
 
 async function setupAssetComputeDevTool() {
