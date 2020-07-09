@@ -5,7 +5,7 @@
     "dependencies": {
         "@react/collection-view": "file:libraries/react-collection-view-4.1.5.tgz",
         "@react/react-spectrum": "file:libraries/react-react-spectrum-2.25.0.tgz",
-        "ace-builds": "^1.4.8",
+        "ace-builds": "^1.4.12",
         "ajv": "^6.12.0",
         "babel-polyfill": "^6.26.0",
         "cross-os": "^1.3.0",
@@ -13,7 +13,7 @@
         "form-data": "^3.0.0",
         "js-yaml": "^3.13.1",
         "react": "^16.13.0",
-        "react-ace": "^8.0.0",
+        "react-ace": "^9.1.1",
         "react-dom": "^16.13.0",
         "react-scripts": "3.4.0",
         "regenerator-runtime": "^0.13.5",
@@ -65,6 +65,9 @@
             "src/components/**/*.{js,jsx}",
             "src/App.js"
         ],
-        "coverageReporters": ["text", "lcov"]
+        "coverageReporters": ["text", "lcov"],
+        "moduleNameMapper": {
+            "ace-builds": "<rootDir>/node_modules/ace-builds"
+        }
     }
 }
