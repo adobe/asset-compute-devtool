@@ -14,7 +14,6 @@ import React, { Component } from 'react';
 import AceEditor from 'react-ace';
 
 import * as ace from 'ace-builds'; // ace module ..
-ace.config.set('basePath', '../../node_modules/ace-builds');
 
 import 'ace-builds/webpack-resolver';
 import 'ace-builds/src-min-noconflict/ext-language_tools';
@@ -23,6 +22,7 @@ import 'ace-builds/src-noconflict/theme-tomorrow_night_eighties';
 
 import ChangeAssetComputeProfileButton from './ChangeAssetComputeProfileButton';
 
+ace.config.set('basePath', '../../node_modules/ace-builds');
 const DEFAULT_RENDITIONS_TEXT  = JSON.stringify({
     "renditions": [
         {
