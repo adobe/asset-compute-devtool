@@ -139,11 +139,7 @@ class AssetComputeDevTool {
 
     async checkEventJournal(journalUrl) {
         console.log("calling asset-compute-client#checkEventJournal");
-        try{
-            await this.assetCompute.checkEventJournal(journalUrl);
-        } catch(error) {
-            throw error;
-        }
+        await this.assetCompute.checkEventJournal(journalUrl);
     }
 
     /**
