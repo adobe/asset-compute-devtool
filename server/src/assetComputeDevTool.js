@@ -137,10 +137,13 @@ class AssetComputeDevTool {
         );
     }
 
-    async checkEventJornal(journalUrl) {
-        console.log("calling asset-compute-client#checkEventJornal");
-        const response = await this.assetCompute.checkEventJornal(journalUrl);
-        return response;
+    async checkEventJournal(journalUrl) {
+        console.log("calling asset-compute-client#checkEventJournal");
+        try{
+            await this.assetCompute.checkEventJournal(journalUrl);
+        } catch(error) {
+            throw error;
+        }
     }
 
     /**

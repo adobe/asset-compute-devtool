@@ -27,35 +27,22 @@ router.get('/asset-compute-endpoint', async function(req, res) {
     });
 });
 
-
-router.get('/get-journal-url', async function(req, res) {
+router.get('/check-journal-ready', async function(req, res) {
+    let journalReady = false;
     try {
         if (!assetComputeDevTool) {
             assetComputeDevTool = await setupAssetComputeDevTool();
         }
-    }  catch(e) {
-        console.log(e);
-        return res.status(500).send({
-            message: 'Error setting up devtool - journal url'
-        });
-    }
-    const journalUrl = assetComputeDevTool && assetComputeDevTool.assetCompute 
+        const journalUrl = assetComputeDevTool && assetComputeDevTool.assetCompute 
                             && assetComputeDevTool.assetCompute.journal;
-    res.json({ journalUrl });
-});
-
-router.post('/check-jrnl-ready', async function(req, res) {
-    const journalUrl = req.fields.journalUrl;
-    try {
-        if (!journalUrl) {
-            throw new Error("assetComputeDevTool did not initialize");
-        }
-        const journalReady = await assetComputeDevTool.checkEventJornal(journalUrl);
+        await assetComputeDevTool.checkEventJournal(journalUrl);
+        //no error implies ready
+        journalReady = true;
         res.json({ journalReady });
     }  catch(e) {
-        console.log(e);
+        console.error(e);
         return res.status(500).send({
-            message: 'Error checking journal ready'
+            message: 'Adobe I/O Event provider journal setup in progress. Please try again after 1 min'
         });
     }
 });

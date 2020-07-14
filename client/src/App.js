@@ -114,36 +114,8 @@ export default class NormalDisplay extends React.Component {
         }
     }
 
-    async getJournalUrl() {
-        if (this.isAborted) return;
-        let resp;
-        try {
-            resp = await fetch("/api/get-journal-url", {
-                method: 'GET',
-                headers: {
-                    Authorization: this.state.devToolToken
-                }
-            });
-            if (!resp.ok) {
-                const errorMessage = await this.formatErrorMessage(resp, 'Error setting up event provider');
-                throw new Error(errorMessage);
-            }
-            resp = await resp.json();
-            console.log(`Asset Compute journal url: ${resp.journalUrl}`);
-            this.setState({
-                journalUrl: resp.journalUrl
-            });
-            document.getElementById('run').disabled = false;
-            return resp.journalUrl;
-        } catch (e) {
-            console.log(e);
-            this.handleApiErrors(e.message);
-        }
-    }
-
     componentDidMount() {
         this.callGetAssetComputeEndpoint();
-        this.getJournalUrl();
     }
 
     hideToast() {
@@ -335,46 +307,26 @@ export default class NormalDisplay extends React.Component {
         if (this.isAborted) return;
         let resp;
         try {
-            var data = new FormData();
-            data.append('journalUrl',journalUrl);
-            resp = await fetch("/api/check-jrnl-ready", {
-                method: 'POST',
+            resp = await fetch("/api/check-journal-ready", {
+                method: 'GET',
                 headers: {
                     Authorization: this.state.devToolToken
-                },
-                body: data
-                });
+                }
+            });
             if (!resp.ok) {
-                const errorMessage = await this.formatErrorMessage(resp, '/check-jrnl-ready')
+                const errorMessage = await this.formatErrorMessage(resp, '/check-journal-ready')
                 throw new Error(errorMessage);
             }
-            resp = await resp.json();
-            return resp;
+            //resp = await resp.json();
+            return true;
         } catch(e) {
-            console.log(e);
+            Log(e);
             return this.handleApiErrors(e.message);
         }
     }
 
-    async validate(journalUrl) {
-        const response = await this.checkJournalReady(journalUrl);
-        return response.journalReady;
-    }
-
     async run() {
         this.isAborted = false;
-        //validate only if setup returned journalUrl and was not checked before
-        if(this.state.journalUrl && !this.state.journalReady){
-            const journalReady = await this.validate(this.state.journalUrl);
-            this.setState({
-                journalReady: journalReady
-            });
-            if(!journalReady) {
-                const errMsg = "Journal registration not complete, try again in 60 seconds";
-                console.log(errMsg);
-                return this.handleApiErrors(errMsg);
-            }
-        }
         this.setState({
             renditions: [],
             error: null,
@@ -382,6 +334,18 @@ export default class NormalDisplay extends React.Component {
             running: true,
             logs: undefined
         });
+        //validate if journal ready
+        if(!this.state.journalReady){
+            const journalReady = await this.checkJournalReady(this.state.journalUrl);
+            this.setState({
+                journalReady: journalReady
+            });
+            if(!journalReady) {
+                const errMsg = "Journal registration not complete, try again in 1 min";
+                Log(errMsg);
+                return this.handleApiErrors(errMsg);
+            }
+        }
         // name all the renditions and create presigned put urls
         try {
             const requestJSON = JSON.parse(this.state.textArea);
@@ -476,7 +440,7 @@ export default class NormalDisplay extends React.Component {
                             padding: '1rem'}}>
                         {/* choose file and add new file */}
                         <ChooseFileBox id="ChooseFileBox" onChange={this.handleSelectedFileChange.bind(this)} devToolToken={this.state.devToolToken} onError={this.handleApiErrors.bind(this)}/>
-                        <Button id="run" label="Run" variant="cta" style={{marginTop:15, marginLeft:10}} disabled={!this.state.selectedOption || this.state.running || !this.state.journalUrl} onClick={this.run}/>
+                        <Button id="run" label="Run" variant="cta" style={{marginTop:15, marginLeft:10}} disabled={!this.state.selectedOption || this.state.running} onClick={this.run}/>
                         <span id="tourStepThree" style={{position:"fixed", top:'35px', left:'420px'}}/>
                         <Button id='Abort' label="Abort" variant="warning" style={{marginTop:15, marginLeft:10}} disabled={!this.state.running} onClick={this.abort.bind(this)}/>
 
