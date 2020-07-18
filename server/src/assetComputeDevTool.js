@@ -137,9 +137,9 @@ class AssetComputeDevTool {
         );
     }
 
-    async checkEventJournal(journalUrl) {
-        console.log("calling asset-compute-client#checkEventJournal");
-        await this.assetCompute.checkEventJournal(journalUrl);
+    async isJournalReady() {
+        const isReady = await this.assetCompute.isEventJournalReady();
+        return isReady;
     }
 
     /**

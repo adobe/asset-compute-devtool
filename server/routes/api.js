@@ -28,23 +28,11 @@ router.get('/asset-compute-endpoint', async function(req, res) {
 });
 
 router.get('/check-journal-ready', async function(req, res) {
-    let journalReady = false;
-    try {
-        if (!assetComputeDevTool) {
-            assetComputeDevTool = await setupAssetComputeDevTool();
-        }
-        const journalUrl = assetComputeDevTool && assetComputeDevTool.assetCompute 
-                            && assetComputeDevTool.assetCompute.journal;
-        await assetComputeDevTool.checkEventJournal(journalUrl);
-        //no error implies ready
-        journalReady = true;
-        res.json({ journalReady });
-    }  catch(e) {
-        console.error(e);
-        return res.status(500).send({
-            message: 'Adobe I/O Event provider journal setup in progress. Please try again after 1 min'
-        });
+    if (!assetComputeDevTool) {
+        assetComputeDevTool = await setupAssetComputeDevTool();
     }
+    const isReady = await assetComputeDevTool.isJournalReady();
+    res.json({ isReady });
 });
 
 router.get('/asset-compute-action-url', async function(req, res) {
