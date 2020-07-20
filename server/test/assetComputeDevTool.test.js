@@ -77,7 +77,7 @@ describe( 'assetComputeDevTool.js tests', () => {
         });
         const { setupAssetCompute } = mock.reRequire('../src/assetComputeDevTool');
         process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH = 'path-to-private-key.key';
-        await fse.writeFile('console.json', {'dummyJson':'hello'});
+        await fse.writeJSON('console.json', {'dummyJson':'hello'});
         await setupAssetCompute();
         await fse.remove('console.json');
     });
