@@ -65,7 +65,6 @@
     "mock-require": "^3.0.3",
     "nodemon": "^2.0.3",
     "nyc": "^15.0.1",
-    "rewire": "^5.0.0",
     "sinon": "^9.0.2",
     "stdout-stderr": "^0.1.13"
   }
