@@ -18,7 +18,6 @@
 const assert = require('assert');
 const fse = require('fs-extra');
 const mock = require('mock-require');
-const rewire = require('rewire');
 const { getActionUrls } = require('../src/assetComputeDevTool');
 const path = require('path');
 const AIO_PROJECT_CREDENTIALS_PATH = path.join(process.cwd(),'console.json');
@@ -46,8 +45,7 @@ describe( 'assetComputeDevTool.js tests', () => {
                 assert.ok(!process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH); // no private key necessary when using yaml file format
             }
         });
-        const rewiredAssetComputeDevTool = rewire('../src/assetComputeDevTool');
-        const setupAssetCompute = rewiredAssetComputeDevTool.__get__('setupAssetCompute');
+        const { setupAssetCompute } = mock.reRequire('../src/assetComputeDevTool');
         process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH = 'test-integration.yaml';
         await setupAssetCompute();
     });
@@ -61,8 +59,7 @@ describe( 'assetComputeDevTool.js tests', () => {
                 assert.equal('path-to-private-key.key', process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH);
             }
         });
-        const rewiredAssetComputeDevTool = rewire('../src/assetComputeDevTool');
-        const setupAssetCompute = rewiredAssetComputeDevTool.__get__('setupAssetCompute');
+        const { setupAssetCompute } = mock.reRequire('../src/assetComputeDevTool');
         process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH = 'test-integration.json';
         process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH = 'path-to-private-key.key';
         await setupAssetCompute();
@@ -78,8 +75,7 @@ describe( 'assetComputeDevTool.js tests', () => {
                 assert.ok(!process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH); // no integration file, using `console.json` instead
             }
         });
-        const rewiredAssetComputeDevTool = rewire('../src/assetComputeDevTool');
-        const setupAssetCompute = rewiredAssetComputeDevTool.__get__('setupAssetCompute');
+        const { setupAssetCompute } = mock.reRequire('../src/assetComputeDevTool');
         process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH = 'path-to-private-key.key';
         await fse.writeFile('console.json', {'dummyJson':'hello'});
         await setupAssetCompute();

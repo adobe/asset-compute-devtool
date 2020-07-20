@@ -22,7 +22,7 @@ mock('open', () => {});
 
 describe('index.js tests', () => {
     after(() => {
-        mock.stopAll();
+        mock.stop('open');
     });
     it('Just calling index', async function () {
         stdout.start();

@@ -269,5 +269,6 @@ async function setupAssetComputeDevTool() {
 module.exports = {
     setupAssetComputeDevTool,
     getEndpoint,
-    getActionUrls
+    getActionUrls,
+    setupAssetCompute
 };
