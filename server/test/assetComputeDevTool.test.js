@@ -43,6 +43,7 @@ describe( 'assetComputeDevTool.js tests', () => {
                 register() {}
             }, getIntegrationConfiguration: function(integrationPath) {
                 assert.equal(integrationPath, process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH);
+                assert.ok(!process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH); // no private key necessary when using yaml file format
             }
         });
         const rewiredAssetComputeDevTool = rewire('../src/assetComputeDevTool');
@@ -74,6 +75,7 @@ describe( 'assetComputeDevTool.js tests', () => {
             }, getIntegrationConfiguration: function(integrationPath) {
                 assert.equal(integrationPath, AIO_PROJECT_CREDENTIALS_PATH);
                 assert.equal('path-to-private-key.key', process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH);
+                assert.ok(!process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH); // no integration file, using `console.json` instead
             }
         });
         const rewiredAssetComputeDevTool = rewire('../src/assetComputeDevTool');
