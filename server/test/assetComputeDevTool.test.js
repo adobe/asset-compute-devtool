@@ -20,6 +20,8 @@ const fse = require('fs-extra');
 const mock = require('mock-require');
 const rewire = require('rewire');
 const { getActionUrls } = require('../src/assetComputeDevTool');
+const path = require('path');
+const AIO_PROJECT_CREDENTIALS_PATH = path.join(process.cwd(),'console.json');
 
 // const path = require('path');
 describe( 'assetComputeDevTool.js tests', () => {
@@ -70,7 +72,7 @@ describe( 'assetComputeDevTool.js tests', () => {
             AssetComputeClient: class AssetComputeClientMock {
                 register() {}
             }, getIntegrationConfiguration: function(integrationPath) {
-                assert.equal(integrationPath, 'console.json');
+                assert.equal(integrationPath, AIO_PROJECT_CREDENTIALS_PATH);
                 assert.equal('path-to-private-key.key', process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH);
             }
         });

@@ -17,12 +17,13 @@ const yaml = require("js-yaml");
 const fse = require('fs-extra');
 const { CloudStorage } = require('@adobe/cloud-blobstore-wrapper');
 const { v4: uuidv4 } = require('uuid');
+const path = require('path');
 
 const DEFAULT_PRESIGN_TTL_MSEC = 60000 * 10; // 10 minutes validity
 const DEFAULT_ACTIVATION_WAIT_MSEC = 60000 * 10; // 10 minutes to wait for activation
 const DEFAULT_ENDPOINT = 'https://asset-compute.adobe.io';
 
-const AIO_PROJECT_CREDENTIALS_PATH = 'console.json';
+const AIO_PROJECT_CREDENTIALS_PATH = path.join(process.cwd(),'console.json');
 
 class AssetComputeDevTool {
     /**
