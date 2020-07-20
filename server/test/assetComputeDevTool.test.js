@@ -17,7 +17,11 @@
 
 const assert = require('assert');
 const fse = require('fs-extra');
+const mock = require('mock-require');
+const rewire = require('rewire');
+const { getActionUrls } = require('../src/assetComputeDevTool');
 
+// const path = require('path');
 describe( 'assetComputeDevTool.js tests', () => {
 
     afterEach(() => {
@@ -25,11 +29,61 @@ describe( 'assetComputeDevTool.js tests', () => {
         delete process.env.AIO_runtime_namespace;
         delete process.env.AIO_RUNTIME_AUTH;
         delete process.env.AIO_runtime_auth;
+
+        delete process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH;
+        delete process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH;
+        mock.stop('@adobe/asset-compute-client');
+    });
+
+    it('should set up Asset Compute DevTool client with integration yaml', async () => {
+        mock('@adobe/asset-compute-client', { 
+            AssetComputeClient: class AssetComputeClientMock {
+                register() {}
+            }, getIntegrationConfiguration: function(integrationPath) {
+                assert.equal(integrationPath, process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH);
+            }
+        });
+        const rewiredAssetComputeDevTool = rewire('../src/assetComputeDevTool');
+        const setupAssetCompute = rewiredAssetComputeDevTool.__get__('setupAssetCompute');
+        process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH = 'test-integration.yaml';
+        await setupAssetCompute();
+    });
+
+    it('should set up Asset Compute DevTool client with integration json and path to private key', async () => {
+        mock('@adobe/asset-compute-client', { 
+            AssetComputeClient: class AssetComputeClientMock {
+                register() {}
+            }, getIntegrationConfiguration: function(integrationPath) {
+                assert.equal(integrationPath, process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH);
+                assert.equal('path-to-private-key.key', process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH);
+            }
+        });
+        const rewiredAssetComputeDevTool = rewire('../src/assetComputeDevTool');
+        const setupAssetCompute = rewiredAssetComputeDevTool.__get__('setupAssetCompute');
+        process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH = 'test-integration.json';
+        process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH = 'path-to-private-key.key';
+        await setupAssetCompute();
+    });
+
+    it('should set up Asset Compute DevTool client with console.json from aio project and path to private key', async () => {
+        mock('@adobe/asset-compute-client', { 
+            AssetComputeClient: class AssetComputeClientMock {
+                register() {}
+            }, getIntegrationConfiguration: function(integrationPath) {
+                assert.equal(integrationPath, 'console.json');
+                assert.equal('path-to-private-key.key', process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH);
+            }
+        });
+        const rewiredAssetComputeDevTool = rewire('../src/assetComputeDevTool');
+        const setupAssetCompute = rewiredAssetComputeDevTool.__get__('setupAssetCompute');
+        process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH = 'path-to-private-key.key';
+        await fse.writeFile('console.json', {'dummyJson':'hello'});
+        await setupAssetCompute();
+        await fse.remove('console.json');
     });
 
     it('should fail to get action urls if not in the context of an aio action', async function() {
 
-        const { getActionUrls } = require('../src/assetComputeDevTool'); // refresh cache to use mocked child_process defined above
 
         const actionUrls = await getActionUrls();
         assert.ok(typeof actionUrls, 'object');
@@ -40,7 +94,6 @@ describe( 'assetComputeDevTool.js tests', () => {
         process.env.AIO_RUNTIME_NAMESPACE = 'namespace';
         await fse.copy('./test/files/test-manifest.yml', 'manifest.yml');
         assert.ok(await fse.pathExists('manifest.yml'));
-        const { getActionUrls } = require('../src/assetComputeDevTool'); // refresh cache to use mocked child_process defined above
 
         const actionUrls = await getActionUrls();
         assert.strictEqual(Object.keys(actionUrls).length, 2);
