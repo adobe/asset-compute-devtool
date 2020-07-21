@@ -22,7 +22,6 @@ const { getActionUrls } = require('../src/assetComputeDevTool');
 const path = require('path');
 const AIO_PROJECT_CREDENTIALS_PATH = path.join(process.cwd(),'console.json');
 
-// const path = require('path');
 describe( 'assetComputeDevTool.js tests', () => {
 
     afterEach(() => {
@@ -101,5 +100,41 @@ describe( 'assetComputeDevTool.js tests', () => {
         assert.ok(actionUrls.generic, "https://105979_72515.adobeioruntime.net/api/v1/web/@adobe/asset-compute-devtool-1.0.0/generic");
         await fse.remove('manifest.yml');
         assert.ok(!await fse.pathExists('manifest.yml'));
+    });
+
+    it('should create an instance of AssetComputeDevTool on setupAssetComputeDevTool', async() => {
+        process.env.AZURE_STORAGE_ACCOUNT = 'AZURE_STORAGE_ACCOUNT';
+        process.env.AZURE_STORAGE_KEY = 'AZURE_STORAGE_KEY';
+        mock('@adobe/cloud-blobstore-wrapper', { 
+            CloudStorage: class CloudStorageMock {
+                validate() {}
+            }
+        });
+        const { setupAssetComputeDevTool } = mock.reRequire('../src/assetComputeDevTool');
+        const devToolPromise =  await setupAssetComputeDevTool();
+        assert(devToolPromise);
+    });
+
+    it('should return boolean from AssetComputeClient isJournalReady', async () => {
+        mock('@adobe/asset-compute-client', { 
+            AssetComputeClient: class AssetComputeClientMock {
+                register() {}
+                isEventJournalReady() {
+                    return true;
+                } 
+            }, getIntegrationConfiguration: function() { }
+        });
+        process.env.AZURE_STORAGE_ACCOUNT = 'AZURE_STORAGE_ACCOUNT';
+        process.env.AZURE_STORAGE_KEY = 'AZURE_STORAGE_KEY';
+        process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH = 'ASSET_COMPUTE_INTEGRATION_FILE_PATH';
+        mock('@adobe/cloud-blobstore-wrapper', { 
+            CloudStorage: class CloudStorageMock {
+                validate() {}
+            }
+        });
+        const { setupAssetComputeDevTool } = mock.reRequire('../src/assetComputeDevTool');
+        const devToolPromise =  await setupAssetComputeDevTool();
+        const isReady = await devToolPromise.isJournalReady();
+        assert(isReady,true);
     });
 });
