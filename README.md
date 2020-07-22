@@ -154,6 +154,8 @@ Note: The **backend port** will default to 9000. If you already have something r
 1. Make sure to do a clean `yarn install` in both `/server` and `/client`
 2. cd into `/server`
 3. Run  `npm run build`
+4. update the version number in `package.json`(inside `/server`) to refelect the next chronological version number
+5. push the updated `package.json` to master
 4. Create the git tag for the release
 5. Run `npm publish --access public --dry-run` then `npm publish --access public` script to release to npm
 
