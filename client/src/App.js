@@ -303,6 +303,24 @@ export default class NormalDisplay extends React.Component {
                 </pre>
     }
 
+    async checkJournalReady() {
+        if (this.isAborted) return;
+        let resp;
+        try {
+            resp = await fetch("/api/check-journal-ready", {
+                method: 'GET',
+                headers: {
+                    Authorization: this.state.devToolToken
+                }
+            });
+            resp = await resp.json();
+            return resp.isReady;
+        } catch(e) {
+            Log(e);
+            return this.handleApiErrors(e.message);
+        }
+    }
+
     async run() {
         this.isAborted = false;
         this.setState({
@@ -312,6 +330,18 @@ export default class NormalDisplay extends React.Component {
             running: true,
             logs: undefined
         });
+        //validate if journal ready
+        if(!this.state.journalReady){
+            const isJournalReady = await this.checkJournalReady();
+            this.setState({
+                journalReady: isJournalReady
+            });
+            if(!isJournalReady) {
+                const errMsg = 'Adobe I/O Event provider journal setup in progress. Please try again after 1 min';
+                Log(errMsg);
+                return this.handleApiErrors(errMsg);
+            }
+        }
         // name all the renditions and create presigned put urls
         try {
             const requestJSON = JSON.parse(this.state.textArea);

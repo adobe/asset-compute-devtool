@@ -139,6 +139,10 @@ class AssetComputeDevTool {
         );
     }
 
+    async isJournalReady() {
+        return this.assetCompute.isEventJournalReady();
+    }
+
     /**
      * Process an asset, waits for all rendition events to return
      *
@@ -160,7 +164,7 @@ class AssetComputeDevTool {
         console.log(`>>> Request ID ${response.requestId} (Activation ${response.activationId})`);
         return response;
     }
-
+     
     async getEvents(requestId) {
         const events = await this.assetCompute.waitActivation(requestId, this.activationWaitMsec);
         await Promise.all(events.map(event => {
@@ -258,7 +262,20 @@ async function setupCloudStorage() {
 /**
  * Setup the dev tool framework.
  */
+// singleton Promise
+let devToolPromise;
+
 async function setupAssetComputeDevTool() {
+    if (devToolPromise) {
+        return devToolPromise;
+    }
+    devToolPromise = new Promise((resolve) => {
+        resolve(doSetupAssetComputeDevTool());
+    });
+    return devToolPromise;
+}
+
+async function doSetupAssetComputeDevTool() {
     const assetCompute = await setupAssetCompute();
     const expirationTime = Date.now() + 86400000;
     const storage = await setupCloudStorage();

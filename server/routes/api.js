@@ -27,6 +27,14 @@ router.get('/asset-compute-endpoint', async function(req, res) {
     });
 });
 
+router.get('/check-journal-ready', async function(req, res) {
+    if (!assetComputeDevTool) {
+        assetComputeDevTool = await setupAssetComputeDevTool();
+    }
+    const isReady = await assetComputeDevTool.isJournalReady();
+    res.json({ isReady });
+});
+
 router.get('/asset-compute-action-url', async function(req, res) {
     const urls = await getActionUrls();
     res.json(urls);
@@ -96,7 +104,6 @@ router.post('/asset-compute-process', async function(req, res) {
         }
         const source = req.fields.source;
         const renditions = JSON.parse(req.fields.renditions);
-
 
         assetComputeStartTime = Date.now();
         const response = await assetComputeDevTool.process(source, renditions);
