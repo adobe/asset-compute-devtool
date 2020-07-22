@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@adobe/asset-compute-client@^4.3.0":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@adobe/asset-compute-client/-/asset-compute-client-4.3.0.tgz#3c3dbb7776af81cfd12ebe27638f25fc5fd247ba"
-  integrity sha512-OjEYBHk3lhIP/1EcX7fdx5dQsAbiy5rcBj59undWtGgxJ25jp5ubGz3V1F8WgneC8tcsBn8j3hiyN0fehMQlBw==
+"@adobe/asset-compute-client@^4.3.1":
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/@adobe/asset-compute-client/-/asset-compute-client-4.3.1.tgz#425b17be8633e4877ae17a1324fa040997a716f9"
+  integrity sha512-EU35aF97CkBa9xaA1KPmmIfMy+DMDgVu7+1M5dLBlQ16ayIg47A5vQXFmw7BelypiycFbcRkxtRLWgRqoNoniA==
   dependencies:
     "@adobe/asset-compute-events-client" "^1.0.1"
     "@adobe/jwt-auth" "^0.3.1"
@@ -343,9 +343,9 @@
     form-data "^3.0.0"
 
 "@types/node@*":
-  version "14.0.23"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.23.tgz#676fa0883450ed9da0bb24156213636290892806"
-  integrity sha512-Z4U8yDAl5TFkmYsZdFPdjeMa57NOvnaf1tljHzhouaPEp7LCj2JKkejpI1ODviIAQuW4CcQmxkQ77rnLsOOoKw==
+  version "14.0.24"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.24.tgz#b0f86f58564fa02a28b68f8b55d4cdec42e3b9d6"
+  integrity sha512-btt/oNOiDWcSuI721MdL8VQGnjsKjlTMdrKyTcLCKeQp/n4AAMFJ961wMbp+09y8WuGPClDEv07RIItdXKIXAA==
 
 "@types/tunnel@0.0.1":
   version "0.0.1"
@@ -748,9 +748,9 @@ clone-response@^1.0.2:
     mimic-response "^1.0.0"
 
 codecov@^3.7.1:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/codecov/-/codecov-3.7.1.tgz#434cb8d55f18ef01672e5739d3d266696bebc202"
-  integrity sha512-JHWxyPTkMLLJn9SmKJnwAnvY09kg2Os2+Ux+GG7LwZ9g8gzDDISpIN5wAsH1UBaafA/yGcd3KofMaorE8qd6Lw==
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/codecov/-/codecov-3.7.2.tgz#998e68c8c1ef4b55cfcf11cd456866d35e13d693"
+  integrity sha512-fmCjAkTese29DUX3GMIi4EaKGflHa4K51EoMc29g8fBHawdk/+KEq5CWOeXLdd9+AT7o1wO4DIpp/Z1KCqCz1g==
   dependencies:
     argv "0.0.2"
     ignore-walk "3.0.3"
@@ -1262,9 +1262,9 @@ event-target-shim@^5.0.0:
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
 events@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/events/-/events-3.1.0.tgz#84279af1b34cb75aa88bf5ff291f6d0bd9b31a59"
-  integrity sha512-Rv+u8MLHNOdMjTAFeT3nCjHn2aGlx435FP/sDHNaRhDEMwyI/aB22Kj2qIN8R0cw3z28psEQLYwxVKLsKrMgWg==
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/events/-/events-3.2.0.tgz#93b87c18f8efcd4202a461aec4dfc0556b639379"
+  integrity sha512-/46HWwbfCX2xTawVfkKLGxMifJYQBWMwY1mjywRtb4c9x8l5NP3KoJtnIOiL1hfdRkIuYhETxQlo62IF8tcnlg==
 
 express-formidable@^1.2.0:
   version "1.2.0"
