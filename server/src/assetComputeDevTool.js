@@ -140,7 +140,7 @@ class AssetComputeDevTool {
     }
 
     async isJournalReady() {
-        const isReady = await this.assetCompute.isEventJournalReady();
+        return this.assetCompute.isEventJournalReady();
         return isReady;
     }
 
