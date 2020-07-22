@@ -35,7 +35,7 @@
     }
   },
   "dependencies": {
-    "@adobe/asset-compute-client": "^4.3.0",
+    "@adobe/asset-compute-client": "^4.3.1",
     "@adobe/cloud-blobstore-wrapper": "^1.1.0",
     "ajv": "^6.12.0",
     "body-parser": "^1.19.0",
