@@ -94,21 +94,11 @@ AWS_REGION=
     - Go into your new project and add the following APIs and services to your project (_You must add each service one at a time_)
         - Click on `"Add to Project" => "API"` and add each of these services one at a time: `"Asset Compute"`, `"IO Events"`, `"IO Events Management"`
         - Click on `"Add to Project" => "Runtime"` to add Adobe IO Runtime to your project
+
+        _Note: You will be prompted to create a private key. Please save this to a safe place on your machine. This file path will be the `ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH` environment variable in your `.env` file._
 6. Retrieve and format credentials for Asset Compute service development.
 
-    Navigate to your Asset Compute project or workspace created in step 4, press the `"Download"` button to download your credentials. Add the necessary credentials to a YAML file based off of [template](template.yaml) and save it to a secure location on your machine. This file is needed to use the Asset Compute Development tool.
-
-    #### YAML File details
-    Below are a description of what each of the items in the YAML file maps to in the JSON downloaded from the Developer Console:
-
-    | Name | Description | Maps to in Downloaded JSON |
-    | ---- | ----------- | -------------------------- |
-    | `metascopes` | Metascopes for Asset Compute Service | `project.workspace.details.credentials[0].jwt.meta_scopes` |
-    | `technicalAccount.id` | Technical account ID | `project.workspace.details.credentials[0].jwt.techacct` |
-    | `technicalAccount.org` | Adobe Experience Cloud Organization ID | `project.org.ims_org_id` |
-    | `technicalAccount.clientId` | API Key (Client ID)| `project.workspace.details.credentials[0].jwt.client_id` |
-    | `technicalAccount.clientSecret`| Client Secret | `project.workspace.details.credentials[0].jwt.client_secret` |
-    | `publicKey` and `privateKey`| Created and downloaded to a safe location on your machine when you added the APIs | none |
+    Navigate to your Asset Compute project or workspace created in step 4, press the `"Download"` button to download your credentials and save this file to a secure location on your machine. This file is needed to use the Asset Compute Development tool. Use this file path as the `ASSET_COMPUTE_INTEGRATION_FILE_PATH` environment variable in the `.env` file.
 
 ### 3. Install Yarn
 [Yarn](https://yarnpkg.com/en/docs/install) is required for installing dependencies for this project. See [internal dependencies](#internal-dependencies) to learn more about this.
@@ -120,11 +110,10 @@ Please set the following credentials in a `.env` file in the root of the `/serve
 For more information on setting up credentials, see [Cloud Storage Container](#1-s3-bucket-or-azure-blob-storage-credentials) and [Adobe I/O Console Techinical Integrations](#2-adobe-io-console-technical-integration) below.
 
 ```bash
-# Defaults to Asset Compute Production endpoint
-ASSET_COMPUTE_URL=
-
-# Path to AIO Integration yaml
+# Path to AIO Integration File JSON (defaults to current working directory + `console.json`. Only applicable if running in the context of an aio Firefly application)
 ASSET_COMPUTE_INTEGRATION_FILE_PATH=
+# Path to Private Key file for AIO Integration
+ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH=
 
 # S3 credentials
 S3_BUCKET=
@@ -139,6 +128,9 @@ AZURE_STORAGE_CONTAINER_NAME=
 
 # Optional (can be used during development)
 # ASSET_COMPUTE_DEV_PORT=
+
+# Optional Asset Compute endpoint (defaults to Asset Compute Production Endpoint)
+# ASSET_COMPUTE_URL=
 ```
 
 ## Usage

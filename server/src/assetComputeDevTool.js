@@ -12,16 +12,18 @@
 
 "use strict";
 
-const { AssetComputeClient } = require("@adobe/asset-compute-client");
+const { AssetComputeClient, getIntegrationConfiguration } = require("@adobe/asset-compute-client");
 const yaml = require("js-yaml");
 const fse = require('fs-extra');
 const { CloudStorage } = require('@adobe/cloud-blobstore-wrapper');
-
 const { v4: uuidv4 } = require('uuid');
+const path = require('path');
 
 const DEFAULT_PRESIGN_TTL_MSEC = 60000 * 10; // 10 minutes validity
 const DEFAULT_ACTIVATION_WAIT_MSEC = 60000 * 10; // 10 minutes to wait for activation
 const DEFAULT_ENDPOINT = 'https://asset-compute.adobe.io';
+
+const AIO_PROJECT_CREDENTIALS_PATH = path.join(process.cwd(),'console.json');
 
 class AssetComputeDevTool {
     /**
@@ -205,8 +207,15 @@ async function getActionUrls() {
  * Set up instance of Asset Compute Client
  */
 async function setupAssetCompute() {
-    if (!process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH) { return; }
-    const integration = yaml.safeLoad(await fse.readFile(process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH, "utf-8"));
+    let integrationFilePath =  process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH;
+    if (!integrationFilePath) {
+        if (process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH && fse.exists(AIO_PROJECT_CREDENTIALS_PATH)) {
+            integrationFilePath = AIO_PROJECT_CREDENTIALS_PATH;
+        } else {
+            return; 
+        }
+    }
+    const integration = await getIntegrationConfiguration(integrationFilePath);
 
     const options = {
         url: getEndpoint(),
@@ -260,5 +269,6 @@ async function setupAssetComputeDevTool() {
 module.exports = {
     setupAssetComputeDevTool,
     getEndpoint,
-    getActionUrls
+    getActionUrls,
+    setupAssetCompute
 };
