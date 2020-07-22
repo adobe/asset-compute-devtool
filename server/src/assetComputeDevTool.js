@@ -141,7 +141,6 @@ class AssetComputeDevTool {
 
     async isJournalReady() {
         return this.assetCompute.isEventJournalReady();
-        return isReady;
     }
 
     /**
