@@ -26,7 +26,7 @@ import {Grid, GridColumn, GridRow} from '@react/react-spectrum/Grid';
 import Editor from './components/TextEditor/Editor';
 import ChooseFileBox from './components/FileChooser/ChooseFileBox';
 import Rendition from './components/RenditionDisplay/Rendition';
-import logo from './images/nui-flower.png';
+import logo from './images/Adobe_Experience_Cloud_logo_128px.png';
 
 const Log = debug('asset-compute-devtool.App');
 const DEFAULT_RENDITIONS_TEXT  = JSON.stringify({
@@ -473,8 +473,8 @@ export default class NormalDisplay extends React.Component {
         <div >
             <title>Adobe Asset Compute</title>
             <ul className="top-bar">
-                <Image id='flower' style={{width:'25px', height:'25px', float:'left', marginTop:'13px', marginRight:'10px'}} alt='flower' src={logo}/>
-                <Heading size={2} style={{position:"fixed", left:'60px'}}>Adobe Asset Compute</Heading>
+                <Image id='Adobe Experience Cloud Logo' style={{width:'32px', height:'32px', position:'fixed', marginTop:'10px'}} alt='Adobe Experience Cloud Logo' src={logo}/>
+                <Heading variant="pageTitle" style={{position:"fixed", left:'60px', marginTop:'5px'}}>Adobe Asset Compute</Heading>
             </ul>
         {main}
         <p style={{marginRight:300, marginLeft:20, bottom:4, position:'fixed'}}>{this.state.error}</p>
