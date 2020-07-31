@@ -474,7 +474,7 @@ export default class NormalDisplay extends React.Component {
             <title>Adobe Asset Compute</title>
             <ul className="top-bar">
                 <Image id='Adobe Experience Cloud Logo' style={{width:'32px', height:'32px', position:'fixed', marginTop:'10px'}} alt='Adobe Experience Cloud Logo' src={logo}/>
-                <Heading variant="pageTitle" style={{position:"fixed", left:'60px'}}>Adobe Asset Compute</Heading>
+                <Heading variant="pageTitle" style={{position:"fixed", left:'60px', marginTop:'5px'}}>Adobe Asset Compute</Heading>
             </ul>
         {main}
         <p style={{marginRight:300, marginLeft:20, bottom:4, position:'fixed'}}>{this.state.error}</p>
