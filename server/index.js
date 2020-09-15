@@ -23,103 +23,127 @@ const open = require('open');
 const portfinder = require('portfinder');
 const crypto = require("crypto");
 const fse = require('fs-extra');
+const { createHttpTerminator } = require('http-terminator');
 
+const DEFAULT_PORT = '9000';
 
-async function start(portPreferred) {
-    let port = process.env.ASSET_COMPUTE_DEV_PORT || '9000';
-    if (!isNaN(portPreferred)) {
-        port = portPreferred;
+class DevtoolServer {
+
+    async run (portPreferred) {
+        this.port = process.env.ASSET_COMPUTE_DEV_PORT || DEFAULT_PORT;
+        if (!isNaN(portPreferred)) {
+            this.port = portPreferred;
+        }
+    
+        const portRangeServer = {
+            port: this.port, // minimum port
+            stopPort: 9999 // maximum port
+        };
+        this.port = await findOpenPort(portRangeServer);
+
+        const randomString = getRandomString();
+    
+        
+    
+        // Get port from environment and store in Express.
+        app.set('port', this.port);
+        app.set('devToolToken', randomString);
+    
+        // Create HTTP server.
+        this.server = http.createServer(app);
+    
+        this.server.listen(this.port);
+        this.server.on('error', error => {
+            if (error.syscall !== 'listen') {
+                return reject(error);
+            }
+
+            // handle specific listen errors with friendly messages
+            const bind = typeof this.port === 'string'
+                ? 'Pipe ' + this.port
+                : 'Port ' + this.port;
+            switch (error.code) {
+            case 'EACCES':
+                console.error(bind + ' requires elevated privileges');
+                break;
+            case 'EADDRINUSE':
+                console.error(bind + ' is already in use');
+                break;
+            }
+            return reject(error);
+        });
+
+        this.server.on('listening', () => onListening(this.server, randomString));
+        this.server.on('close', () => {
+            console.log("Asset Compute Developer Tool Server Stopped");
+            process.exit(0);
+        });
     }
 
-    const portRangeServer = {
-        port: port, // minimum port
-        stopPort: 9999 // maximum port
-    };
-    port = await findOpenPort(portRangeServer);
+    async stop() {
+        return this.server.close();
+    }
 
-    let randomString;
+}
+
+// for backwards compatibility
+async function start(port) {
+    const devtool = new DevtoolServer();
+    devtool.run(port);
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+async function onListening(server, randomString) {
+    const addr = server.address();
+    const bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+    if (process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') {
+        const assetComputeDevToolUrl = `http://localhost:${addr.port}/?devToolToken=${randomString}`;
+        console.log('Asset Compute Developer Tool Server started on url', assetComputeDevToolUrl);
+        await open(assetComputeDevToolUrl);
+    } else {
+        // read/process package.json
+        const file = '../client/package.json';
+        const pkg = fse.readJSONSync(file, { throws: false });
+
+        pkg.proxy = `http://localhost:${addr.port}`;
+
+        // Write to package.json
+        fse.writeJSONSync(file, pkg, { spaces: 4 });
+
+        console.log('Running in development mode.');
+    }
+}
+
+
+
+/**
+ * Get random string of bytes
+ * @param {*} bytes 
+ */
+function getRandomString(bytes=32) {
     try {
-        randomString = crypto.randomBytes(32).toString("hex");
+        return crypto.randomBytes(bytes).toString("hex");
     } catch (e) {
         console.log(e);
         throw new Error('Error: Not enough accumulated entropy to generate cryptographically strong data.');
     }
 
-    // Get port from environment and store in Express.
-    app.set('port', port);
-    app.set('devToolToken', randomString);
-
-    // Create HTTP server.
-    const server = http.createServer(app);
-
-    /**
-     * Listen on provided port, on all network interfaces.
-     */
-
-    server.listen(port);
-    server.on('error', onError);
-    server.on('listening', async () => {
-        const addr = server.address();
-        const bind = typeof addr === 'string'
-            ? 'pipe ' + addr
-            : 'port ' + addr.port;
-        debug('Listening on ' + bind);
-        if (process.env.ASSET_COMPUTE_DEV_TOOL_ENV !== 'development') {
-            const assetComputeDevToolUrl = `http://localhost:${addr.port}/?devToolToken=${randomString}`;
-            console.log('Asset Compute Developer Tool Server started on url ', assetComputeDevToolUrl);
-            await open(assetComputeDevToolUrl);
-        } else {
-
-            // read/process package.json
-            const file = '../client/package.json';
-            const pkg = fse.readJSONSync(file, { throws: false });
-
-            pkg.proxy = `http://localhost:${port}`;
-
-            // Write to package.json
-            fse.writeJSONSync(file, pkg, { spaces: 4 });
-
-            console.log('Running in development mode.');
-        }
-    });
-    server.on('close', () => {
-        console.log("Asset Compute Developer Tool Server Stopped");
-        process.exit();
-    });
 }
 
 /**
  * Find open port
  */
 async function findOpenPort(portRange) {
-
     // Find available server port
-    const port = await portfinder.getPortPromise(portRange);
-    return port;
+    return portfinder.getPortPromise(portRange);
 }
 
-/**
- * Event listener for HTTP server "error" event.
- */
-
-async function onError(error) {
-    if (error.syscall !== 'listen') {
-        throw error;
-    }
-
-    const bind = typeof this.port === 'string'
-        ? 'Pipe ' + this.port
-        : 'Port ' + this.port;
-
-    // handle specific listen errors with friendly messages
-    switch (error.code) {
-    case 'EACCES':
-        console.error(bind + ' requires elevated privileges');
-        process.exit(1);
-        break;
-    default:
-        throw error;
-    }
-}
-
-module.exports = { start };
+module.exports = {
+    DevtoolServer,
+    start
+};
