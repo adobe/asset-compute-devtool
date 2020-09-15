@@ -116,7 +116,7 @@ router.post('/asset-compute-process', async function(req, res) {
     }
 });
 
-router.post('/asset-compute-getEvents', async function(req, res) {
+router.post('/asset-compute-get-events', async function(req, res) {
     let requestId;
     try {
         if (!assetComputeDevTool || (Date.now() >= assetComputeDevTool.expirationTime)) {

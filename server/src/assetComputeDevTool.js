@@ -162,7 +162,13 @@ class AssetComputeDevTool {
             userData
         );
         console.log(`>>> Request ID ${response.requestId} (Activation ${response.activationId})`);
-        return response;
+        return { 
+            response,
+            request: {
+                source: presignedSource,
+                renditions: presignedRenditions 
+            }
+        };
     }
      
     async getEvents(requestId) {
