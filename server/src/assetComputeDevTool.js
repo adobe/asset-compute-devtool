@@ -185,7 +185,17 @@ class AssetComputeDevTool {
  * Get the asset compute endpoint
  */
 function getEndpoint() {
-    return process.env.ASSET_COMPUTE_URL || DEFAULT_ENDPOINT;
+    let endpoint = process.env.ASSET_COMPUTE_URL || DEFAULT_ENDPOINT;
+    
+    // remove trailing slash if there is one
+    try {
+        if (endpoint && endpoint.endsWith('/')) {
+            endpoint = endpoint.slice(0, -1)
+        }
+    } catch (error) {
+        // ignore error if endpoint is null or undefined
+    }
+    return endpoint;
 }
 
 async function getActionUrls() {
