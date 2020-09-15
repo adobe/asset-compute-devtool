@@ -9,6 +9,7 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+/*eslint no-unused-vars: "error"*/
 
 "use strict";
 
@@ -162,7 +163,13 @@ class AssetComputeDevTool {
             userData
         );
         console.log(`>>> Request ID ${response.requestId} (Activation ${response.activationId})`);
-        return response;
+        return { 
+            response,
+            request: {
+                source: presignedSource,
+                renditions: presignedRenditions 
+            }
+        };
     }
      
     async getEvents(requestId) {
@@ -185,7 +192,17 @@ class AssetComputeDevTool {
  * Get the asset compute endpoint
  */
 function getEndpoint() {
-    return process.env.ASSET_COMPUTE_URL || DEFAULT_ENDPOINT;
+    let endpoint = process.env.ASSET_COMPUTE_URL || DEFAULT_ENDPOINT;
+    
+    // remove trailing slash if there is one
+    try {
+        if (endpoint && endpoint.endsWith('/')) {
+            endpoint = endpoint.slice(0, -1);
+        }
+    } catch (error) {
+        // ignore error if endpoint is null or undefined
+    }
+    return endpoint;
 }
 
 async function getActionUrls() {
