@@ -9,6 +9,7 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+/*eslint no-unused-vars: "error"*/
 
 "use strict";
 
@@ -196,7 +197,7 @@ function getEndpoint() {
     // remove trailing slash if there is one
     try {
         if (endpoint && endpoint.endsWith('/')) {
-            endpoint = endpoint.slice(0, -1)
+            endpoint = endpoint.slice(0, -1);
         }
     } catch (error) {
         // ignore error if endpoint is null or undefined
