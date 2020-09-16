@@ -104,7 +104,7 @@ describe('index.js tests', () => {
         // api call to get raw html
         const resp = await fetch(`http://localhost:${port}/api/asset-compute-endpoint`, {
             headers: {
-                "authorization": token,
+                "Authorization": token
             }
         });
         
