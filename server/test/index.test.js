@@ -172,18 +172,19 @@ describe('index.js tests', () => {
 
     it('Passing an invalid port number to run server', async function () {
         this.timeout(TIMEOUT);
-        // stdout.start();
+        stdout.start();
         const devtool = new DevtoolServer();
         await devtool.run('80invalid');
         await sleep(SERVER_START_UP_WAIT_TIME);
-        assert.strictEqual(devtool.port, 9000);
+        assert.notStrictEqual(devtool.port, '80invalid');
+        assert.ok((devtool.port >= 9000) && (devtool.port <= 9999) ); // in case port 9000 is taken, it will be between 9000, 9999
         await devtool.stop();
         await sleep(SERVER_SHUTDOWN_TIME);
-        // stdout.stop();
+        stdout.stop();
 
-        // const stdoutList = stdout.output.split('\n');
-        // assert(stdoutList[0].includes('Asset Compute Developer Tool Server started on url http://localhost:9000/?devToolToken='));
-        // assert(stdoutList[1].includes('Asset Compute Developer Tool Server Stopped'));
+        const stdoutList = stdout.output.split('\n');
+        assert(stdoutList[0].includes(`Asset Compute Developer Tool Server started on url http://localhost:${devtool.port}/?devToolToken=`));
+        assert(stdoutList[1].includes('Asset Compute Developer Tool Server Stopped'));
     });
     
     describe('using start function', () => {
@@ -200,12 +201,15 @@ describe('index.js tests', () => {
         });
 
         it('Check stopping the devtool actually ends the node process', async function () {
+            this.timeout(TIMEOUT);
             const port = 2345;
             const devtool = await start(port);
+            await sleep(SERVER_START_UP_WAIT_TIME);
             assert.strictEqual(devtool.port, port);
             await devtool.stop();
 
             const devtool2 = await start(port);
+            await sleep(SERVER_START_UP_WAIT_TIME);
             assert.strictEqual(devtool2.port, port);
             await devtool2.stop();
         });
