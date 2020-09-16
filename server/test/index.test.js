@@ -29,7 +29,7 @@ const SERVER_SHUTDOWN_TIME = 100; // ms to wait while server shuts down up
 const TIMEOUT = 3000;
 
 // Important Note: 
-// A lot of these tests rely on ports 9000, 8080, 2345 being open. 
+// A lot of these tests rely on ports 8080 and 2345 being open. 
 // If you are currently using one or some of those ports locally, some of the unit tests will fail
 describe('index.js tests', () => {
     after(() => {
@@ -190,7 +190,7 @@ describe('index.js tests', () => {
     describe('using start function', () => {
         it('start up devtool', async function () {
             const devtool = await start();
-            assert.strictEqual(devtool.port, 9000);
+            assert.ok((devtool.port >= 9000) && (devtool.port <= 9999) ); // in case port 9000 is taken, it will be between 9000, 9999
             await devtool.stop();
         });
 
