@@ -68,7 +68,7 @@ class DevtoolServer {
                 console.error(bind + ' requires elevated privileges');
                 break;
             case 'EADDRINUSE':
-                console.error(bind + ' is already in use');
+                console.error(bind, ' is already in use');
                 break;
             }
             throw new Error(error);
