@@ -25,14 +25,14 @@ const crypto = require("crypto");
 const fse = require('fs-extra');
 const { createHttpTerminator } = require('http-terminator');
 
-const DEFAULT_PORT = '9000';
+const DEFAULT_PORT = 9000;
 
 class DevtoolServer {
 
-    async run (portPreferred) {
+    async run (preferredPort) {
         this.port = process.env.ASSET_COMPUTE_DEV_PORT || DEFAULT_PORT;
-        if (!isNaN(portPreferred)) {
-            this.port = portPreferred;
+        if (!isNaN(preferredPort)) {
+            this.port = preferredPort;
         }
     
         const portRangeServer = {

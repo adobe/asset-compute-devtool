@@ -25,14 +25,19 @@ mock('open', () => {});
 const { DevtoolServer, start } = require('../index.js');
 
 const SERVER_START_UP_WAIT_TIME = 500; // ms to wait while server starts up
+const SERVER_SHUTDOWN_TIME = 100; // ms to wait while server shuts down up
 const TIMEOUT = 3000;
 
+// Important Note: 
+// A lot of these tests rely on ports 9000, 8080, 2345 being open. 
+// If you are currently using one or some of those ports locally, some of the unit tests will fail
 describe('index.js tests', () => {
     after(() => {
         mock.stop('open');
     });
     afterEach(() => {
         delete process.env.ASSET_COMPUTE_DEV_TOOL_ENV;
+        delete process.env.ASSET_COMPUTE_DEV_PORT;
     });
     it("devtool starts and serves html", async function() {
         // set up server
@@ -120,7 +125,6 @@ describe('index.js tests', () => {
         // check output
         const port = devtool.port;
         stdout.stop();
-
         // api call to get raw html
         const resp = await fetch(`http://localhost:${port}/api/asset-compute-endpoint`, {
             headers: {
@@ -132,6 +136,55 @@ describe('index.js tests', () => {
         assert.deepStrictEqual(await resp.json(), { message: 'Unauthorized' } );
         await devtool.stop();
     });
+
+    it('Passing a port number as string to run server', async function () {
+        this.timeout(TIMEOUT);
+        stdout.start();
+        const devtool = new DevtoolServer();
+        await devtool.run('8080');
+        await sleep(SERVER_START_UP_WAIT_TIME);
+        assert.strictEqual(devtool.port, 8080);
+        await devtool.stop();
+        await sleep(SERVER_SHUTDOWN_TIME);
+        stdout.stop();
+
+        const stdoutList = stdout.output.split('\n');
+        assert(stdoutList[0].includes('Asset Compute Developer Tool Server started on url http://localhost:8080/?devToolToken='));
+        assert(stdoutList[1].includes('Asset Compute Developer Tool Server Stopped'));
+    });
+
+    it('Using an environment variable for the port to run server', async function () {
+        this.timeout(TIMEOUT);
+        process.env.ASSET_COMPUTE_DEV_PORT = 8080;
+        stdout.start();
+        const devtool = new DevtoolServer();
+        await devtool.run();
+        await sleep(SERVER_START_UP_WAIT_TIME);
+        assert.strictEqual(devtool.port, 8080);
+        await devtool.stop();
+        await sleep(SERVER_SHUTDOWN_TIME);
+        stdout.stop();
+
+        const stdoutList = stdout.output.split('\n');
+        assert(stdoutList[0].includes('Asset Compute Developer Tool Server started on url http://localhost:8080/?devToolToken='));
+        assert(stdoutList[1].includes('Asset Compute Developer Tool Server Stopped'));
+    });
+
+    it('Passing an invalid port number to run server', async function () {
+        this.timeout(TIMEOUT);
+        stdout.start();
+        const devtool = new DevtoolServer();
+        await devtool.run('80invalid');
+        await sleep(SERVER_START_UP_WAIT_TIME);
+        assert.strictEqual(devtool.port, 9000);
+        await devtool.stop();
+        await sleep(SERVER_SHUTDOWN_TIME);
+        stdout.stop();
+
+        const stdoutList = stdout.output.split('\n');
+        assert(stdoutList[0].includes('Asset Compute Developer Tool Server started on url http://localhost:9000/?devToolToken='));
+        assert(stdoutList[1].includes('Asset Compute Developer Tool Server Stopped'));
+    });
     
     describe('using start function', () => {
         it('start up devtool', async function () {
@@ -140,7 +193,7 @@ describe('index.js tests', () => {
             await devtool.stop();
         });
 
-        it('Passing a port number to index', async function () {
+        it('Passing a port number to run server', async function () {
             const devtool = await start(8080);
             assert.strictEqual(devtool.port, 8080);
             await devtool.stop();
