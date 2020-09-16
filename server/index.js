@@ -51,11 +51,12 @@ class DevtoolServer {
     
         // Create HTTP server.
         this.server = http.createServer(app);
+        this.httpTerminator = createHttpTerminator({ server: this.server });
     
         this.server.listen(this.port);
         this.server.on('error', error => {
             if (error.syscall !== 'listen') {
-                return reject(error);
+                throw new Error(error);
             }
 
             // handle specific listen errors with friendly messages
@@ -70,13 +71,12 @@ class DevtoolServer {
                 console.error(bind + ' is already in use');
                 break;
             }
-            return reject(error);
+            throw new Error(error);
         });
 
         this.server.on('listening', () => onListening(this.server, randomString));
         this.server.on('close', () => {
             console.log("Asset Compute Developer Tool Server Stopped");
-            process.exit(0);
         });
     }
 
@@ -89,7 +89,8 @@ class DevtoolServer {
 // for backwards compatibility
 async function start(port) {
     const devtool = new DevtoolServer();
-    devtool.run(port);
+    await devtool.run(port);
+    return devtool;
 }
 
 /**
@@ -115,7 +116,7 @@ async function onListening(server, randomString) {
         // Write to package.json
         fse.writeJSONSync(file, pkg, { spaces: 4 });
 
-        console.log('Running in development mode.');
+        console.log('Asset Compute Developer Tool Server started. Running in development mode.');
     }
 }
 

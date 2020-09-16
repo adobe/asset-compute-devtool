@@ -17,29 +17,155 @@
 
 const {stdout} = require("stdout-stderr");
 const assert = require("assert");
+const promisify = require('util').promisify;
+const sleep = promisify(setTimeout);
+const fetch = require('node-fetch');
 const mock = require('mock-require');
 mock('open', () => {});
+const { DevtoolServer, start } = require('../index.js');
+
+const SERVER_START_UP_WAIT_TIME = 500; // ms to wait while server starts up
+const TIMEOUT = 3000;
 
 describe('index.js tests', () => {
     after(() => {
         mock.stop('open');
     });
-    it('Just calling index', async function () {
+    afterEach(() => {
+        delete process.env.ASSET_COMPUTE_DEV_TOOL_ENV;
+    });
+    it("devtool starts and serves html", async function() {
+        // set up server
         stdout.start();
-        await require('../index.js');
+        const devtool = new DevtoolServer();
+        await devtool.run();
+        await sleep(SERVER_START_UP_WAIT_TIME);
+        const port = devtool.port;
+        stdout.stop();
+        
+        // check start up logs
+        const stdoutList = stdout.output.split('\n');
+        assert(stdoutList[0].includes(`Asset Compute Developer Tool Server started on url http://localhost:${port}/?devToolToken=`));
+        const url = stdoutList[0].split(' ').pop();
+        assert.ok(url.includes(`http://localhost:${port}/?devToolToken=`));
+        
+        // api call to get raw html
+        const resp = await fetch(url);
+        assert.strictEqual(resp.status, 200);
+        const html = await resp.text();
+        assert.ok(html.includes('/static/js'));
+        await devtool.stop();
+    });
+
+    it("devtool starts and serves html in development mode", async function() {
+        process.env.ASSET_COMPUTE_DEV_TOOL_ENV = 'development';
+        // set up server
+        stdout.start();
+        const devtool = new DevtoolServer();
+        await devtool.run();
+        await sleep(SERVER_START_UP_WAIT_TIME);
+        const port = devtool.port;
+        stdout.stop();
+        
+        // check start up logs
+        assert.ok(stdout.output.includes('Asset Compute Developer Tool Server started. Running in development mode.'));
+        
+        // api call to get raw html
+        const resp = await fetch(`http://localhost:${port}`);
+        assert.strictEqual(resp.status, 200);
+        const html = await resp.text();
+        assert.ok(html.includes('/static/js'));
+        await devtool.stop();
+    });
+
+
+    it("server starts up and does an api call", async function() {
+        this.timeout(TIMEOUT);
+        // set up server
+        stdout.start();
+        const devtool = new DevtoolServer();
+        await devtool.run();
+        await sleep(SERVER_START_UP_WAIT_TIME);
+
+        // check output
+        stdout.stop();
+        const port = devtool.port;
+        const stdoutList = stdout.output.split('\n');
+        const url = stdoutList[0].split(' ').pop();
+        const token = url.split('=')[1];
+        assert.strictEqual(token.length, 64);
+        assert.ok(url.includes(`http://localhost:${port}/?devToolToken=`));
+        
+        // api call to get raw html
+        const resp = await fetch(`http://localhost:${port}/api/asset-compute-endpoint`, {
+            headers: {
+                "authorization": token,
+            }
+        });
+        
+        assert.strictEqual(resp.status, 200);
+        const body = await resp.json();
+        assert.ok(body.endpoint.includes('https://asset-compute.adobe.io'));
+        await devtool.stop();
+    });
+
+    it("server starts up and fails an api call without authorization", async function() {
+        this.timeout(TIMEOUT);
+        // set up server
+        stdout.start();
+        const devtool = new DevtoolServer();
+        await devtool.run();
+        await sleep(SERVER_START_UP_WAIT_TIME);
+
+        // check output
+        const port = devtool.port;
         stdout.stop();
 
-        // check start up logs
-        console.log(stdout.output);
-        assert.ok(stdout.output.includes('client-build'));
+        // api call to get raw html
+        const resp = await fetch(`http://localhost:${port}/api/asset-compute-endpoint`, {
+            headers: {
+                "authorization": "fake token",
+            }
+        });
+
+        assert.strictEqual(resp.status, 401);
+        assert.deepStrictEqual(await resp.json(), { message: 'Unauthorized' } );
+        await devtool.stop();
+    });
+    
+    describe('using start function', () => {
+        it('start up devtool', async function () {
+            const devtool = await start();
+            assert.strictEqual(devtool.port, 9000);
+            await devtool.stop();
+        });
+
+        it('Passing a port number to index', async function () {
+            const devtool = await start(8080);
+            assert.strictEqual(devtool.port, 8080);
+            await devtool.stop();
+        });
+
+        it('Check stopping the devtool actually ends the node process', async function () {
+            const port = 2345;
+            const devtool = await start(port);
+            assert.strictEqual(devtool.port, port);
+            await devtool.stop();
+
+            const devtool2 = await start(port);
+            assert.strictEqual(devtool2.port, port);
+            await devtool2.stop();
+        });
+    
+        it('Port in use', async function () {
+            const devtool8080 = await start(8080);
+            const devtoolNot8080 = await start(8080);
+    
+            assert.strictEqual(devtool8080.port, 8080);
+            assert.notStrictEqual(devtoolNot8080.port, 8080);
+            await devtool8080.stop();
+            await devtoolNot8080.stop();
+        });
     });
 
-    it('Passing a port number to index', async function () {
-        await require('../index.js').start(8080);
-    });
-
-    it('Port in use', async function () {
-        await require('../index.js').start(8080);
-        await require('../index.js').start(8080);
-    });
 });
