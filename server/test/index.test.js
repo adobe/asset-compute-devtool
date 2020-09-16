@@ -114,7 +114,7 @@ describe('index.js tests', () => {
         await devtool.stop();
     });
 
-    it("server starts up and fails an api call without authorization", async function() {
+    it("server starts up and fails an api call without authorization headers", async function() {
         this.timeout(TIMEOUT);
         // set up server
         stdout.start();
