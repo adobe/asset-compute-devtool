@@ -23,7 +23,6 @@ const open = require('open');
 const portfinder = require('portfinder');
 const crypto = require("crypto");
 const fse = require('fs-extra');
-const { createHttpTerminator } = require('http-terminator');
 
 const DEFAULT_PORT = 9000;
 
@@ -58,7 +57,6 @@ class DevtoolServer {
     
         // Create HTTP server.
         this.server = http.createServer(app);
-        this.httpTerminator = createHttpTerminator({ server: this.server }); // to be used in aio cli plugin to stop the server
     
         this.server.listen(this.port);
         this.server.on('error', error => {
