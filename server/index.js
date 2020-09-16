@@ -65,7 +65,7 @@ class DevtoolServer {
                 : 'Port ' + this.port;
             switch (error.code) {
             case 'EACCES':
-                console.error(bind + ' requires elevated privileges');
+                console.error(bind,  'requires elevated privileges');
                 break;
             case 'EADDRINUSE':
                 console.error(bind, ' is already in use');
