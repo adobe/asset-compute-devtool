@@ -56,11 +56,7 @@ describe('index.js tests', () => {
         assert.ok(url.includes(`http://localhost:${port}/?devToolToken=`));
         
         // api call to get raw html
-        const resp = await fetch(url, {
-            headers: {
-                "Authorization": token
-            }
-        });
+        const resp = await fetch(url);
         console.log('Response from html for debugging', resp.status, resp.statusText, url);
         assert.strictEqual(resp.status, 200);
         const html = await resp.text();
