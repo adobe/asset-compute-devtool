@@ -56,6 +56,7 @@ describe('index.js tests', () => {
         
         // api call to get raw html
         const resp = await fetch(url);
+        console.log('Response from html for debugging', resp.status, resp.statusText, url);
         assert.strictEqual(resp.status, 200);
         const html = await resp.text();
         assert.ok(html.includes('/static/js'));
@@ -77,6 +78,7 @@ describe('index.js tests', () => {
         
         // api call to get raw html
         const resp = await fetch(`http://localhost:${port}`);
+        console.log('Response from html for debugging', resp.status, resp.statusText, url);
         assert.strictEqual(resp.status, 200);
         const html = await resp.text();
         assert.ok(html.includes('/static/js'));
