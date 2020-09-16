@@ -203,8 +203,8 @@ export default class NormalDisplay extends React.Component {
         try {
             var data = new FormData();
             data.append('requestId', requestId);
-            Log('getting events');
-            resp = await fetch("/api/asset-compute-getEvents", {
+            Log(`getting events for requestId: ${requestId}`);
+            resp = await fetch("/api/asset-compute-get-events", {
                 method: 'POST',
                 headers: {
                     Authorization: this.state.devToolToken
@@ -212,11 +212,11 @@ export default class NormalDisplay extends React.Component {
                 body: data
             });
             if (!resp.ok) {
-                const errorMessage = await (resp, '/getEvents')
+                const errorMessage = await this.formatErrorMessage(resp, '/get-events')
                 throw new Error(errorMessage);
             }
             resp = await resp.json();
-            Log(`Successfully got events`);
+            Log(`Successfully got events ${JSON.stringify(resp, undefined, 1)}`);
             return resp;
         } catch (e) {
             Log(e);
@@ -287,20 +287,20 @@ export default class NormalDisplay extends React.Component {
                     <br />
                 </span>
             });
-            Log('headings: ', headings);
             return <pre style={{ maxHeight: '400px', overflow: 'scroll', maxWidth: `${currentWidth - 20}px`, fontSize: '12px' }}>{headings}</pre>
         }
         return;
     }
 
-    formatRequestDisplay(source, requestJSON, response) {
-        return <pre style={{overflow:'scroll', fontFamily:'Source Code Pro', fontSize:'12px'}}>
-                    <Heading size={6}>Request:</Heading>{`POST ${this.state.endpoint}\n`}
-                    <br/>{JSON.stringify(Object.assign({}, {source: source}, requestJSON), undefined, 1)}<br/>
-                    <br/>
-                    <Heading size={6}>Response:</Heading>
-                    {JSON.stringify({ activationId: response.activationId, requestId: response.requestId}, undefined, 2)}
-                </pre>
+    formatRequestDisplay(response={}) {
+        const currentWidth = document.getElementById('activationLogs').offsetWidth;
+        return <pre style={{ maxHeight: '400px', overflow: 'scroll', maxWidth: `${currentWidth - 20}px`, fontSize: '12px' }}>
+                <Heading size={6}>Request:</Heading>{`POST ${this.state.endpoint}/process\n`}
+                <br/>{JSON.stringify(response.request, undefined, 1)}<br/>
+                <br/>
+                <Heading size={6}>Response:</Heading>
+                {JSON.stringify(response.response, undefined, 2)}
+            </pre>
     }
 
     async checkJournalReady() {
@@ -350,19 +350,19 @@ export default class NormalDisplay extends React.Component {
             const renditions = [];
 
             Log("Response from /process:", JSON.stringify(response, null, 2));
-            if (!response) {
+            if (!response || !response.response) {
                 return; // process failed so just return
             }
 
             if (!this.isAborted) {
-                const jsonResponse = this.formatRequestDisplay(source, requestJSON, response);
+                const jsonResponse = this.formatRequestDisplay(response);
                 this.setState({
                     json: jsonResponse,
                     renditions: Array(requestJSON.renditions.length + 1).join('0').split('').map(parseFloat)
                 });
             }
 
-            const events = await this.callAssetComputeEventsApi(response.requestId);
+            const events = await this.callAssetComputeEventsApi(response.response.requestId);
 
             if (this.isAborted) return;
             await Promise.all(events.map(async event => {
@@ -432,7 +432,6 @@ export default class NormalDisplay extends React.Component {
                 <GridColumn size="auto">
                 <div  style={{ marginTop:'53px',
                             minWidth: '500px', marginBottom: '1em',
-                            overflow: 'scroll',
                             padding: '1rem'}}>
                         {/* choose file and add new file */}
                         <ChooseFileBox id="ChooseFileBox" onChange={this.handleSelectedFileChange.bind(this)} devToolToken={this.state.devToolToken} onError={this.handleApiErrors.bind(this)}/>
@@ -449,7 +448,6 @@ export default class NormalDisplay extends React.Component {
                             position: 'relative',
                             minWidth: '400px',
                             marginBottom: '1em',
-                            overflow: 'scroll',
                             padding: '1rem'}}>
                     <Accordion>
                         <AccordionItem  header="Request/Response" disabled={!this.state.json}>
