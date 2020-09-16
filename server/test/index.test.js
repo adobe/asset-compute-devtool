@@ -52,10 +52,15 @@ describe('index.js tests', () => {
         const stdoutList = stdout.output.split('\n');
         assert(stdoutList[0].includes(`Asset Compute Developer Tool Server started on url http://localhost:${port}/?devToolToken=`));
         const url = stdoutList[0].split(' ').pop();
+        const token = url.split('=')[1];
         assert.ok(url.includes(`http://localhost:${port}/?devToolToken=`));
         
         // api call to get raw html
-        const resp = await fetch(url);
+        const resp = await fetch(url, {
+            headers: {
+                "Authorization": token
+            }
+        });
         console.log('Response from html for debugging', resp.status, resp.statusText, url);
         assert.strictEqual(resp.status, 200);
         const html = await resp.text();
