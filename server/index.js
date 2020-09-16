@@ -29,6 +29,13 @@ const DEFAULT_PORT = 9000;
 
 class DevtoolServer {
 
+    /**
+     * Start server and open developer tool UI in a browser
+     * @param {*} preferredPort preferred port to bind server, can be a number or string
+     * 
+     * preferredPort will take precedence over the default port and the environment variable port
+     * however, if the requested port is taken, it will find and usethe closest open port
+     */
     async run (preferredPort) {
         this.port = process.env.ASSET_COMPUTE_DEV_PORT || DEFAULT_PORT;
         if (!isNaN(preferredPort)) {
