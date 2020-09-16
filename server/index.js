@@ -51,7 +51,7 @@ class DevtoolServer {
     
         // Create HTTP server.
         this.server = http.createServer(app);
-        this.httpTerminator = createHttpTerminator({ server: this.server });
+        this.httpTerminator = createHttpTerminator({ server: this.server }); // to be used in aio cli plugin to stop the server
     
         this.server.listen(this.port);
         this.server.on('error', error => {
