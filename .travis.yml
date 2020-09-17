@@ -41,7 +41,7 @@ script:
     - if [ $TEST_DIR = "client" ]; then
         npm test -- --coverage;
       else
-        npm test;
+        npm run build && npm test;
       fi
 after_success:
   - npm run report-coverage
