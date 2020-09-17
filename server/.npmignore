@@ -13,6 +13,7 @@ Jenkinsfile
 .eslintignore
 stryker.conf.js
 build/
+set-port.js
 
 # npm pack leftovers
 *.tgz
