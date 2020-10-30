@@ -1,0 +1,9 @@
+comparators:
+  node_modules:
+    dir:
+      - "client"
+      - "server"
+  npm_package:
+    dir:
+      - "client"
+      - "server"

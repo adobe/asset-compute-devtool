@@ -45,3 +45,7 @@ script:
       fi
 after_success:
   - npm run report-coverage
+
+after_script:
+  - cd $TRAVIS_BUILD_DIR
+  - npx @adobe/sizewatcher
