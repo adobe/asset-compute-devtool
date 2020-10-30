@@ -48,5 +48,4 @@ after_success:
 
 after_script:
   - cd $TRAVIS_BUILD_DIR
-  - pwd
-  - DEBUG=sizewatcher npx @adobe/sizewatcher@latest
+  - npx @adobe/sizewatcher
