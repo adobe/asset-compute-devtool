@@ -47,4 +47,5 @@ after_success:
   - npm run report-coverage
 
 after_script:
+  - pwd
   - DEBUG=sizewatcher npx @adobe/sizewatcher@latest
