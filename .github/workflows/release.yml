@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.19'
-        run: |
+      - run: |
           ls
           yarn install
           npm test -- --coverage;
@@ -37,7 +37,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.19'
-        run: |
+      - run: |
           ls
           yarn install
           npm run build
