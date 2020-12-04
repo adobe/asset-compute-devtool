@@ -58,13 +58,11 @@ jobs:
       - name: Install client dependencies
         run: yarn install
         working-directory: ./client
-      - name: Run build
+      - name: Run build and semantic release
         run: |
           yarn install
           npm run build
-        working-directory: ./server
-      - name: Run semantic release
-        run: npm run semantic-release
+          npm run semantic-release
         working-directory: ./server
         env:
           GITHUB_TOKEN: ${{ secrets.ADOBE_BOT_GITHUB_TOKEN }}
