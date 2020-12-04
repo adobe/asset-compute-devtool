@@ -10,7 +10,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  client-test:
     runs-on: ubuntu-latest
     if: ${{  !contains(github.event.head_commit.message, '[ci skip]') }}
     steps:
@@ -18,11 +18,28 @@ jobs:
         with:
           persist-credentials: false
       - name: Use Node.js 12.19
+        working-directory: ./client
         uses: actions/setup-node@v1
         with:
           node-version: '12.19'
-      - run: cd client/ && yarn install && cd ..
-      - run: cd server/ && yarn install && npm run build
+      - run: ls
+      - run: yarn install
+      - run: npm test -- --coverage;
+  server-test:
+    runs-on: ubuntu-latest
+    if: ${{  !contains(github.event.head_commit.message, '[ci skip]') }}
+    steps:
+      - uses: actions/checkout@v2
+        working-directory: ./server
+        with:
+          persist-credentials: false
+      - name: Use Node.js 12.19
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.19'
+      - run: ls
+      - run: yarn install
+      - run: npm run build
   semantic-release:
     runs-on: ubuntu-latest
     if: ${{  !contains(github.event.head_commit.message, '[ci skip]') && github.ref == 'refs/heads/master' }}
