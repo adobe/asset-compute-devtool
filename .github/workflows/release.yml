@@ -21,10 +21,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.19'
+        run: |
+          ls
+          yarn install
+          npm test -- --coverage;
         working-directory: ./client
-      - run: ls
-      - run: yarn install
-      - run: npm test -- --coverage;
   server-test:
     runs-on: ubuntu-latest
     if: ${{  !contains(github.event.head_commit.message, '[ci skip]') }}
@@ -36,11 +37,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.19'
+        run: |
+          ls
+          yarn install
+          npm run build
+          npm test
         working-directory: ./server
-      - run: ls
-      - run: yarn install
-      - run: npm run build
-      - run: npm test
   semantic-release:
     runs-on: ubuntu-latest
     if: ${{  !contains(github.event.head_commit.message, '[ci skip]') && github.ref == 'refs/heads/master' }}
