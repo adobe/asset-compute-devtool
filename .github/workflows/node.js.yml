@@ -21,8 +21,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.19'
-      - run: |
-          ls
+      - name: Run tests
+        run: |
           yarn install
           npm test -- --coverage;
         working-directory: ./client
@@ -37,8 +37,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.19'
-      - run: |
-          ls
+      - name: Run tests and build
+        run: |
           yarn install
           npm run build
           npm test
@@ -54,9 +54,17 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.19'
-      - run: cd client/ && yarn install && cd ..
-      - run: cd server/ && yarn install && npm run build && npm run semantic-release
+      - name: Install client dependencies
+        run: yarn install
+        working-directory: ./client
+      - name: Run build
+        run: |
+          yarn install
+          npm run build
+        working-directory: ./server
+      - name: Run semantic release
+        run: npm run semantic-release
+        working-directory: ./server
         env:
           GITHUB_TOKEN: ${{ secrets.ADOBE_BOT_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.ADOBE_BOT_NPM_TOKEN }}
-          ACTIONS_STEP_DEBUG: true 
