@@ -63,7 +63,7 @@ For complete information on setting up you AWS account and S3 bucket, see docume
           }
         }
       ]
-    }
+     }
      ```
 
 4. Retrieve the AWS keys for your user. You might have them stored locally somewhere. Otherwise, get new AWS keys for your user:
