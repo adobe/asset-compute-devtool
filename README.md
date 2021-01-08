@@ -34,8 +34,8 @@ For complete information on setting up you AWS account and S3 bucket, see docume
 3. Ensure the user has access to the bucket
    * To check: go to `Services > S3` and search for the bucket (e.g. `my-bucket`).You should be able to see the bucket, click on it and upload a file.
 4. Add a [bucket policy](https://docs.aws.amazon.com/AmazonS3/latest/dev/access-policy-language-overview.html):
-   * The minimal permission someone needs to give your user is an S3 policy like below. Replace `BUCKET` and Principal permissions with your own:
-```json
+   * The minimal permission someone needs to give your user is an template S3 policy like below. Replace `BUCKET` and `Principal` permissions with your own:
+```
  {
   "Id": "ExamplePolicy01",
   "Version": "2012-10-17",
@@ -53,12 +53,12 @@ For complete information on setting up you AWS account and S3 bucket, see docume
       ],
       "Effect": "Allow",
       "Resource": [
-            "arn:aws:s3:::BUCKET/*",
+            "arn:aws:s3:::BUCKET/*", // replace with your own bucket
             "arn:aws:s3:::BUCKET"
         ]
       "Principal": {
         "AWS": [
-          "arn:aws:iam::123456789012:user/Dave"
+          "arn:aws:iam::123456789012:user/Dave" // replace with your own
         ]
       }
     }
