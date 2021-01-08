@@ -35,36 +35,36 @@ For complete information on setting up you AWS account and S3 bucket, see docume
    * To check: go to `Services > S3` and search for the bucket (e.g. `my-bucket`).You should be able to see the bucket, click on it and upload a file.
 4. Add a [bucket policy](https://docs.aws.amazon.com/AmazonS3/latest/dev/access-policy-language-overview.html):
    * The minimal permission someone needs to give your user is an S3 policy like below. Replace `BUCKET` and Principal permissions with your own:
-     ```json
-     {
-      "Id": "ExamplePolicy01",
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Sid": "ExampleStatement01",
-          "Action": [
-            "s3:DeleteObject",
-            "s3:GetObject",
-            "s3:GetObjectVersion",
-            "s3:ListBucket",
-            "s3:ListBucketMultipartUploads",
-            "s3:ListMultipartUploadParts",
-            "s3:PutObject"
-          ],
-          "Effect": "Allow",
-          "Resource": [
-                "arn:aws:s3:::BUCKET/*",
-                "arn:aws:s3:::BUCKET"
-            ]
-          "Principal": {
-            "AWS": [
-              "arn:aws:iam::123456789012:user/Dave"
-            ]
-          }
-        }
-      ]
-     }
-     ```
+```json
+ {
+  "Id": "ExamplePolicy01",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ExampleStatement01",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetObject",
+        "s3:GetObjectVersion",
+        "s3:ListBucket",
+        "s3:ListBucketMultipartUploads",
+        "s3:ListMultipartUploadParts",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+            "arn:aws:s3:::BUCKET/*",
+            "arn:aws:s3:::BUCKET"
+        ]
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::123456789012:user/Dave"
+        ]
+      }
+    }
+  ]
+}
+```
 
 4. Retrieve the AWS keys for your user. You might have them stored locally somewhere. Otherwise, get new AWS keys for your user:
    * Go to `Services > IAM > Users`
