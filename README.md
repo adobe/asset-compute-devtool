@@ -54,7 +54,7 @@ For complete information on setting up you AWS account and S3 bucket, see docume
       "Effect": "Allow",
       "Resource": [
             "arn:aws:s3:::BUCKET/*", // replace with your own bucket
-            "arn:aws:s3:::BUCKET"
+            "arn:aws:s3:::BUCKET"    // replace with your own bucket
         ]
       "Principal": {
         "AWS": [
