@@ -33,39 +33,38 @@ For complete information on setting up you AWS account and S3 bucket, see docume
 1. **Create a new bucket** under `Services > S3 > Create bucket`.
 3. Ensure the user has access to the bucket
    * To check: go to `Services > S3` and search for the bucket (e.g. `my-bucket`).You should be able to see the bucket, click on it and upload a file.
-   * The minimal permission someone needs to give your user is an S3 policy like below. Replace `BUCKET` with the name of your bucket:
-     ```json
-     {
-         "Version": "2012-10-17",
-         "Statement": [
-             {
-                 "Sid": "VisualEditor0",
-                 "Effect": "Allow",
-                 "Action": [
-                     "s3:PutObject",
-                     "s3:GetObject",
-                     "s3:ListBucketByTags",
-                     "s3:ListBucketMultipartUploads",
-                     "s3:DeleteObjectVersion",
-                     "s3:ListBucket",
-                     "s3:DeleteObject",
-                     "s3:GetObjectVersion",
-                     "s3:ListMultipartUploadParts"
-                 ],
-                 "Resource": [
-                     "arn:aws:s3:::BUCKET/*",
-                     "arn:aws:s3:::BUCKET"
-                 ]
-             },
-             {
-                 "Sid": "VisualEditor1",
-                 "Effect": "Allow",
-                 "Action": "s3:HeadBucket",
-                 "Resource": "*"
-             }
-         ]
-     }
-     ```
+4. Add a [bucket policy](https://docs.aws.amazon.com/AmazonS3/latest/dev/access-policy-language-overview.html):
+   * The minimal permission someone needs to give your user is an template S3 policy like below. Replace `BUCKET` and `Principal` permissions with your own:
+```
+ {
+  "Id": "ExamplePolicy01",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ExampleStatement01",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetObject",
+        "s3:GetObjectVersion",
+        "s3:ListBucket",
+        "s3:ListBucketMultipartUploads",
+        "s3:ListMultipartUploadParts",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+            "arn:aws:s3:::BUCKET/*", // replace with your own bucket
+            "arn:aws:s3:::BUCKET"    // replace with your own bucket
+        ]
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::123456789012:user/Dave" // replace with your own
+        ]
+      }
+    }
+  ]
+}
+```
 
 4. Retrieve the AWS keys for your user. You might have them stored locally somewhere. Otherwise, get new AWS keys for your user:
    * Go to `Services > IAM > Users`
