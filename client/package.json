@@ -65,7 +65,10 @@
             "src/components/**/*.{js,jsx}",
             "src/App.js"
         ],
-        "coverageReporters": ["text", "lcov"],
+        "coverageReporters": [
+            "text",
+            "lcov"
+        ],
         "moduleNameMapper": {
             "ace-builds": "<rootDir>/node_modules/ace-builds"
         }
