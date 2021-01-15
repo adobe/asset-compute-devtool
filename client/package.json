@@ -72,5 +72,6 @@
         "moduleNameMapper": {
             "ace-builds": "<rootDir>/node_modules/ace-builds"
         }
-    }
+    },
+    "proxy": "http://localhost:9001"
 }
