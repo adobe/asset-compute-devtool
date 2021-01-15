@@ -27,7 +27,7 @@
     ["@semantic-release/npm"],
     ["@semantic-release/git", {
       "preset": "eslint",
-      "assets": ["package.json", "package-lock.json"],
+      "assets": ["package.json", "yarn.lock"],
       "message": " [ci skip] no-release: version number update"
     }],
     ["@semantic-release/github"]
