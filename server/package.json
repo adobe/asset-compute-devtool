@@ -18,7 +18,7 @@
     "start-prod": "cross-os cross-os-start-prod",
     "start-server": "run-func index.js start",
     "start-client": "node set-port.js && cd .. && cd client && npm start",
-    "test": "nyc mocha --recursive --exit",
+    "test": "npm run build && nyc mocha --recursive --exit",
     "posttest": "eslint src set-port.js test routes index.js app.js && license-checker --summary",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov",
     "semantic-release": "semantic-release"
@@ -36,8 +36,8 @@
     }
   },
   "dependencies": {
-    "@adobe/asset-compute-client": "^4.3.1",
-    "@adobe/cloud-blobstore-wrapper": "^1.1.0",
+    "@adobe/asset-compute-client": "^4.3.2",
+    "@adobe/cloud-blobstore-wrapper": "^1.1.1",
     "ajv": "^6.12.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",

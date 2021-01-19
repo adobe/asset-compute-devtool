@@ -230,7 +230,8 @@ async function getActionUrls() {
 async function setupAssetCompute() {
     let integrationFilePath =  process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH;
     if (!integrationFilePath) {
-        if (process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH && fse.exists(AIO_PROJECT_CREDENTIALS_PATH)) {
+        if (process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH 
+            && fse.accessSync(AIO_PROJECT_CREDENTIALS_PATH, fse.constants.R_OK)) {
             integrationFilePath = AIO_PROJECT_CREDENTIALS_PATH;
         } else {
             return; 
@@ -258,8 +259,7 @@ async function setupCloudStorage() {
             accountName: process.env.AZURE_STORAGE_ACCOUNT,
             accountKey: process.env.AZURE_STORAGE_KEY
         }, process.env.AZURE_STORAGE_CONTAINER_NAME);
-    }
-    else if (process.env.S3_BUCKET && process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+    } else if (process.env.S3_BUCKET && process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
         storage = new CloudStorage(
             {
                 accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -268,8 +268,7 @@ async function setupCloudStorage() {
             process.env.S3_BUCKET,
             { bucketRegion: process.env.AWS_REGION }
         );
-    }
-    else {
+    } else {
         throw new Error("Neither AWS nor Azure cloud storage credentials were provided, please set credentials up for either AWS or Azure");
     }
     await storage.validate();
@@ -282,7 +281,37 @@ async function setupCloudStorage() {
 // singleton Promise
 let devToolPromise;
 
+function validateDevToolSettings(){
+    let result = true;
+
+    if (!process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH){
+        console.log('`ASSET_COMPUTE_INTEGRATION_FILE_PATH` is not set');
+        result = false;
+    }
+
+    if(!((process.env.S3_BUCKET && process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY && process.env.AWS_REGION) 
+            || (process.env.AZURE_STORAGE_ACCOUNT && process.env.AZURE_STORAGE_KEY && process.env.AZURE_STORAGE_CONTAINER_NAME))){
+        console.log("Neither AWS nor Azure cloud storage credentials were properly set, please set credentials up for either AWS or Azure (all fields are needed)");
+        result = false;
+    }
+
+    if(!process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH){
+        console.log('`ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH` is not set');
+        result = false;
+    }
+
+    return result;
+}
+
 async function setupAssetComputeDevTool() {
+    if(!validateDevToolSettings()){
+        devToolPromise = null;
+        console.log('Missing settings for devtool. Are all needed settings available?');
+        return new Promise((resolve) => {
+            resolve(false);
+        });
+    }
+
     if (devToolPromise) {
         return devToolPromise;
     }
@@ -294,9 +323,12 @@ async function setupAssetComputeDevTool() {
 
 async function doSetupAssetComputeDevTool() {
     const assetCompute = await setupAssetCompute();
-    const expirationTime = Date.now() + 86400000;
-    const storage = await setupCloudStorage();
-    return new AssetComputeDevTool(assetCompute, storage, expirationTime);
+
+    if(assetCompute){
+        const expirationTime = Date.now() + 86400000;
+        const storage = await setupCloudStorage();
+        return new AssetComputeDevTool(assetCompute, storage, expirationTime);
+    }
 }
 
 

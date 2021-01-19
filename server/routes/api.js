@@ -31,6 +31,7 @@ router.get('/check-journal-ready', async function(req, res) {
     if (!assetComputeDevTool) {
         assetComputeDevTool = await setupAssetComputeDevTool();
     }
+    
     const isReady = await assetComputeDevTool.isJournalReady();
     res.json({ isReady });
 });
