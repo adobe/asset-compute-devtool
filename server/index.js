@@ -23,6 +23,7 @@ const open = require('open');
 const portfinder = require('portfinder');
 const crypto = require("crypto");
 const fse = require('fs-extra');
+const yaml = require("js-yaml");
 
 const DEFAULT_PORT = 9000;
 
@@ -106,21 +107,26 @@ function validateCredentials() {
         console.error('Error: Missing some or all cloud storage credentials.');
         return false;
     }
-    const integrationFile = process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH;
+    const integrationFile = process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH || 'console.json';
     const privateKeyFilePath = process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH;
     // if integration file is yaml, it will include private key, so no key file path necessary
-    if (integrationFile && fse.existsSync(integrationFile) && (integrationFile.endsWith('.yaml')) || integrationFile.endsWith('.yml')) {
-        return true;
-    }
-    if (!privateKeyFilePath || !fse.existsSync(privateKeyFilePath)) {
-        console.error('Error: Missing Adobe Developer Project private key file.');
-        return false;
-    }
-    if (!((integrationFile && fse.existsSync(integrationFile)) ||
-     fse.existsSync('console.json'))) {
+    if ((!integrationFile || !fse.existsSync(integrationFile))) {
         console.error('Error: Missing Adobe Developer Project details.');
         return false;
     }
+    if ((integrationFile.endsWith('.yaml')) || integrationFile.endsWith('.yml')) {
+        const yamlFile = yaml.safeLoad(fse.readFileSync(integrationFile, "utf-8"));
+        if (!yamlFile.technicalAccount.privateKey) {
+            console.error('Error: Missing Adobe Developer Project private key file.');
+            return false;
+        }
+    } else if (integrationFile.endsWith('.json')) {
+        if (!privateKeyFilePath || !fse.existsSync(privateKeyFilePath)) {
+            console.error('Error: Missing Adobe Developer Project private key file.');
+            return false;
+        }
+    }
+    
     return true;
 }
 
