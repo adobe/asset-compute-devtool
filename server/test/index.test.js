@@ -32,8 +32,18 @@ const TIMEOUT = 3000;
 // A lot of these tests rely on ports 8080 and 2345 being open. 
 // If you are currently using one or some of those ports locally, some of the unit tests will fail
 describe('index.js tests', () => {
+    beforeEach(() => {
+        process.env.AZURE_STORAGE_ACCOUNT='account';
+        process.env.AZURE_STORAGE_KEY='key';
+        process.env.AZURE_STORAGE_CONTAINER_NAME='container';
+        process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH='./files/test-manifest.yml';
+    })
     after(() => {
         mock.stop('open');
+        delete process.env.AZURE_STORAGE_ACCOUNT;
+        delete process.env.AZURE_STORAGE_KEY;
+        delete process.env.AZURE_STORAGE_CONTAINER_NAME;
+        delete process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH;
     });
     afterEach(() => {
         delete process.env.ASSET_COMPUTE_DEV_TOOL_ENV;
@@ -225,6 +235,30 @@ describe('index.js tests', () => {
             await devtool8080.stop();
             await devtoolNot8080.stop();
         });
+    });
+
+    it.skip("devtool fails to start, missing cloud storage creds", async function() {
+        // set up server
+        stdout.start();
+        const devtool = new DevtoolServer();
+        await devtool.run();
+        await sleep(SERVER_START_UP_WAIT_TIME);
+        const port = devtool.port;
+        stdout.stop();
+        
+        // check start up logs
+        const stdoutList = stdout.output.split('\n');
+        assert(stdoutList[0].includes(`Asset Compute Developer Tool Server started on url http://localhost:${port}/?devToolToken=`));
+        const url = stdoutList[0].split(' ').pop();
+        assert.ok(url.includes(`http://localhost:${port}/?devToolToken=`));
+        
+        // api call to get raw html
+        const resp = await fetch(url);
+        console.log('Response from html for debugging', resp.status, resp.statusText, url);
+        assert.strictEqual(resp.status, 200);
+        const html = await resp.text();
+        assert.ok(html.includes('/static/js'));
+        await devtool.stop();
     });
 
 });

@@ -110,7 +110,7 @@ function validateCredentials() {
     const integrationFile = process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH;
     const privateKeyFilePath = process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH;
     // if integration file is yaml, it will include private key, so no key file path necessary
-    if (integrationFile && fse.existsSync(integrationFile) && integrationFile.endsWith('.yaml')) {
+    if (integrationFile && fse.existsSync(integrationFile) && (integrationFile.endsWith('.yaml')) || integrationFile.endsWith('.yml')) {
         return true;
     }
     if (!privateKeyFilePath || !fse.existsSync(privateKeyFilePath)) {
