@@ -37,13 +37,14 @@ describe('index.js tests', () => {
         process.env.AZURE_STORAGE_KEY='key';
         process.env.AZURE_STORAGE_CONTAINER_NAME='container';
         process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH='./files/test-manifest.yml';
-    })
+    });
     after(() => {
         mock.stop('open');
         delete process.env.AZURE_STORAGE_ACCOUNT;
         delete process.env.AZURE_STORAGE_KEY;
         delete process.env.AZURE_STORAGE_CONTAINER_NAME;
         delete process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH;
+        delete process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH;
     });
     afterEach(() => {
         delete process.env.ASSET_COMPUTE_DEV_TOOL_ENV;

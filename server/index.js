@@ -39,7 +39,6 @@ class DevtoolServer {
         if(!validateCredentials()) {
             return;
         }
-        console.log('All credentials set.');
 
         this.port = process.env.ASSET_COMPUTE_DEV_PORT || DEFAULT_PORT;
         if (!isNaN(preferredPort)) {
@@ -119,8 +118,8 @@ function validateCredentials() {
     }
     if (!((integrationFile && fse.existsSync(integrationFile)) ||
      fse.existsSync('console.json'))) {
-         console.error('Error: Missing Adobe Developer Project details.');
-         return false;
+        console.error('Error: Missing Adobe Developer Project details.');
+        return false;
     }
     return true;
 }
