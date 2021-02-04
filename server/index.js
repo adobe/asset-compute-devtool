@@ -109,17 +109,20 @@ function validateCredentials() {
     }
     const integrationFile = process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH || 'console.json';
     const privateKeyFilePath = process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH;
-    // if integration file is yaml, it will include private key, so no key file path necessary
     if ((!integrationFile || !fse.existsSync(integrationFile))) {
         console.error('Error: Missing Adobe Developer Project details.');
         return false;
     }
+    // if integration file is yaml, it will include private key, so no private key file path necessary
+    // but we read yaml file to make sure it contains private key
     if ((integrationFile.endsWith('.yaml')) || integrationFile.endsWith('.yml')) {
         const yamlFile = yaml.safeLoad(fse.readFileSync(integrationFile, "utf-8"));
         if (!yamlFile.technicalAccount.privateKey) {
             console.error('Error: Missing Adobe Developer Project private key file.');
             return false;
         }
+    // if console.json integration file, this does not include the private.key
+    // so we must check the private key env var is set and accessible
     } else if (integrationFile.endsWith('.json')) {
         if (!privateKeyFilePath || !fse.existsSync(privateKeyFilePath)) {
             console.error('Error: Missing Adobe Developer Project private key file.');
