@@ -21,9 +21,9 @@ const debug = require('debug')('server');
 const http = require('http');
 const open = require('open');
 const portfinder = require('portfinder');
-const crypto = require("crypto");
+const crypto = require('crypto');
 const fse = require('fs-extra');
-const yaml = require("js-yaml");
+const yaml = require('js-yaml');
 
 const DEFAULT_PORT = 9000;
 
