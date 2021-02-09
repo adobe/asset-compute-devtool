@@ -21,8 +21,9 @@ const debug = require('debug')('server');
 const http = require('http');
 const open = require('open');
 const portfinder = require('portfinder');
-const crypto = require("crypto");
+const crypto = require('crypto');
 const fse = require('fs-extra');
+const yaml = require('js-yaml');
 
 const DEFAULT_PORT = 9000;
 
@@ -36,6 +37,10 @@ class DevtoolServer {
      * however, if the requested port is taken, it will find and usethe closest open port
      */
     async run (preferredPort) {
+        if(!validateCredentials()) {
+            return;
+        }
+
         this.port = process.env.ASSET_COMPUTE_DEV_PORT || DEFAULT_PORT;
         if (!isNaN(preferredPort)) {
             this.port = preferredPort;
@@ -89,6 +94,43 @@ class DevtoolServer {
         return this.server.close();
     }
 
+}
+
+/**
+ * 
+ * Validate credentials in .env file 
+ */
+function validateCredentials() {
+    if (!((process.env.AZURE_STORAGE_ACCOUNT && process.env.AZURE_STORAGE_KEY && process.env.AZURE_STORAGE_CONTAINER_NAME) || 
+    (process.env.S3_BUCKET && process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY))
+    ) {
+        console.error('Error: Missing some or all cloud storage credentials.');
+        return false;
+    }
+    const integrationFile = process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH || 'console.json';
+    const privateKeyFilePath = process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH;
+    if ((!integrationFile || !fse.existsSync(integrationFile))) {
+        console.error('Error: Missing Adobe Developer Project details.');
+        return false;
+    }
+    // if integration file is yaml, it will include private key, so no private key file path necessary
+    // but we read yaml file to make sure it contains private key
+    if ((integrationFile.endsWith('.yaml')) || integrationFile.endsWith('.yml')) {
+        const yamlFile = yaml.safeLoad(fse.readFileSync(integrationFile, "utf-8"));
+        if (!yamlFile.technicalAccount.privateKey) {
+            console.error('Error: Missing Adobe Developer Project private key file.');
+            return false;
+        }
+    // if console.json integration file, this does not include the private.key
+    // so we must check the private key env var is set and accessible
+    } else if (integrationFile.endsWith('.json')) {
+        if (!privateKeyFilePath || !fse.existsSync(privateKeyFilePath)) {
+            console.error('Error: Missing Adobe Developer Project private key file.');
+            return false;
+        }
+    }
+    
+    return true;
 }
 
 // for backwards compatibility

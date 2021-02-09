@@ -15,12 +15,13 @@
 
 'use strict';
 
-const {stdout} = require("stdout-stderr");
+const {stdout, stderr} = require("stdout-stderr");
 const assert = require("assert");
 const promisify = require('util').promisify;
 const sleep = promisify(setTimeout);
 const fetch = require('node-fetch');
 const mock = require('mock-require');
+const fs = require('fs');
 mock('open', () => {});
 const { DevtoolServer, start } = require('../index.js');
 
@@ -32,8 +33,19 @@ const TIMEOUT = 3000;
 // A lot of these tests rely on ports 8080 and 2345 being open. 
 // If you are currently using one or some of those ports locally, some of the unit tests will fail
 describe('index.js tests', () => {
+    beforeEach(() => {
+        process.env.AZURE_STORAGE_ACCOUNT='account';
+        process.env.AZURE_STORAGE_KEY='key';
+        process.env.AZURE_STORAGE_CONTAINER_NAME='container';
+        process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH='./test/files/test-integration.yaml';
+    });
     after(() => {
         mock.stop('open');
+        delete process.env.AZURE_STORAGE_ACCOUNT;
+        delete process.env.AZURE_STORAGE_KEY;
+        delete process.env.AZURE_STORAGE_CONTAINER_NAME;
+        delete process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH;
+        delete process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH;
     });
     afterEach(() => {
         delete process.env.ASSET_COMPUTE_DEV_TOOL_ENV;
@@ -227,4 +239,96 @@ describe('index.js tests', () => {
         });
     });
 
+});
+
+describe('index.js tests, credentials failures', () => {
+    beforeEach(() => {
+        delete process.env.ASSET_COMPUTE_DEV_TOOL_ENV;
+        delete process.env.ASSET_COMPUTE_DEV_PORT;
+        delete process.env.AZURE_STORAGE_ACCOUNT;
+        delete process.env.AZURE_STORAGE_KEY;
+        delete process.env.AZURE_STORAGE_CONTAINER_NAME;
+        delete process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH;
+        delete process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH;
+    });
+    it("devtool fails to start, missing call credentials", async function() {
+        // set up server
+        stderr.start();
+        const devtool = new DevtoolServer();
+        await devtool.run();
+        stderr.stop();
+        
+        // check start up logs
+        const stdoutList = stderr.output.split('\n');
+        assert(stdoutList[0].includes(`Error: Missing some or all cloud storage credentials.`));
+    });
+
+    it("devtool fails to start, missing Cloud Storage credentials", async function() {
+        process.env.AZURE_STORAGE_KEY='key';
+        process.env.AZURE_STORAGE_CONTAINER_NAME='container';
+        process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH='./files/test-manifest.yml';
+        // set up server
+        stderr.start();
+        const devtool = new DevtoolServer();
+        await devtool.run();
+        stderr.stop();
+        
+        // check start up logs
+        const stdoutList = stderr.output.split('\n');
+        assert(stdoutList[0].includes(`Error: Missing some or all cloud storage credentials.`));
+    });
+
+    it("devtool fails to start, missing Adobe Developer Console Project Credentials", async function() {
+        process.env.AZURE_STORAGE_ACCOUNT='account';
+        process.env.AZURE_STORAGE_KEY='key';
+        process.env.AZURE_STORAGE_CONTAINER_NAME='container';
+        // set up server
+        stderr.start();
+        const devtool = new DevtoolServer();
+        await devtool.run();
+        stderr.stop();
+        
+        // check start up logs
+        const stdoutList = stderr.output.split('\n');
+        console.log(stdoutList);
+        assert(stdoutList[0].includes(`Error: Missing Adobe Developer Project details.`));
+    });
+    it("devtool fails to start, missing Adobe Developer Console Project private key", async function() {
+        const consoleFile = './test/files/console.json';
+        process.env.AZURE_STORAGE_ACCOUNT='account';
+        process.env.AZURE_STORAGE_KEY='key';
+        process.env.AZURE_STORAGE_CONTAINER_NAME='container';
+        process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH = consoleFile;
+        fs.writeFileSync(consoleFile, '{}');
+        // set up server
+        stderr.start();
+        const devtool = new DevtoolServer();
+        await devtool.run();
+        stderr.stop();
+        
+        // check start up logs
+        const stdoutList = stderr.output.split('\n');
+        console.log(stdoutList);
+        assert(stdoutList[0].includes(`Error: Missing Adobe Developer Project private key file.`));
+        fs.unlinkSync(consoleFile);
+    });
+
+    it("devtool fails to start, missing Adobe Developer Console Project private key (console.json in root)", async function() {
+        const consoleFile = './console.json';
+        process.env.AZURE_STORAGE_ACCOUNT='account';
+        process.env.AZURE_STORAGE_KEY='key';
+        process.env.AZURE_STORAGE_CONTAINER_NAME='container';
+        fs.writeFileSync(consoleFile, '{}');
+        // set up server
+        stderr.start();
+        const devtool = new DevtoolServer();
+        await devtool.run();
+        stderr.stop();
+        
+        // check start up logs
+        const stdoutList = stderr.output.split('\n');
+        console.log(stdoutList);
+        assert(stdoutList[0].includes(`Error: Missing Adobe Developer Project private key file.`));
+        fs.unlinkSync(consoleFile);
+    });
 });

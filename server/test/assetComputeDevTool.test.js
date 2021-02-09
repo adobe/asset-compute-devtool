@@ -23,6 +23,15 @@ const path = require('path');
 const AIO_PROJECT_CREDENTIALS_PATH = path.join(process.cwd(),'console.json');
 
 describe( 'assetComputeDevTool.js tests', () => {
+    before(() => {
+        delete process.env.AIO_RUNTIME_NAMESPACE;
+        delete process.env.AIO_runtime_namespace;
+        delete process.env.AIO_RUNTIME_AUTH;
+        delete process.env.AIO_runtime_auth;
+
+        delete process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH;
+        delete process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH;
+    });
 
     afterEach(() => {
         delete process.env.AIO_RUNTIME_NAMESPACE;
