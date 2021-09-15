@@ -141,6 +141,7 @@ AZURE_STORAGE_CONTAINER_NAME=
 4. run `npm run start-prod`
 
 ### Development
+_NOTE: Only use dev mode if you are developing or adding changes to the devtool itself. Please use production mode if you are just using the devtool._
 1. Make sure to set environment variable:  `ASSET_COMPUTE_DEV_TOOL_ENV='development'`
 2. If it is your first time using the dev tool or you made changes to the UI, cd into `/client` and run `yarn install` <br/>
 3. cd into the `/server` directory. (remember to do an `yarn install`) <br/>
