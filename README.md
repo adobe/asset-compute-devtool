@@ -109,7 +109,7 @@ Please set the following credentials in a `.env` file in the root of the `/serve
 For more information on setting up credentials, see [Cloud Storage Container](#1-s3-bucket-or-azure-blob-storage-credentials) and [Adobe I/O Console Techinical Integrations](#2-adobe-io-console-technical-integration) below.
 
 ```bash
-# Path to AIO Integration File JSON (defaults to current working directory + `console.json`. Only applicable if running in the context of an aio Firefly application)
+# Path to AIO Integration File JSON (defaults to current working directory + `console.json`. Only applicable if running in the context of App Builder application)
 ASSET_COMPUTE_INTEGRATION_FILE_PATH=
 # Path to Private Key file for AIO Integration
 ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH=
