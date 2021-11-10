@@ -55,6 +55,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.19'
+      - name: Install aio
+        run: npm install -g @adobe/aio-cli@8.2.0
       - name: Install client dependencies
         run: yarn install
         working-directory: ./client
