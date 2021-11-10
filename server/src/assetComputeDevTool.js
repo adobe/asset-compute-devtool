@@ -210,8 +210,8 @@ function getActionUrls() {
         /**
          * {
          *   "runtime": {
-         *      "worker":"https://105979-empiricalamethystdog-stage.adobeioruntime.net/api/v1/web/dx-asset-compute-worker-1/worker",
-        *       "worker-1":"https://105979-empiricalamethystdog-stage.adobeioruntime.net/api/v1/web/dx-asset-compute-worker-1/worker-1"
+         *      "worker":"https://org-fakeproject-stage.adobeioruntime.net/api/v1/web/dx-asset-compute-worker-1/worker",
+        *       "worker-1":"https://org-fakeproject-stage.adobeioruntime.net/api/v1/web/dx-asset-compute-worker-1/worker-1"
         *       }
         * }
          */
