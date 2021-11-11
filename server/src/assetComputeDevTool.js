@@ -14,11 +14,11 @@
 "use strict";
 
 const { AssetComputeClient, getIntegrationConfiguration } = require("@adobe/asset-compute-client");
-const yaml = require("js-yaml");
 const fse = require('fs-extra');
 const { CloudStorage } = require('@adobe/cloud-blobstore-wrapper');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
+const child_process = require('child_process');
 
 const DEFAULT_PRESIGN_TTL_MSEC = 60000 * 120; // 2 hours validity
 const DEFAULT_ACTIVATION_WAIT_MSEC = 60000 * 120; // 2 hours to wait for activation
@@ -205,21 +205,26 @@ function getEndpoint() {
     return endpoint;
 }
 
-async function getActionUrls() {
+function getActionUrls() {
     try {
-        const namespace = process.env.AIO_RUNTIME_NAMESPACE || process.env.AIO_runtime_namespace;
-        const manifest = yaml.safeLoad(await fse.readFile('manifest.yml', "utf-8"));
-        const packageJson = await fse.readJson('package.json');
-
-
-        return Object.entries(manifest.packages.__APP_PACKAGE__.actions).reduce((obj, [name]) => {
-            obj[name] = `https://${namespace}.adobeioruntime.net/api/v1/web/${packageJson.name}-${packageJson.version}/${name}`;
-            return obj;
-        }, {});
-
-
+        /**
+         * {
+         *   "runtime": {
+         *      "worker":"https://org-fakeproject-stage.adobeioruntime.net/api/v1/web/dx-asset-compute-worker-1/worker",
+        *       "worker-1":"https://org-fakeproject-stage.adobeioruntime.net/api/v1/web/dx-asset-compute-worker-1/worker-1"
+        *       }
+        * }
+         */
+        const result = child_process.execSync('aio app get-url -j', {
+            timeout: 10000
+        });
+        const runtimeUrls = result.toString().trim().split('\n').pop();
+        const actionUrlsObj = JSON.parse(runtimeUrls).runtime;
+        console.log('Got action urls:', actionUrlsObj);
+        return actionUrlsObj;
     } catch (e) { /* eslint-disable-line no-unused-vars */
         // ignore error is not in the context of an aio app
+        console.log('Issues getting custom worker action urls. Please ignore if not in the context of an aio app builder app.');
         return {};
     }
 }
