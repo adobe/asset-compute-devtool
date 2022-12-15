@@ -44,7 +44,7 @@
     "cross-os": "^1.4.0",
     "debug": "~4.3.3",
     "dotenv": "^8.2.0",
-    "express": "~4.17.2",
+    "express": "~4.17.3",
     "express-formidable": "^1.2.0",
     "formidable": "^1.2.2",
     "fs-extra": "^8.1.0",
