@@ -46,6 +46,12 @@ describe( 'assetComputeDevTool.js tests', () => {
     });
 
     it('should set up Asset Compute DevTool client with integration yaml', async () => {
+        // Create temporary test file
+        await fse.writeFile('test-integration.yaml', `
+technicalAccount:
+  privateKey: dummy-key
+`);
+        
         mock('@adobe/asset-compute-client', { 
             AssetComputeClient: class AssetComputeClientMock {
                 register() {}
@@ -57,9 +63,27 @@ describe( 'assetComputeDevTool.js tests', () => {
         const { setupAssetCompute } = mock.reRequire('../src/assetComputeDevTool');
         process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH = 'test-integration.yaml';
         await setupAssetCompute();
+        
+        // Clean up
+        await fse.remove('test-integration.yaml');
     });
 
     it('should set up Asset Compute DevTool client with integration json and path to private key', async () => {
+        // Create temporary test files
+        await fse.writeJSON('test-integration.json', {
+            project: {
+                org: { ims_org_id: 'test-org' },
+                workspace: {
+                    details: {
+                        credentials: [{
+                            jwt: { some: 'data' }
+                        }]
+                    }
+                }
+            }
+        });
+        await fse.writeFile('path-to-private-key.key', 'dummy-private-key');
+        
         mock('@adobe/asset-compute-client', { 
             AssetComputeClient: class AssetComputeClientMock {
                 register() {}
@@ -72,6 +96,10 @@ describe( 'assetComputeDevTool.js tests', () => {
         process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH = 'test-integration.json';
         process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH = 'path-to-private-key.key';
         await setupAssetCompute();
+        
+        // Clean up
+        await fse.remove('test-integration.json');
+        await fse.remove('path-to-private-key.key');
     });
 
     it('should set up Asset Compute DevTool client with console.json from aio project and path to private key', async () => {
@@ -135,6 +163,21 @@ describe( 'assetComputeDevTool.js tests', () => {
     });
 
     it('should return boolean from AssetComputeClient isJournalReady', async () => {
+        // Create temporary test file
+        await fse.writeJSON('test-integration-journal.json', {
+            project: {
+                org: { ims_org_id: 'test-org' },
+                workspace: {
+                    details: {
+                        credentials: [{
+                            jwt: { some: 'data' }
+                        }]
+                    }
+                }
+            }
+        });
+        await fse.writeFile('test-private-key.key', 'dummy-private-key');
+        
         mock('@adobe/asset-compute-client', { 
             AssetComputeClient: class AssetComputeClientMock {
                 register() {}
@@ -145,7 +188,8 @@ describe( 'assetComputeDevTool.js tests', () => {
         });
         process.env.AZURE_STORAGE_ACCOUNT = 'AZURE_STORAGE_ACCOUNT';
         process.env.AZURE_STORAGE_KEY = 'AZURE_STORAGE_KEY';
-        process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH = 'ASSET_COMPUTE_INTEGRATION_FILE_PATH';
+        process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH = 'test-integration-journal.json';
+        process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH = 'test-private-key.key';
         mock('@adobe/cloud-blobstore-wrapper', { 
             CloudStorage: class CloudStorageMock {
                 validate() {}
@@ -155,5 +199,9 @@ describe( 'assetComputeDevTool.js tests', () => {
         const devToolPromise =  await setupAssetComputeDevTool();
         const isReady = await devToolPromise.isJournalReady();
         assert(isReady,true);
+        
+        // Clean up
+        await fse.remove('test-integration-journal.json');
+        await fse.remove('test-private-key.key');
     });
 });

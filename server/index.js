@@ -100,34 +100,92 @@ class DevtoolServer {
  * 
  * Validate credentials in .env file 
  */
-function validateCredentials() {
-    if (!((process.env.AZURE_STORAGE_ACCOUNT && process.env.AZURE_STORAGE_KEY && process.env.AZURE_STORAGE_CONTAINER_NAME) || 
-    (process.env.S3_BUCKET && process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY))
-    ) {
+
+function validateCloudStorageCredentials() {
+    const hasAzureCredentials = process.env.AZURE_STORAGE_ACCOUNT && 
+                               process.env.AZURE_STORAGE_KEY && 
+                               process.env.AZURE_STORAGE_CONTAINER_NAME;
+    
+    const hasAwsCredentials = process.env.S3_BUCKET && 
+                             process.env.AWS_ACCESS_KEY_ID && 
+                             process.env.AWS_SECRET_ACCESS_KEY;
+    
+    if (!hasAzureCredentials && !hasAwsCredentials) {
         console.error('Error: Missing some or all cloud storage credentials.');
         return false;
     }
-    const integrationFile = process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH || 'console.json';
-    const privateKeyFilePath = process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH;
-    if ((!integrationFile || !fse.existsSync(integrationFile))) {
+    
+    return true;
+}
+
+function validateIntegrationFileExists(integrationFile) {
+    if (!integrationFile || !fse.existsSync(integrationFile)) {
         console.error('Error: Missing Adobe Developer Project details.');
         return false;
     }
-    // if integration file is yaml, it will include private key, so no private key file path necessary
-    // but we read yaml file to make sure it contains private key
-    if ((integrationFile.endsWith('.yaml')) || integrationFile.endsWith('.yml')) {
-        const yamlFile = yaml.safeLoad(fse.readFileSync(integrationFile, "utf-8"));
-        if (!yamlFile.technicalAccount.privateKey) {
-            console.error('Error: Missing Adobe Developer Project private key file.');
+    return true;
+}
+
+function validateYamlIntegration(integrationFile) {
+    const yamlFile = yaml.safeLoad(fse.readFileSync(integrationFile, "utf-8"));
+    if (!yamlFile.technicalAccount.privateKey) {
+        console.error('Error: Missing Adobe Developer Project private key file.');
+        return false;
+    }
+    return true;
+}
+
+function validateJsonIntegration(integrationFile, privateKeyFilePath) {
+    const jsonFile = fse.readJSONSync(integrationFile, { throws: false });
+    const workspace = jsonFile.project && jsonFile.project.workspace;
+    
+    if (!workspace) {
+        console.error('Error: No workspace found in console.json');
+        return false;
+    }
+
+    // Check for private key file first
+    if (!privateKeyFilePath || !fse.existsSync(privateKeyFilePath)) {
+        console.error('Error: Missing Adobe Developer Project private key file.');
+
+        // Check for OAuth Server to Server credentials as fallback
+        const hasOAuthCredentials = workspace.details && 
+                                   workspace.details.credentials && 
+                                   workspace.details.credentials.some(credential => 
+                                       credential && credential.oauth_server_to_server
+                                   );
+        
+        // Allow it pass if OAuth credentials are found, otherwise fail as no private key file is found
+        if (hasOAuthCredentials) {
+            console.log('Info: OAuth Server to Server credentials found.');
+            return true;
+        } else {
+            console.error('Error: No credentials found.');
             return false;
         }
-    // if console.json integration file, this does not include the private.key
-    // so we must check the private key env var is set and accessible
+    }
+    
+    return true;
+}
+
+function validateCredentials() {
+    // Validate cloud storage credentials
+    if (!validateCloudStorageCredentials()) {
+        return false;
+    }
+    
+    // Validate integration file exists
+    const integrationFile = process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH || 'console.json';
+    if (!validateIntegrationFileExists(integrationFile)) {
+        return false;
+    }
+    
+    // Validate based on file type
+    if (integrationFile.endsWith('.yaml') || integrationFile.endsWith('.yml')) {
+        return validateYamlIntegration(integrationFile);
     } else if (integrationFile.endsWith('.json')) {
-        if (!privateKeyFilePath || !fse.existsSync(privateKeyFilePath)) {
-            console.error('Error: Missing Adobe Developer Project private key file.');
-            return false;
-        }
+        const privateKeyFilePath = process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH;
+        return validateJsonIntegration(integrationFile, privateKeyFilePath);
     }
     
     return true;

@@ -299,7 +299,18 @@ describe('index.js tests, credentials failures', () => {
         process.env.AZURE_STORAGE_KEY='key';
         process.env.AZURE_STORAGE_CONTAINER_NAME='container';
         process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH = consoleFile;
-        fs.writeFileSync(consoleFile, '{}');
+        // Create a console.json without OAuth credentials and without private key
+        fs.writeFileSync(consoleFile, JSON.stringify({
+            project: {
+                workspace: {
+                    details: {
+                        credentials: [{
+                            jwt: { some: 'data' }
+                        }]
+                    }
+                }
+            }
+        }));
         // set up server
         stderr.start();
         const devtool = new DevtoolServer();
@@ -318,7 +329,18 @@ describe('index.js tests, credentials failures', () => {
         process.env.AZURE_STORAGE_ACCOUNT='account';
         process.env.AZURE_STORAGE_KEY='key';
         process.env.AZURE_STORAGE_CONTAINER_NAME='container';
-        fs.writeFileSync(consoleFile, '{}');
+        // Create a console.json without OAuth credentials and without private key
+        fs.writeFileSync(consoleFile, JSON.stringify({
+            project: {
+                workspace: {
+                    details: {
+                        credentials: [{
+                            jwt: { some: 'data' }
+                        }]
+                    }
+                }
+            }
+        }));
         // set up server
         stderr.start();
         const devtool = new DevtoolServer();
