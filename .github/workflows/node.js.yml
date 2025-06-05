@@ -14,14 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{  !contains(github.event.head_commit.message, '[ci skip]') }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
         with:
           persist-credentials: false
-      - name: Use Node.js 18
-        uses: actions/setup-node@v4
+      - name: Use Node.js 12.19
+        uses: actions/setup-node@v1
         with:
-          node-version: '18'
-          cache: 'yarn'
+          node-version: '12.19'
       - name: Run tests
         run: |
           yarn install
@@ -31,14 +30,13 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{  !contains(github.event.head_commit.message, '[ci skip]') }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
         with:
           persist-credentials: false
-      - name: Use Node.js 18
-        uses: actions/setup-node@v4
+      - name: Use Node.js 12.19
+        uses: actions/setup-node@v1
         with:
-          node-version: '18'
-          cache: 'yarn'
+          node-version: '12.19'
       - name: Run tests and build
         run: |
           yarn install
@@ -50,14 +48,13 @@ jobs:
     needs: [client-test, server-test]
     if: ${{  !contains(github.event.head_commit.message, '[ci skip]') && github.ref == 'refs/heads/master' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
         with:
           persist-credentials: false
-      - name: Use Node.js 18
-        uses: actions/setup-node@v4
+      - name: Use Node.js 12.19
+        uses: actions/setup-node@v1
         with:
-          node-version: '18'
-          cache: 'yarn'
+          node-version: '12.19'
       - name: Install aio
         run: npm install -g @adobe/aio-cli@8.2.0
       - name: Install client dependencies
