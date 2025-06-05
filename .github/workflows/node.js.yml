@@ -23,8 +23,6 @@ jobs:
           node-version: '18'
       - name: Run tests
         run: |
-          yarn config set registry https://registry.npmjs.org/
-          yarn config set strict-ssl false
           yarn install
           npm test -- --coverage;
         working-directory: ./client
@@ -41,8 +39,6 @@ jobs:
           node-version: '18'
       - name: Run tests and build
         run: |
-          yarn config set registry https://registry.npmjs.org/
-          yarn config set strict-ssl false
           yarn install
           npm run build
           npm test
@@ -62,15 +58,10 @@ jobs:
       - name: Install aio
         run: npm install -g @adobe/aio-cli@8.2.0
       - name: Install client dependencies
-        run: |
-          yarn config set registry https://registry.npmjs.org/
-          yarn config set strict-ssl false
-          yarn install
+        run: yarn install
         working-directory: ./client
       - name: Run build and semantic release
         run: |
-          yarn config set registry https://registry.npmjs.org/
-          yarn config set strict-ssl false
           yarn install
           npm run build
           npm run semantic-release
