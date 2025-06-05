@@ -21,6 +21,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'yarn'
       - name: Run tests
         run: |
           yarn install
@@ -37,6 +38,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'yarn'
       - name: Run tests and build
         run: |
           yarn install
@@ -55,6 +57,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'yarn'
       - name: Install aio
         run: npm install -g @adobe/aio-cli@8.2.0
       - name: Install client dependencies
