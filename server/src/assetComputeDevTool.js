@@ -233,20 +233,80 @@ function getActionUrls() {
  * Set up instance of Asset Compute Client
  */
 async function setupAssetCompute() {
-    let integrationFilePath =  process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH;
+    let integrationFilePath = process.env.ASSET_COMPUTE_INTEGRATION_FILE_PATH;
+
     if (!integrationFilePath) {
-        if (process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH && fse.exists(AIO_PROJECT_CREDENTIALS_PATH)) {
+        if (fse.existsSync(AIO_PROJECT_CREDENTIALS_PATH)) {
             integrationFilePath = AIO_PROJECT_CREDENTIALS_PATH;
         } else {
-            return; 
+            return;
         }
     }
-    const integration = await getIntegrationConfiguration(integrationFilePath);
+
+    // Check if this is a YAML file - if so, use traditional JWT integration
+    if (integrationFilePath.endsWith('.yaml') || integrationFilePath.endsWith('.yml')) {
+        console.log('Using traditional JWT integration');
+        
+        // For YAML files, use the getIntegrationConfiguration function
+        const integration = await getIntegrationConfiguration(integrationFilePath);
+        
+        const options = {
+            url: getEndpoint(),
+            apiKey: process.env.DEV_TOOL_API_KEY // will default to `integration.technicalAccount.clientId` if environment variable is not set
+        };
+
+        const client = new AssetComputeClient(integration, options);
+        await client.register();
+        return client;
+    }
+
+    // Read the JSON file to determine integration type
+    const jsonFile = fse.readJSONSync(integrationFilePath);
+    const credentials = jsonFile.project && 
+                       jsonFile.project.workspace && 
+                       jsonFile.project.workspace.details && 
+                       jsonFile.project.workspace.details.credentials;
+    
+    // Look for an oauth_server_to_server credential
+    const oauthCredential = credentials && credentials.find(credential => 
+        credential && credential.oauth_server_to_server
+    );
+    
+    const isOAuthS2S = !!oauthCredential;
+    let integration;
+
+    // If an oauth_server_to_server credential is found, use it
+    if (isOAuthS2S) {
+        console.log('Using OAuth Server-to-Server integration');
+        integration = {
+            TYPE: 'oauthservertoserver',
+            SCOPES: oauthCredential.oauth_server_to_server?.scopes,
+            CLIENT_SECRETS: oauthCredential.oauth_server_to_server?.client_secrets,
+            CLIENT_ID: oauthCredential.oauth_server_to_server?.client_id,
+            TECHNICAL_ACCOUNT_ID: oauthCredential.oauth_server_to_server?.technical_account_id,
+            TECHNICAL_ACCOUNT_EMAIL: oauthCredential.oauth_server_to_server?.technical_account_email,
+            ORG_ID: jsonFile.project.org?.ims_org_id,
+            technicalAccount: {
+                org: jsonFile.project.org?.ims_org_id,
+            }
+        };
+    } else {
+        // Traditional JWT-based integration - requires private key file
+        console.log('Using traditional JWT integration');
+        
+        if (!process.env.ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH) {
+            throw new Error('Traditional JWT integration requires ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH environment variable to be set');
+        }
+        
+        // Get the integration configuration from the integration file using the asset compute client
+        integration = await getIntegrationConfiguration(integrationFilePath);
+    }
 
     const options = {
         url: getEndpoint(),
         apiKey: process.env.DEV_TOOL_API_KEY // will default to `integration.technicalAccount.clientId` if environment variable is not set
     };
+
     const client = new AssetComputeClient(integration, options);
     await client.register();
     return client;

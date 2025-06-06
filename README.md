@@ -94,7 +94,6 @@ AWS_REGION=
         - Click on `"Add to Project" => "API"` and add each of these services one at a time: `"Asset Compute"`, `"IO Events"`, `"IO Events Management"`
         - Click on `"Add to Project" => "Runtime"` to add Adobe IO Runtime to your project
 
-        _Note: You will be prompted to create a private key. Please save this to a safe place on your machine. This file path will be the `ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH` environment variable in your `.env` file._
 6. Retrieve and format credentials for Asset Compute service development.
 
     Navigate to your Asset Compute project or workspace created in step 4, press the `"Download"` button to download your credentials and save this file to a secure location on your machine. This file is needed to use the Asset Compute Development tool. Use this file path as the `ASSET_COMPUTE_INTEGRATION_FILE_PATH` environment variable in the `.env` file.
@@ -111,8 +110,6 @@ For more information on setting up credentials, see [Cloud Storage Container](#1
 ```bash
 # Path to AIO Integration File JSON (defaults to current working directory + `console.json`. Only applicable if running in the context of App Builder application)
 ASSET_COMPUTE_INTEGRATION_FILE_PATH=
-# Path to Private Key file for AIO Integration
-ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH=
 
 # S3 credentials
 S3_BUCKET=
@@ -130,6 +127,9 @@ AZURE_STORAGE_CONTAINER_NAME=
 
 # Optional Asset Compute endpoint (defaults to Asset Compute Production Endpoint)
 # ASSET_COMPUTE_URL=
+
+# Optional path to Private Key file for AIO Integration (only required for JWT credential integrations)
+# ASSET_COMPUTE_PRIVATE_KEY_FILE_PATH=
 ```
 
 ## Usage
