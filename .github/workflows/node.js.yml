@@ -27,10 +27,13 @@ jobs:
           yarn config set registry https://registry.npmjs.org/
           npm config set registry https://registry.npmjs.org/
           yarn config set httpTimeout 600000
-      - name: Run tests
+      - name: Clean and install dependencies
         run: |
+          rm -f yarn.lock
           yarn install
-          npm test -- --coverage;
+        working-directory: ./client
+      - name: Run tests
+        run: npm test -- --coverage;
         working-directory: ./client
   server-test:
     runs-on: ubuntu-latest
@@ -49,9 +52,13 @@ jobs:
           yarn config set registry https://registry.npmjs.org/
           npm config set registry https://registry.npmjs.org/
           yarn config set httpTimeout 600000
+      - name: Clean and install dependencies
+        run: |
+          rm -f yarn.lock
+          yarn install
+        working-directory: ./server
       - name: Run tests and build
         run: |
-          yarn install
           npm run build
           npm test
         working-directory: ./server
@@ -75,12 +82,18 @@ jobs:
           yarn config set httpTimeout 600000
       - name: Install aio
         run: npm install -g @adobe/aio-cli@8.2.0
-      - name: Install client dependencies
-        run: yarn install
+      - name: Clean and install client dependencies
+        run: |
+          rm -f yarn.lock
+          yarn install
         working-directory: ./client
+      - name: Clean and install server dependencies
+        run: |
+          rm -f yarn.lock
+          yarn install
+        working-directory: ./server
       - name: Run build and semantic release
         run: |
-          yarn install
           npm run build
           npm run semantic-release
         working-directory: ./server
