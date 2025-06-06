@@ -21,18 +21,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-      - name: Configure yarn
+      - name: Configure yarn and npm
         run: |
           corepack enable
+          yarn config set registry https://registry.npmjs.org/
+          npm config set registry https://registry.npmjs.org/
           yarn config set httpTimeout 600000
-          yarn config set enableStrictSsl false
       - name: Run tests
         run: |
           yarn install
           npm test -- --coverage;
         working-directory: ./client
-        env:
-          NODE_TLS_REJECT_UNAUTHORIZED: '0'
   server-test:
     runs-on: ubuntu-latest
     if: ${{  !contains(github.event.head_commit.message, '[ci skip]') }}
@@ -44,19 +43,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-      - name: Configure yarn
+      - name: Configure yarn and npm
         run: |
           corepack enable
+          yarn config set registry https://registry.npmjs.org/
+          npm config set registry https://registry.npmjs.org/
           yarn config set httpTimeout 600000
-          yarn config set enableStrictSsl false
       - name: Run tests and build
         run: |
           yarn install
           npm run build
           npm test
         working-directory: ./server
-        env:
-          NODE_TLS_REJECT_UNAUTHORIZED: '0'
   semantic-release:
     runs-on: ubuntu-latest
     needs: [client-test, server-test]
@@ -69,20 +67,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-      - name: Configure yarn
+      - name: Configure yarn and npm
         run: |
           corepack enable
+          yarn config set registry https://registry.npmjs.org/
+          npm config set registry https://registry.npmjs.org/
           yarn config set httpTimeout 600000
-          yarn config set enableStrictSsl false
       - name: Install aio
         run: npm install -g @adobe/aio-cli@8.2.0
-        env:
-          NODE_TLS_REJECT_UNAUTHORIZED: '0'
       - name: Install client dependencies
         run: yarn install
         working-directory: ./client
-        env:
-          NODE_TLS_REJECT_UNAUTHORIZED: '0'
       - name: Run build and semantic release
         run: |
           yarn install
@@ -92,4 +87,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ADOBE_BOT_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.ADOBE_BOT_NPM_TOKEN }}
-          NODE_TLS_REJECT_UNAUTHORIZED: '0'
