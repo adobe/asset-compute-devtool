@@ -79,7 +79,8 @@
             "lcov"
         ],
         "moduleNameMapper": {
-            "ace-builds": "<rootDir>/node_modules/ace-builds"
+            "ace-builds": "<rootDir>/node_modules/ace-builds",
+            "^node:(.+)$": "$1"
         }
     },
     "proxy": "http://localhost:9001"
