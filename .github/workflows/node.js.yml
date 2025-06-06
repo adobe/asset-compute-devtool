@@ -31,6 +31,8 @@ jobs:
           yarn install
           npm test -- --coverage;
         working-directory: ./client
+        env:
+          NODE_TLS_REJECT_UNAUTHORIZED: '0'
   server-test:
     runs-on: ubuntu-latest
     if: ${{  !contains(github.event.head_commit.message, '[ci skip]') }}
@@ -53,6 +55,8 @@ jobs:
           npm run build
           npm test
         working-directory: ./server
+        env:
+          NODE_TLS_REJECT_UNAUTHORIZED: '0'
   semantic-release:
     runs-on: ubuntu-latest
     needs: [client-test, server-test]
@@ -72,9 +76,13 @@ jobs:
           yarn config set enableStrictSsl false
       - name: Install aio
         run: npm install -g @adobe/aio-cli@8.2.0
+        env:
+          NODE_TLS_REJECT_UNAUTHORIZED: '0'
       - name: Install client dependencies
         run: yarn install
         working-directory: ./client
+        env:
+          NODE_TLS_REJECT_UNAUTHORIZED: '0'
       - name: Run build and semantic release
         run: |
           yarn install
@@ -84,3 +92,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ADOBE_BOT_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.ADOBE_BOT_NPM_TOKEN }}
+          NODE_TLS_REJECT_UNAUTHORIZED: '0'
