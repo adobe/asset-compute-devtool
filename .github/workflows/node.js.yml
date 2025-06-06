@@ -21,6 +21,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+      - name: Configure yarn
+        run: |
+          corepack enable
+          corepack prepare yarn@stable --activate
+          yarn config set network-timeout 600000
+          yarn config set strict-ssl true
       - name: Run tests
         run: |
           yarn install
@@ -37,6 +43,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+      - name: Configure yarn
+        run: |
+          corepack enable
+          corepack prepare yarn@stable --activate
+          yarn config set network-timeout 600000
+          yarn config set strict-ssl true
       - name: Run tests and build
         run: |
           yarn install
@@ -55,6 +67,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+      - name: Configure yarn
+        run: |
+          corepack enable
+          corepack prepare yarn@stable --activate
+          yarn config set network-timeout 600000
+          yarn config set strict-ssl true
       - name: Install aio
         run: npm install -g @adobe/aio-cli@8.2.0
       - name: Install client dependencies
