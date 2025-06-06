@@ -29,9 +29,9 @@
     },
     "cross-os": {
         "cross-os-build": {
-            "darwin": "yarn install && react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
-            "linux": "yarn install && react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
-            "win32": "yarn install && react-scripts build && build.cmd"
+            "darwin": "yarn install && NODE_OPTIONS='--openssl-legacy-provider' react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
+            "linux": "yarn install && NODE_OPTIONS='--openssl-legacy-provider' react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
+            "win32": "yarn install && set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build && build.cmd"
         }
     },
     "eslintConfig": {
@@ -80,14 +80,14 @@
         ],
         "moduleNameMapper": {
             "ace-builds": "<rootDir>/node_modules/ace-builds",
-            "^node:stream$": "stream",
+            "^node:stream$": "stream-browserify",
             "^node:util$": "util",
-            "^node:crypto$": "crypto",
+            "^node:crypto$": "crypto-browserify",
             "^node:fs$": "fs",
-            "^node:path$": "path",
-            "^node:os$": "os",
+            "^node:path$": "path-browserify",
+            "^node:os$": "os-browserify",
             "^node:events$": "events"
         }
     },
-    "proxy": "http://localhost:9001"
+    "proxy": "http://localhost:9000"
 }
