@@ -80,23 +80,7 @@
         ],
         "moduleNameMapper": {
             "ace-builds": "<rootDir>/node_modules/ace-builds",
-            "^node:stream$": "stream-browserify",
-            "^node:util$": "util",
-            "^node:crypto$": "crypto-browserify",
-            "^node:fs$": "fs",
-            "^node:path$": "path-browserify",
-            "^node:os$": "os-browserify",
-            "^node:events$": "events",
-            "^node:assert$": "assert",
-            "^node:net$": "net",
-            "^node:tls$": "tls",
-            "^node:http$": "http",
-            "^node:https$": "https",
-            "^node:url$": "url",
-            "^node:querystring$": "querystring",
-            "^node:buffer$": "buffer",
-            "^node:timers$": "timers-browserify",
-            "^node:process$": "process"
+            "^node:(.+)$": "$1"
         }
     },
     "proxy": "http://localhost:9000"
