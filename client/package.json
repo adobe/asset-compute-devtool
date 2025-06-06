@@ -86,7 +86,8 @@
             "^node:fs$": "fs",
             "^node:path$": "path-browserify",
             "^node:os$": "os-browserify",
-            "^node:events$": "events"
+            "^node:events$": "events",
+            "^node:assert$": "assert"
         }
     },
     "proxy": "http://localhost:9000"
