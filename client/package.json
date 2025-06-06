@@ -80,7 +80,13 @@
         ],
         "moduleNameMapper": {
             "ace-builds": "<rootDir>/node_modules/ace-builds",
-            "^node:(.+)$": "$1"
+            "^node:stream$": "stream",
+            "^node:util$": "util",
+            "^node:crypto$": "crypto",
+            "^node:fs$": "fs",
+            "^node:path$": "path",
+            "^node:os$": "os",
+            "^node:events$": "events"
         }
     },
     "proxy": "http://localhost:9001"
