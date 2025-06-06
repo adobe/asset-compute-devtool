@@ -24,9 +24,8 @@ jobs:
       - name: Configure yarn
         run: |
           corepack enable
-          corepack prepare yarn@stable --activate
-          yarn config set network-timeout 600000
-          yarn config set strict-ssl true
+          yarn config set httpTimeout 600000
+          yarn config set enableStrictSsl true
       - name: Run tests
         run: |
           yarn install
@@ -46,9 +45,8 @@ jobs:
       - name: Configure yarn
         run: |
           corepack enable
-          corepack prepare yarn@stable --activate
-          yarn config set network-timeout 600000
-          yarn config set strict-ssl true
+          yarn config set httpTimeout 600000
+          yarn config set enableStrictSsl true
       - name: Run tests and build
         run: |
           yarn install
@@ -70,9 +68,8 @@ jobs:
       - name: Configure yarn
         run: |
           corepack enable
-          corepack prepare yarn@stable --activate
-          yarn config set network-timeout 600000
-          yarn config set strict-ssl true
+          yarn config set httpTimeout 600000
+          yarn config set enableStrictSsl true
       - name: Install aio
         run: npm install -g @adobe/aio-cli@8.2.0
       - name: Install client dependencies
