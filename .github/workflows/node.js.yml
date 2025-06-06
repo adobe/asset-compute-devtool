@@ -17,10 +17,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Use Node.js 18
+      - name: Use Node.js 23
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '23'
       - name: Configure yarn and npm
         run: |
           corepack enable
@@ -44,10 +44,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Use Node.js 18
+      - name: Use Node.js 23
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '23'
       - name: Configure yarn and npm
         run: |
           corepack enable
@@ -77,10 +77,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Use Node.js 18
+      - name: Use Node.js 23
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '23'
       - name: Configure yarn and npm
         run: |
           corepack enable
