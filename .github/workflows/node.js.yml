@@ -33,7 +33,7 @@ jobs:
           yarn install
         working-directory: ./client
       - name: Run tests
-        run: node --legacy-openssl-provider ./node_modules/.bin/react-scripts test --coverage --watchAll=false
+        run: npm test -- --coverage --watchAll=false
         working-directory: ./client
   server-test:
     runs-on: ubuntu-latest
@@ -62,7 +62,7 @@ jobs:
         working-directory: ./server
       - name: Run tests and build
         run: |
-          node --legacy-openssl-provider $(which npm) run build
+          npm run build
           npm test
         working-directory: ./server
   semantic-release:
@@ -97,7 +97,7 @@ jobs:
         working-directory: ./server
       - name: Run build and semantic release
         run: |
-          node --legacy-openssl-provider $(which npm) run build
+          npm run build
           npm run semantic-release
         working-directory: ./server
         env:
