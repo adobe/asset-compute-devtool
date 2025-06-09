@@ -29,9 +29,9 @@
     },
     "cross-os": {
         "cross-os-build": {
-            "darwin": "yarn install && NODE_OPTIONS='--openssl-legacy-provider' react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
-            "linux": "yarn install && NODE_OPTIONS='--openssl-legacy-provider' react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
-            "win32": "yarn install && set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build && build.cmd"
+            "darwin": "yarn install && react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
+            "linux": "yarn install && react-scripts build && rm -rf ../server/client-build/ && mv build ../server/client-build/",
+            "win32": "yarn install && react-scripts build && build.cmd"
         }
     },
     "eslintConfig": {
@@ -79,23 +79,7 @@
             "lcov"
         ],
         "moduleNameMapper": {
-            "ace-builds": "<rootDir>/node_modules/ace-builds",
-            "^node:stream$": "stream-browserify",
-            "^node:crypto$": "crypto-browserify",
-            "^node:path$": "path-browserify",
-            "^node:os$": "os-browserify",
-            "^node:timers$": "timers-browserify",
-            "^node:util$": "util",
-            "^node:events$": "events",
-            "^node:assert$": "assert",
-            "^node:net$": "stream-browserify",
-            "^node:tls$": "stream-browserify",
-            "^node:http$": "stream-browserify",
-            "^node:https$": "stream-browserify",
-            "^node:url$": "url",
-            "^node:querystring$": "querystring-es3",
-            "^node:buffer$": "buffer",
-            "^node:process$": "process"
+            "ace-builds": "<rootDir>/node_modules/ace-builds"
         }
     },
     "proxy": "http://localhost:9000"
