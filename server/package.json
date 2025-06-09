@@ -68,15 +68,8 @@
     "mock-require": "^3.0.3",
     "nodemon": "^2.0.7",
     "nyc": "^15.1.0",
-    "semantic-release": "^19.0.3",
+    "semantic-release": "^17.3.2",
     "sinon": "^9.2.3",
     "stdout-stderr": "^0.1.13"
-  },
-  "resolutions": {
-    "minimist": "1.2.8",
-    "http-cache-semantics": "4.1.1",
-    "json5": "2.2.3",
-    "semver-regex": "3.1.4",
-    "async": "2.6.4"
   }
 }
