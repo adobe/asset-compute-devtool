@@ -280,14 +280,14 @@ async function setupAssetCompute() {
         console.log('Using OAuth Server-to-Server integration');
         integration = {
             TYPE: 'oauthservertoserver',
-            SCOPES: oauthCredential.oauth_server_to_server?.scopes,
-            CLIENT_SECRETS: oauthCredential.oauth_server_to_server?.client_secrets,
-            CLIENT_ID: oauthCredential.oauth_server_to_server?.client_id,
-            TECHNICAL_ACCOUNT_ID: oauthCredential.oauth_server_to_server?.technical_account_id,
-            TECHNICAL_ACCOUNT_EMAIL: oauthCredential.oauth_server_to_server?.technical_account_email,
-            ORG_ID: jsonFile.project.org?.ims_org_id,
+            SCOPES: oauthCredential.oauth_server_to_server.scopes,
+            CLIENT_SECRETS: oauthCredential.oauth_server_to_server.client_secrets,
+            CLIENT_ID: oauthCredential.oauth_server_to_server.client_id,
+            TECHNICAL_ACCOUNT_ID: oauthCredential.oauth_server_to_server.technical_account_id,
+            TECHNICAL_ACCOUNT_EMAIL: oauthCredential.oauth_server_to_server.technical_account_email,
+            ORG_ID: jsonFile.project.org.ims_org_id,
             technicalAccount: {
-                org: jsonFile.project.org?.ims_org_id,
+                org: jsonFile.project.org.ims_org_id,
             }
         };
     } else {
