@@ -93,7 +93,7 @@
             "^node:http$": "stream-browserify",
             "^node:https$": "stream-browserify",
             "^node:url$": "url",
-            "^node:querystring$": "querystring",
+            "^node:querystring$": "querystring-es3",
             "^node:buffer$": "buffer",
             "^node:process$": "process"
         }
