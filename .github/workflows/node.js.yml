@@ -14,52 +14,32 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{  !contains(github.event.head_commit.message, '[ci skip]') }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
         with:
           persist-credentials: false
       - name: Use Node.js 12.19
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v1
         with:
           node-version: '12.19'
-      - name: Configure yarn and npm
-        run: |
-          yarn config set registry https://registry.npmjs.org/
-          npm config set registry https://registry.npmjs.org/
-          yarn config set httpTimeout 600000
-      - name: Clean and install dependencies
-        run: |
-          rm -f yarn.lock
-          yarn install
-        working-directory: ./client
       - name: Run tests
-        run: npm test -- --coverage --watchAll=false
+        run: |
+          yarn install
+          npm test -- --coverage;
         working-directory: ./client
   server-test:
     runs-on: ubuntu-latest
     if: ${{  !contains(github.event.head_commit.message, '[ci skip]') }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
         with:
           persist-credentials: false
       - name: Use Node.js 12.19
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v1
         with:
           node-version: '12.19'
-      - name: Configure yarn and npm
-        run: |
-          yarn config set registry https://registry.npmjs.org/
-          npm config set registry https://registry.npmjs.org/
-          yarn config set httpTimeout 600000
-      - name: Clean client yarn.lock for build
-        run: rm -f yarn.lock
-        working-directory: ./client
-      - name: Clean and install server dependencies
-        run: |
-          rm -f yarn.lock
-          yarn install
-        working-directory: ./server
       - name: Run tests and build
         run: |
+          yarn install
           npm run build
           npm test
         working-directory: ./server
@@ -68,32 +48,21 @@ jobs:
     needs: [client-test, server-test]
     if: ${{  !contains(github.event.head_commit.message, '[ci skip]') && github.ref == 'refs/heads/master' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
         with:
           persist-credentials: false
       - name: Use Node.js 12.19
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v1
         with:
           node-version: '12.19'
-      - name: Configure yarn and npm
-        run: |
-          yarn config set registry https://registry.npmjs.org/
-          npm config set registry https://registry.npmjs.org/
-          yarn config set httpTimeout 600000
       - name: Install aio
         run: npm install -g @adobe/aio-cli@8.2.0
-      - name: Clean and install client dependencies
-        run: |
-          rm -f yarn.lock
-          yarn install
+      - name: Install client dependencies
+        run: yarn install
         working-directory: ./client
-      - name: Clean and install server dependencies
-        run: |
-          rm -f yarn.lock
-          yarn install
-        working-directory: ./server
       - name: Run build and semantic release
         run: |
+          yarn install
           npm run build
           npm run semantic-release
         working-directory: ./server
